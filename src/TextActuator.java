@@ -11,29 +11,32 @@ public class TextActuator {
         actuator.printBoard(spaces);
     }
 
-     void printBoard(Space[][] spaces) {
+    void printBoard(Space[][] spaces) {
         int m = spaces.length;
         int n = spaces[0].length;
 
         for (Space[] row : spaces) {
             for (int r = 0; r <= m; r++) {
-                print("+   ");
+                if (r != m)
+                    print("+---");
+                else print("+");
             }
             println();
             for (Space space : row) {
                 if (space == null) {
-                    print(" ###");
+                    print("|###");
                 } else {
-                    print("  " + space.getpiece().getColor().charAt(0) +
+                    print("| " + space.getpiece().getColor().charAt(0) +
                             space.getpiece().getClass().toString().replaceAll("class ", "").charAt(0));
-
                 }
             }
             println();
         }
 
         for (int r = 0; r <= m; r++) {
-            print("+   ");
+            if (r != m)
+                print("+---");
+            else print("+");
         }
         println();
     }
