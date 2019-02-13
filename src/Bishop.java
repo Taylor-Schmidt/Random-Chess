@@ -18,4 +18,6 @@ public class Bishop implements Piece {
     public int getvalue() {
         return value;
     }
+
+    public String getColor(){return color;}
 }

@@ -5,4 +5,6 @@ public interface Piece {
 
     public int getvalue();
 
+    public String getColor();
+
 }
