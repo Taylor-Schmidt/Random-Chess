@@ -16,40 +16,30 @@ public class TextActuator {
         int n = spaces[0].length;
 
         for (Space[] row : spaces) {
-            for (int r = 0; r <= m; r++) {
-                if (r != m)
-                    print("+---");
-                else print("+");
-            }
-            println();
+            printHorizontalDivider(m);
+
             for (Space space : row) {
                 if (space == null) {
-                    print("|###");
+                    System.out.print("|###");
                 } else {
-                    print("| " + space.getpiece().getColor().charAt(0) +
+                    System.out.print("| " + space.getpiece().getColor().charAt(0) +
                             space.getpiece().getClass().toString().replaceAll("class ", "").charAt(0));
                 }
             }
-            println();
+            System.out.print("|");
+            System.out.println();
         }
 
+        printHorizontalDivider(m);
+    }
+
+    private void printHorizontalDivider(int m) {
         for (int r = 0; r <= m; r++) {
             if (r != m)
-                print("+---");
-            else print("+");
+                System.out.print("+---");
+            else System.out.print("+");
         }
-        println();
-    }
-
-    private void print(String s) {
-        System.out.print(s);
-    }
-
-    private void println() {
         System.out.println();
     }
 
-    private void println(String s) {
-        System.out.println(s);
-    }
 }
