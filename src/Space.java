@@ -5,6 +5,8 @@ public class Space {
     //private int y;
     private Piece p;
 
+    public Space() {p=null;}
+
     public Space(Piece P) {
         p = P;
     }

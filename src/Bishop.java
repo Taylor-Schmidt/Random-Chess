@@ -9,7 +9,7 @@ public class Bishop implements Piece {
     }
 
     public void move(Space a[][], int currentX, int currentY, int newX, int newY)
-    //Still need to program to only move piece if legal move. Also will need to make it so you can only move a pieceif it is that color's turn.
+    //Still need to program to only move piece if legal move. Also will need to make it so you can only move a piece if it is that color's turn.
     {
         a[currentX][currentY] = null;
         a[newX][newY] = new Space(this);
