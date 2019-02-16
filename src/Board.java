@@ -17,6 +17,18 @@ public class Board {
         }
     }
 
+    public Space[][] getBoard()
+            //returns the entire board.
+    {
+        return b;
+    }
+
+    public Space getSpace(int x, int y)
+            //returns the space of the arguments you give it.
+    {
+        return b[x][y];
+    }
+
     public void DisplayBoard()
     // Outputs text version of board.
     {
