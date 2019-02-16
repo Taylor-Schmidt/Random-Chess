@@ -20,10 +20,38 @@ public class TextActuator {
 
             for (Space space : row) {
                 if (space == null) {
-                    System.out.print("|###");
+                    System.out.print("|##\t");
                 } else {
-                    System.out.print("| " + space.getpiece().getColor().charAt(0) +
-                            space.getpiece().getClass().toString().replaceAll("class ", "").charAt(0));
+                    System.out.print("| ");
+                    Piece piece = space.getpiece();
+                    if (piece == null) {
+                        System.out.print("\t");
+                    } else {
+                        char c = ' ';
+                        switch (space.getpiece().getType()) {
+                            case KING:
+                                c = '♔';
+                                break;
+                            case QUEEN:
+                                c = '♕';
+                                break;
+                            case ROOK:
+                                c = '♖';
+                                break;
+                            case BISHOP:
+                                c = '♗';
+                                break;
+                            case KNIGHT:
+                                c = '♘';
+                                break;
+                            case PAWN:
+                                c = '♙';
+                                break;
+                        }
+                        if (space.getpiece().getColor().equals("black"))
+                            c += 6;
+                        System.out.print( c + "\t");
+                    }
                 }
             }
             System.out.print("|");
@@ -36,7 +64,7 @@ public class TextActuator {
     private void printHorizontalDivider(int m) {
         for (int r = 0; r <= m; r++) {
             if (r != m)
-                System.out.print("+---");
+                System.out.print("+--\t");
             else System.out.print("+");
         }
         System.out.println();
