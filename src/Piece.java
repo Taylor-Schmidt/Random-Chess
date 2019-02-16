@@ -1,16 +1,16 @@
 
 public interface Piece {
 
-    public enum ChessPieceType {
+    enum ChessPieceType {
         PAWN, BISHOP, KING, QUEEN, ROOK, KNIGHT
     }
 
-    public abstract void move(Space a[][], int currentX, int currentY, int newX, int newY);
+    void move(Space a[][], int currentX, int currentY, int newX, int newY);
 
-    public int getvalue();
+    int getvalue();
 
-    public String getColor();
+    String getColor();
 
-    public ChessPieceType getType();
+    ChessPieceType getType();
 
 }

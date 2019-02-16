@@ -17,24 +17,7 @@ public class Board {
         }
     }
 
-    public void DisplayBoard()
-    // Outputs text version of board.
-    {
-        for(int i=7; i>=0; i--)
-        {
-            for(int j=0; j<8; j++)
-            {
-                if(b[i][j]==null)
-                {
-                    System.out.print(0 + " ");
-                }
-                else
-                {
-                    System.out.print(b[i][j].getpiece().getvalue() + " ");
-                }
-            }
-            System.out.println();
-        }
+    public Space[][] getBoard() {
+        return b;
     }
-
 }

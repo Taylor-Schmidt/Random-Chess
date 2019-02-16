@@ -1,18 +1,54 @@
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class GameManager {
     public static void main(String[] args) {
-        Space[][] board = new Space[8][8]; //TODO: change to Board class
+        Board board = new Board();
 
+        Space[][] spaces = board.getBoard();
+        initBoardStandardChess(spaces);
+
+
+        GameState currentState = new GameState(0, board);
         TextActuator actuator = new TextActuator();
         Scanner kb = new Scanner(System.in);
 
-        actuator.printBoard(board);
-
+        actuator.printBoard(spaces);
         System.out.println("White goes first.");
         System.out.print("Which piece would you like to move?");
-        String input = kb.nextLine();
+//        String input = kb.nextLine();
+    }
 
+    private static String black = "black";
+    private static String white = "white";
 
+    private static void initBoardStandardChess(Space[][] spaces) {
+        for (int i = 0; i < spaces.length; i++) {
+            spaces[1][i] = new Space(new Pawn(black, 0));
+            spaces[spaces.length - 2][i] = new Space(new Pawn(white, 0));
+        }
+
+        int[] emptyArray = new int[]{0,0,0,0,0,0,0,0}; //TODO: add values OR have classes have predefined values
+        initStandardRow(spaces[0], black, emptyArray);
+        initStandardRow(spaces[spaces.length - 1], white, emptyArray);
+    }
+
+    private static void initStandardRow(Space[] row, String color, int[] valueArray) {
+        row[0] = new Space(new Rook(color, valueArray[0]));
+        row[1] = new Space(new Knight(color, valueArray[1]));
+        row[2] = new Space(new Bishop(color, valueArray[2]));
+        row[3] = new Space(new Queen(color, valueArray[3]));
+        row[4] = new Space(new King(color, valueArray[4]));
+        row[5] = new Space(new Bishop(color, valueArray[5]));
+        row[6] = new Space(new Knight(color, valueArray[6]));
+        row[7] = new Space(new Rook(color, valueArray[7]));
+    }
+
+    private static <T> void reverseArray(T[] array) {
+        for (int i = 0; i < (array.length / 2) - 1; i++) {
+            T temp = array[i];
+            array[i] = array[array.length - 1 - i];
+            array[array.length - 1 - i] = temp;
+        }
     }
 }

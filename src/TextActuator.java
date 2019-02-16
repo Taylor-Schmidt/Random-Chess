@@ -15,10 +15,16 @@ public class TextActuator {
         int m = spaces.length;
         int n = spaces[0].length;
 
-        for (Space[] row : spaces) {
+        printLetterRow(m);
+        for (int i = 0; i < m; i++) {
+            Space[] row = spaces[i];
             printHorizontalDivider(m);
 
-            for (Space space : row) {
+            int rowNum = m - i;
+
+            System.out.print(rowNum + "\t");
+            for (int j = 0; j < n; j++) {
+                Space space = row[j];
                 if (space == null) {
                     System.out.print("|##\t");
                 } else {
@@ -55,17 +61,28 @@ public class TextActuator {
                 }
             }
             System.out.print("|");
+            System.out.print("\t" + rowNum);
             System.out.println();
         }
 
         printHorizontalDivider(m);
+        printLetterRow(m);
     }
 
     private void printHorizontalDivider(int m) {
+        System.out.print("\t");
         for (int r = 0; r <= m; r++) {
             if (r != m)
                 System.out.print("+--\t");
             else System.out.print("+");
+        }
+        System.out.println();
+    }
+
+    private void printLetterRow(int m){
+        System.out.print("\t");
+        for (int i = 0; i < m; i++){
+            System.out.print(("  " + (char) ('A' + i)) + "\t");
         }
         System.out.println();
     }
