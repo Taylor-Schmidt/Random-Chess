@@ -2,6 +2,7 @@ public class Bishop implements Piece {
 
     private String color;
     private int value;
+    private ChessPieceType chessPieceType = ChessPieceType.BISHOP;
 
     public Bishop(String c, int v) {
         color = c;
@@ -9,7 +10,7 @@ public class Bishop implements Piece {
     }
 
     public void move(Space a[][], int currentX, int currentY, int newX, int newY)
-    //Still need to program to only move piece if legal move. Also will need to make it so you can only move a piece if it is that color's turn.
+    //Still need to program to only move piece if legal move. Also will need to make it so you can only move a pieceif it is that color's turn.
     {
         a[currentX][currentY] = null;
         a[newX][newY] = new Space(this);
@@ -20,4 +21,9 @@ public class Bishop implements Piece {
     }
 
     public String getColor(){return color;}
+
+    @Override
+    public ChessPieceType getType() {
+        return chessPieceType;
+    }
 }

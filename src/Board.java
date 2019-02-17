@@ -17,36 +17,7 @@ public class Board {
         }
     }
 
-    public Space[][] getBoard()
-            //returns the entire board.
-    {
+    public Space[][] getBoard() {
         return b;
     }
-
-    public Space getSpace(int x, int y)
-            //returns the space of the arguments you give it.
-    {
-        return b[x][y];
-    }
-
-    public void DisplayBoard()
-    // Outputs text version of board.
-    {
-        for(int i=7; i>=0; i--)
-        {
-            for(int j=0; j<8; j++)
-            {
-                if(b[i][j]==null)
-                {
-                    System.out.print(0 + " ");
-                }
-                else
-                {
-                    System.out.print(b[i][j].getpiece().getvalue() + " ");
-                }
-            }
-            System.out.println();
-        }
-    }
-
 }
