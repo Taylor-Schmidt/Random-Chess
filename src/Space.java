@@ -15,4 +15,8 @@ public class Space {
         return p;
     }
 
+    public void setpiece(Piece P) {
+        p=P;
+    }
+
 }

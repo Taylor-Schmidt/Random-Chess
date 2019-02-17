@@ -20,4 +20,13 @@ public class Board {
     public Space[][] getBoard() {
         return b;
     }
+
+    public Space getSpace(int x, int y) {
+        return b[x][y];
+    }
+
+    public void setSpace(Space sp, int x, int y)
+    {
+        b[x][y]=sp;
+    }
 }
