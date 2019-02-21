@@ -12,5 +12,4 @@ public interface Piece {
     String getColor();
 
     ChessPieceType getType();
-
 }
