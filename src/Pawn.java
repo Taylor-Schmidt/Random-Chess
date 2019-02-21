@@ -9,18 +9,18 @@ public class Pawn implements Piece {
     }
 
     @Override
-    public void move(Space location[][], int currentX, int currentY, int newX, int newY)
-        location[currentX][CurrentY] = null
+    public void move(Space location[][], int currentX, int currentY, int newX, int newY){
+        location[currentX][currentY] = null;
         location[newX][newY] = new Space(this);
 
         //programming logic/valid moves
 
         //white (0 end of board y)
-        if(color == "white");
+        if(color.equals("white"));
             //horizontal
             if(currentX != newX)
                 newX = currentX;
-            if(newY != currentY++)
+            //if(newY != currentY++)
 
     }
 
