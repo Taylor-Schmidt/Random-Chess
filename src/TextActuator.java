@@ -1,15 +1,26 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class TextActuator {
 
-    //Test main; probably remove before prototype release
-    public static void main(String[] args) {
-        Space[][] spaces = new Space[8][8];
-        for (int i = 0; i < 8; i++) {
-            spaces[0][i] = new Space(new Bishop("white", 3));
-        }
+    private LinkedList<String> consoleQueue = new LinkedList<>();
+    private int numberOfConsoleLines;
 
-        TextActuator actuator = new TextActuator();
-        actuator.printBoard(spaces);
+    //Test main; probably remove before prototype release
+//    public static void main(String[] args) {
+//        Space[][] spaces = new Space[8][8];
+//        for (int i = 0; i < 8; i++) {
+//            spaces[0][i] = new Space(new Bishop("white", 3));
+//        }
+//
+//        TextActuator actuator = new TextActuator();
+//        actuator.printBoard(spaces);
+//    }
+
+    TextActuator(int size){
+        numberOfConsoleLines = size;
     }
+
 
     void printBoard(Space[][] spaces) {
         int m = spaces.length;
@@ -67,6 +78,8 @@ public class TextActuator {
 
         printHorizontalDivider(m);
         printLetterRow(m);
+
+        printConsole();
     }
 
     private void printHorizontalDivider(int m) {
@@ -85,6 +98,16 @@ public class TextActuator {
             System.out.print(("  " + (char) ('A' + i)) + "\t");
         }
         System.out.println();
+    }
+
+    public void addLine(String line){
+        consoleQueue.add(line);
+    }
+
+    private void printConsole(){
+        for (int i = 0; i < numberOfConsoleLines; i++){
+            System.out.println(consoleQueue.get(i));
+        }
     }
 
 }
