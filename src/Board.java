@@ -2,8 +2,13 @@
 
 public class Board {
 
-    private Space[][] b;     // 2D array that represents board.
 
+    private Space[][] b;     // 2D array that represents board.
+    /*
+     if the space is null, there is no space there
+     if piece is null- no piece on the space
+     if piece has(name of pieces)- that piece is on the space
+    */
     public Board()
     // Default constructor. Makes normal 8x8 board.
     {
