@@ -21,6 +21,7 @@ public class Pawn implements Piece {
             if(currentX != newX)
                 newX = currentX;
             if(newY != currentY++)
+
     }
 
     @Override
