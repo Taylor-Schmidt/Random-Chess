@@ -4,13 +4,23 @@ public class Pawn implements Piece {
     private ChessPieceType chessPieceType = ChessPieceType.PAWN;
 
     public Pawn(String c, int v) {
-        color = c;
+        color = c; //black,white
         value = v;
     }
 
     @Override
-    public void move(Space[][] a, int currentX, int currentY, int newX, int newY) {
+    public void move(Space location[][], int currentX, int currentY, int newX, int newY)
+        location[currentX][CurrentY] = null
+        location[newX][newY] = new Space(this);
 
+        //programming logic/valid moves
+
+        //white (0 end of board y)
+        if(color == "white");
+            //horizontal
+            if(currentX != newX)
+                newX = currentX;
+            if(newY != currentY++)
     }
 
     @Override
