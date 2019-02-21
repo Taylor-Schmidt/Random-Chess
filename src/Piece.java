@@ -12,4 +12,17 @@ public interface Piece {
     String getColor();
 
     ChessPieceType getType();
+
+    default boolean legalmove(Space a[][], int currentX, int currentY, int newX, int newY)
+    {
+        if(!(a[newX][newY]==null))
+            return false;
+        else if((!a[newX][newY].getpiece().getColor().equals(this.getColor())))
+            return false;
+        else if((newX<0)||(newY<0)||(newX>a.length)||(newY>a.length))
+            return false;
+        else
+            return true;
+    }
+
 }
