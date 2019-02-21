@@ -1,26 +1,30 @@
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class GameManager {
+    private static String black = "black";
+    private static String white = "white";
+
     public static void main(String[] args) {
         Board board = new Board();
 
         Space[][] spaces = board.getBoard();
         initBoardStandardChess(spaces);
 
-
         GameState currentState = new GameState(0, board);
-        TextActuator actuator = new TextActuator();
+        TextActuator actuator = new TextActuator(5);
         Scanner kb = new Scanner(System.in);
 
-        actuator.printBoard(spaces);
-        System.out.println("White goes first.");
-        System.out.print("Which piece would you like to move?");
-//        String input = kb.nextLine();
+        boolean gameIsRunning = true;
+        actuator.addLine("White goes first.");
+
+        while (gameIsRunning){
+
+            actuator.addLine("Which piece would you like to move?");
+            actuator.printBoard(spaces);
+        }
+
     }
 
-    private static String black = "black";
-    private static String white = "white";
 
     private static void initBoardStandardChess(Space[][] spaces) {
         for (int i = 0; i < spaces.length; i++) {
