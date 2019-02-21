@@ -15,12 +15,12 @@ public class GameManager {
         Scanner kb = new Scanner(System.in);
 
         boolean gameIsRunning = true;
-        actuator.addLine("White goes first.");
 
         while (gameIsRunning){
-
+            actuator.addLine("White goes first.");
             actuator.addLine("Which piece would you like to move?");
             actuator.printBoard(spaces);
+
         }
 
     }
