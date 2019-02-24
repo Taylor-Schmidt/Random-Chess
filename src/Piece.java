@@ -18,7 +18,7 @@ public interface Piece {
     default boolean legalmove(Space a[][], int currentRow, int currentCol, int newRow, int newCol) {
         if (a[newRow][newCol] == null)
             return false;
-        else if ((newRow < 0) || (newCol < 0) || (newRow > a.length) || (newCol > a[0].length))
+        else if ((newRow < 0) || (newCol < 0) || (newRow >= a.length) || (newCol >= a[0].length))
             return false;
         else if (!(a[newRow][newCol].getpiece() == null))
             return false;
