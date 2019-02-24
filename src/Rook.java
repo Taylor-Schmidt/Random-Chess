@@ -10,7 +10,18 @@ public class Rook implements Piece {
     }
     @Override
     public void move(Space[][] a, int currentX, int currentY, int newX, int newY) {
-
+        if(legalmove(a, currentX, currentY, newX, newY))
+        {
+            if(currentX == newX || currentY == newY)
+            {
+                a[newX][newY].setpiece(this);
+                a[currentX][currentY].setpiece(null);
+            }
+            else
+                System.out.println("Illegal move, please try another one.");
+        }
+        else
+            System.out.println("Illegal move, please try another one.");
     }
 
     @Override
