@@ -19,7 +19,7 @@ public class Position {
         } else {
 
             int col = s.charAt(0) - 'A';
-            int row = 8 - s.charAt(1) - '0';
+            int row = 7 - (s.charAt(1) - '1');
 
             return new Position(row, col);
         }

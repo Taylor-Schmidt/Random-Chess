@@ -11,16 +11,31 @@ public class GameManager {
         initBoardStandardChess(spaces);
 
         GameState currentState = new GameState(0, board);
-        TextActuator actuator = new TextActuator(5);
+        TextActuator actuator = new TextActuator(0);
         Scanner kb = new Scanner(System.in);
 
         boolean gameIsRunning = true;
-        actuator.addLine("White goes first.");
+        Turn turn = new Turn();
+        String s;
+        Position PBefore, PAfter;
+        //actuator.addLine("White goes first.");
         //start of game loop
         while (gameIsRunning){
 
-            actuator.addLine("Which piece would you like to move?");
+            //actuator.addLine("Which piece would you like to move?");
             actuator.printBoard(spaces);
+            System.out.println("Enter the move you want to make(Ex. B1,A3): ");
+            s=kb.nextLine();
+            String[] split = s.split(",");
+            PBefore = Position.parsePosition(split[0]);
+            PAfter = Position.parsePosition(split[1]);
+            System.out.println(PBefore.row + " " + PBefore.col + " " + PAfter.row + " " + PAfter.col);
+            //Add a check to make sure entered move works.
+            spaces[PBefore.row][PBefore.col].getpiece().move(spaces, PBefore.row, PBefore.col, PAfter.row, PAfter.col);
+            //Check for check mate, if in check mate set gameIsRunning to false.
+
+
+
         }
 
     }
