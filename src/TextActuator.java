@@ -1,27 +1,24 @@
 import java.util.LinkedList;
-import java.util.Queue;
 
 public class TextActuator {
 
     private LinkedList<String> consoleQueue = new LinkedList<>();
     private int numberOfConsoleLines;
 
-    //Test main; probably remove before prototype release
-//    public static void main(String[] args) {
-//        Space[][] spaces = new Space[8][8];
-//        for (int i = 0; i < 8; i++) {
-//            spaces[0][i] = new Space(new Bishop("white", 3));
-//        }
-//
-//        TextActuator actuator = new TextActuator();
-//        actuator.printBoard(spaces);
-//    }
-
+    /**
+     * Creates an instance of TextActuator
+     * @param size Max lines that the attache console print can have
+     */
     TextActuator(int size){
         numberOfConsoleLines = size;
     }
 
-
+    /**
+     * Prints Spaces to Board
+     * Null Spaces are not able to be stepped on
+     * Spaces with null getPiece() have no piece on them
+     * @param spaces 2D array of type Space
+     */
     void printBoard(Space[][] spaces) {
         int m = spaces.length;
         int n = spaces[0].length;
@@ -82,6 +79,10 @@ public class TextActuator {
         printConsole();
     }
 
+    /**
+     * Prints a row equal in width to to the size of the board.
+     * @param m
+     */
     private void printHorizontalDivider(int m) {
         System.out.print("\t");
         for (int r = 0; r <= m; r++) {
@@ -92,6 +93,10 @@ public class TextActuator {
         System.out.println();
     }
 
+    /**
+     * Prints a row of labels (for above and below board
+     * @param m width of board
+     */
     private void printLetterRow(int m){
         System.out.print("\t");
         for (int i = 0; i < m; i++){
@@ -100,10 +105,18 @@ public class TextActuator {
         System.out.println();
     }
 
+    /**
+     * Adds a line to the console
+     * @param line string to print (should be a feedback message to user)
+     */
     public void addLine(String line){
         consoleQueue.add(line);
     }
 
+    /**
+     * prints lines below the text board
+     * Consists of feedback for user
+     */
     private void printConsole(){
         for (int i = 0; i < numberOfConsoleLines; i++){
             System.out.println(consoleQueue.get(i));

@@ -9,21 +9,24 @@ public class Pawn implements Piece {
     }
 
     @Override
-    public void move(Space location[][], int currentX, int currentY, int newX, int newY){
-        location[currentX][currentY] = null;
-        location[newX][newY] = new Space(this);
+    public Position[] getAvailableMoves(int row, int col) {
+        return new Position[0];
+    }
+
+    @Override
+    public void move(Space[][] location, int currentRow, int currentCol, int newX, int newCol){
+        location[currentRow][currentCol] = null;
+        location[newX][newCol] = new Space(this);
 
         //programming logic/valid moves
 
-        //all
-        if(newX <= -1 || newX >= location.length)
-            System.out.println("Invalid move");
         //white (0 end of board y)
         if(color.equals("white"));
             //horizontal
-            if(currentX != newX)
-                newX = currentX;
-            //if(newY != currentY++)
+            if(currentRow != newX)
+                newX = currentRow;
+            //if(newCol != currentCol++)
+
     }
 
     @Override

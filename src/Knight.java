@@ -8,13 +8,18 @@ public class Knight implements Piece {private String color;
     }
 
     @Override
-    public void move(Space[][] a, int currentX, int currentY, int newX, int newY) {
-        if(legalmove(a, currentX, currentY, newX, newY))
+    public Position[] getAvailableMoves(int row, int col) {
+        return new Position[0];
+    }
+
+    @Override
+    public void move(Space[][] a, int currentRow, int currentCol, int newRow, int newCol) {
+        if(legalmove(a, currentRow, currentCol, newRow, newCol))
         {
-            if((((newX==currentX+2)||(newX==currentX-2))&&((newY==currentY+1)||(newY==currentY-1)))||((newY==currentY+2||(newY==currentY-2))&&((newX==currentX+1)||(newX==currentX-1))))
+            if((((newRow==currentRow+2)||(newRow==currentRow-2))&&((newCol==currentCol+1)||(newCol==currentCol-1)))||((newCol==currentCol+2||(newCol==currentCol-2))&&((newRow==currentRow+1)||(newRow==currentRow-1))))
             {
-                a[newX][newY].setpiece(this);
-                a[currentX][currentY].setpiece(null);
+                a[newRow][newCol].setpiece(this);
+                a[currentRow][currentCol].setpiece(null);
             }
             else
                 System.out.println("Illegal move, please try another one.");
