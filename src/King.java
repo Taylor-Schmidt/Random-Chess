@@ -10,16 +10,16 @@ public class King implements Piece {
     }
 
     @Override
-    public Position[] getAvailableMoves(int row, int col) {
-        return new Position[0];
-    }
+    public void move(Space[][] a, int currentX, int currentY, int newX, int newY) {
+        if (legalmove(a, currentX, currentY, newX, newY)){
+            if((((Math.abs(currentX-newX)==1 && Math.abs(currentY-newY)==1) && Math.abs(currentY-newY)<2))||((Math.abs(currentX-newX)==1 && Math.abs(currentY-newY)==1) && Math.abs(currentX-newX)<2)){
 
-    @Override
-    public void move(Space[][] a, int currentRow, int currentCol, int newRow, int newCol) {
-        if (legalmove(a, currentRow, currentCol, newRow, newCol)){
+            }
 
         }
     }
+
+
 
     @Override
     public int getvalue() {
