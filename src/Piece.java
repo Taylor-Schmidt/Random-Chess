@@ -23,9 +23,13 @@ public interface Piece {
             return false;
         else if(!(a[newRow][newCol].getpiece()==null))
             return false;
-        //Still need to check if space you are moving a piece to has a piece of the same color
-        else
-            return true;
+        else if(!(a[newCol][newRow].getpiece()==null)) {
+            return a[newRow][newCol].getpiece().getColor() != getColor();
+        }
+                //Still need to check if space you are moving a piece to has a piece of the same color
+            else
+                return true;
+        }
     }
 
 }

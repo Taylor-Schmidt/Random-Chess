@@ -1,3 +1,7 @@
+/**
+ * Main Driver for game loop.
+ */
+
 import java.util.Scanner;
 
 /**
@@ -14,10 +18,8 @@ public class GameManager {
      */
     public static void main(String[] args) {
         Board board = new Board();
-
         Space[][] spaces = board.getBoard();
         initBoardStandardChess(spaces);
-
         GameState currentState = new GameState(0, board);
         TextActuator actuator = new TextActuator(0);
         Scanner kb = new Scanner(System.in);
