@@ -11,7 +11,7 @@ public class Knight implements Piece {private String color;
     public void move(Space[][] a, int currentX, int currentY, int newX, int newY) {
         if(legalmove(a, currentX, currentY, newX, newY))
         {
-            if((((newX==currentX+2)||(newX==currentX-2))&&((newY==currentY+1)||(newY==currentY-1)))||((newY==currentY+2||(newY==currentY-2))&&((newX==currentX+1)||(newX==currentY-1))))
+            if((((newX==currentX+2)||(newX==currentX-2))&&((newY==currentY+1)||(newY==currentY-1)))||((newY==currentY+2||(newY==currentY-2))&&((newX==currentX+1)||(newX==currentX-1))))
             {
                 a[newX][newY].setpiece(this);
                 a[currentX][currentY].setpiece(null);
