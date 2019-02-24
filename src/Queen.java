@@ -10,13 +10,18 @@ public class Queen implements Piece {
     }
 
     @Override
-    public void move(Space[][] a, int currentX, int currentY, int newX, int newY) {
-        if(legalmove(a, currentX, currentY, newX, newY))
+    public Position[] getAvailableMoves(int row, int col) {
+        return new Position[0];
+    }
+
+    @Override
+    public void move(Space[][] a, int currentRow, int currentCol, int newRow, int newCol) {
+        if(legalmove(a, currentRow, currentCol, newRow, newCol))
         {
-            if(currentX == newX || currentY == newY || Math.abs(newX-currentX)==Math.abs(newY-currentY))
+            if(currentRow == newRow || currentCol == newCol || Math.abs(newRow-currentRow)==Math.abs(newCol-currentCol))
             {
-                a[newX][newY].setpiece(this);
-                a[currentX][currentY].setpiece(null);
+                a[newRow][newCol].setpiece(this);
+                a[currentRow][currentCol].setpiece(null);
             }
             else
                 System.out.println("Illegal move, please try another one.");

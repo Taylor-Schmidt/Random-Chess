@@ -8,6 +8,12 @@ public class Rook implements Piece {
         color = c;
         value = v;
     }
+
+    @Override
+    public Position[] getAvailableMoves(int row, int col) {
+        return new Position[0];
+    }
+
     @Override
     public void move(Space[][] a, int currentRow, int currentCol, int newRow, int newCol) {
         if(legalmove(a, currentRow, currentCol, newRow, newCol))
