@@ -20,7 +20,7 @@ public class Knight implements Piece {private String color;
                 System.out.println("Illegal move, please try another one.");
         }
         else
-            System.out.println("Illegal move, please try another one.");
+            System.out.println("Illegal move(According to legalmove method in piece class), please try another one.");
     }
 
     @Override
