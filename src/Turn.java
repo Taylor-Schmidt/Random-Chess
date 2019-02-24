@@ -17,4 +17,7 @@ public class Turn {
     public String getcolor() {
         return color;
     }
+
+
+
 }

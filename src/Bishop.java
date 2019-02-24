@@ -12,8 +12,18 @@ public class Bishop implements Piece {
     public void move(Space a[][], int currentX, int currentY, int newX, int newY)
     //Still need to program to only move piece if legal move. Also will need to make it so you can only move a pieceif it is that color's turn.
     {
-        a[currentX][currentY].setpiece(null);
-        a[newX][newY] = new Space(this);
+        if(legalmove(a, currentX, currentY, newX, newY))
+        {
+            if(Math.abs(newX-currentX)==Math.abs(newY-currentY))
+            {
+                a[newX][newY].setpiece(this);
+                a[currentX][currentY].setpiece(null);
+            }
+            else
+                System.out.println("Illegal move, please try another one.");
+        }
+        else
+            System.out.println("Illegal move, please try another one.");
     }
 
     public int getvalue() {

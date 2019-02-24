@@ -24,4 +24,23 @@ public class GameState {
         this.turn = turn;
         this.board = board;
     }
+    //Start of my game loop, returns a boolean if the game is still running(in terms of in a game state)
+    public static boolean gameLoop() {
+        boolean checkmate = false;
+
+        /*
+        Ryan's Basic Turn logic:
+        Display color's turn and board
+        Asks the user for input
+        (already in game manager)
+        do while not in checkmate:
+
+        Ends game when checkmate is true
+         */
+
+
+
+        return checkmate; //temp return
+    }
+
 }

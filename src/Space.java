@@ -3,6 +3,8 @@ public class Space {
 
     //private int x;
     //private int y;
+
+
     private Piece p;
 
     public Space() {p=null;}
