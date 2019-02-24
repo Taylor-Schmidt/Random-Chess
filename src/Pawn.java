@@ -15,6 +15,9 @@ public class Pawn implements Piece {
 
         //programming logic/valid moves
 
+        //all
+        if(newX <= -1 || newX >= location.length)
+            System.out.println("Invalid move");
         //white (0 end of board y)
         if(color.equals("white"));
             //horizontal

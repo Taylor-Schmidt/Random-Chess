@@ -18,10 +18,10 @@ public class Test {
 
 
         //The rest of the program is temporary and for testing
-        Bishop wbishop = new Bishop("white", 1);
-        board[3][3] = new Space(wbishop);
+        Pawn wpawn = new Pawn("white", 1);
+        board[3][3] = new Space(wpawn);
         displayBoard(currentTurn.getcolor(), board);
-        System.out.println("Enter the X coordinate for where you want to move the bishop(Represented by the 1). Legal moves not yet programmed.");
+        System.out.println("Enter the X coordinate for where you want to move the pawn(Represented by the 1). Legal moves not yet programmed.");
         int currentX = 3, currentY = 3, newX, newY;
         newX = key.nextInt();
         System.out.println("Now enter the Y coordinate.");
