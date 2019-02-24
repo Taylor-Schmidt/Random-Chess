@@ -6,34 +6,38 @@ import java.util.Scanner;
 
 /**
  * Initialized the state of the game, and runs the game loop.
+ *
  */
-class GameManager {
-    static String black = "black";
-    static String white = "white";
-
+public class GameManager {
+    private static String black = "black";
+    private static String white = "white";
 
     /**
-     * Runs the game loop
+     *
+     * @param args
      */
-    void run() {
+    public static void main(String[] args) {
+        // Initializes standard chess board and sets up TextActuator.
         Board board = new Board();
         Space[][] spaces = board.getBoard();
         initBoardStandardChess(spaces);
-        GameState currentState = new GameState("white", board, null);
+        GameState currentState = new GameState(0, board);
         TextActuator actuator = new TextActuator(0);
         Scanner kb = new Scanner(System.in);
 
+        // Sets up game loop.
         boolean gameIsRunning = true;
         String s;
         Position PBefore, PAfter;
-        //actuator.addLine("White goes first.");
-        //start of game loop
-        while (gameIsRunning) {
 
-            //actuator.addLine("Which piece would you like to move?");
+        // The game loop.
+        while (gameIsRunning){
+
+            //Prints Board.
             actuator.printBoard(spaces);
+            // Gets move from player, parses move and attempts to make move if legal.
             System.out.println("Enter the move you want to make(Ex. B1,A3): ");
-            s = kb.nextLine();
+            s=kb.nextLine();
             String[] split = s.split(",");
             PBefore = Position.parsePosition(split[0]);
             PAfter = Position.parsePosition(split[1]);
@@ -45,18 +49,18 @@ class GameManager {
     }
 
 
-    private void initBoardStandardChess(Space[][] spaces) {
+    private static void initBoardStandardChess(Space[][] spaces) {
         for (int i = 0; i < spaces.length; i++) {
             spaces[1][i] = new Space(new Pawn(black, 0));
             spaces[spaces.length - 2][i] = new Space(new Pawn(white, 0));
         }
 
-        int[] emptyArray = new int[]{0, 0, 0, 0, 0, 0, 0, 0}; //TODO: add values OR have classes have predefined values
+        int[] emptyArray = new int[]{0,0,0,0,0,0,0,0}; //TODO: add values OR have classes have predefined values
         initStandardRow(spaces[0], black, emptyArray);
         initStandardRow(spaces[spaces.length - 1], white, emptyArray);
     }
 
-    private void initStandardRow(Space[] row, String color, int[] valueArray) {
+    private static void initStandardRow(Space[] row, String color, int[] valueArray) {
         row[0] = new Space(new Rook(color, valueArray[0]));
         row[1] = new Space(new Knight(color, valueArray[1]));
         row[2] = new Space(new Bishop(color, valueArray[2]));
