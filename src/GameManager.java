@@ -1,9 +1,17 @@
 import java.util.Scanner;
 
+/**
+ * Initialized the state of the game, and runs the game loop.
+ *
+ */
 public class GameManager {
     private static String black = "black";
     private static String white = "white";
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         Board board = new Board();
 
@@ -15,7 +23,6 @@ public class GameManager {
         Scanner kb = new Scanner(System.in);
 
         boolean gameIsRunning = true;
-        Turn turn = new Turn();
         String s;
         Position PBefore, PAfter;
         //actuator.addLine("White goes first.");
@@ -33,11 +40,7 @@ public class GameManager {
             //Add a check to make sure entered move works.
             spaces[PBefore.row][PBefore.col].getpiece().move(spaces, PBefore.row, PBefore.col, PAfter.row, PAfter.col);
             //Check for check mate, if in check mate set gameIsRunning to false.
-
-
-
         }
-
     }
 
 

@@ -5,7 +5,9 @@ public interface Piece {
         PAWN, BISHOP, KING, QUEEN, ROOK, KNIGHT
     }
 
-    void move(Space a[][], int currentX, int currentY, int newX, int newY);
+    Position[] getAvailableMoves(int row, int col);
+
+    void move(Space a[][], int currentRow, int currentCol, int newRow, int newCol);
 
     int getvalue();
 
@@ -13,13 +15,13 @@ public interface Piece {
 
     ChessPieceType getType();
 
-    default boolean legalmove(Space a[][], int currentX, int currentY, int newX, int newY)
+    default boolean legalmove(Space a[][], int currentRow, int currentCol, int newRow, int newCol)
     {
-        if(a[newX][newY]==null)
+        if(a[newRow][newCol]==null)
             return false;
-        else if((newX<0)||(newY<0)||(newX>a.length)||(newY>a.length))
+        else if((newRow<0)||(newCol<0)||(newRow>a.length)||(newCol>a[0].length))
             return false;
-        else if(!(a[newX][newY].getpiece()==null))
+        else if(!(a[newRow][newCol].getpiece()==null))
             return false;
         //Still need to check if space you are moving a piece to has a piece of the same color
         else

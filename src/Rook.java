@@ -9,13 +9,13 @@ public class Rook implements Piece {
         value = v;
     }
     @Override
-    public void move(Space[][] a, int currentX, int currentY, int newX, int newY) {
-        if(legalmove(a, currentX, currentY, newX, newY))
+    public void move(Space[][] a, int currentRow, int currentCol, int newRow, int newCol) {
+        if(legalmove(a, currentRow, currentCol, newRow, newCol))
         {
-            if(currentX == newX || currentY == newY)
+            if(currentRow == newRow || currentCol == newCol)
             {
-                a[newX][newY].setpiece(this);
-                a[currentX][currentY].setpiece(null);
+                a[newRow][newCol].setpiece(this);
+                a[currentRow][currentCol].setpiece(null);
             }
             else
                 System.out.println("Illegal move, please try another one.");
