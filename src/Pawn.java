@@ -18,7 +18,6 @@ public class Pawn extends Piece {
     @Override
     public void move(Space[][] a, int currentRow, int currentCol, int newRow, int newCol) {
         if ((legalMove(a, newRow, newCol)) && (chessPieceType == ChessPieceType.PAWN)) {
-
             if (color.equals("white")) {
                 //white pieces
                 if ((newCol == currentCol) && (hasAPiece(a, newRow, newCol))) {
@@ -33,7 +32,8 @@ public class Pawn extends Piece {
                     a[currentRow][currentCol].setpiece(null);
                 }
                 else if ((currentRow == 6) &&
-                        ((newRow == currentRow - 2) && (newCol == currentCol))
+                        ((newRow == currentRow - 2) && (newCol == currentCol)) &&
+                        ((!hasAPiece(a,4,newCol)) && (!hasAPiece(a,5,newCol)))
                 ) {
                     //Two spaces for first movement
                     //First checks if piece is in original row
@@ -72,7 +72,8 @@ public class Pawn extends Piece {
                     a[currentRow][currentCol].setpiece(null);
                 }
                 else if ((currentRow == 1) &&
-                        ((newRow == currentRow + 2) && (newCol == currentCol))
+                        ((newRow == currentRow + 2) && (newCol == currentCol)) &&
+                ((!hasAPiece(a,2,newCol)) && (!hasAPiece(a,3,newCol)))
                 ) {
                     //Two spaces for first movement
                     //First checks if piece is in original row
