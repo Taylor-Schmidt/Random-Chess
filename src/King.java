@@ -1,4 +1,4 @@
-public class King implements Piece {
+public class King extends Piece {
 
     private String color;
     private int value;
@@ -10,9 +10,14 @@ public class King implements Piece {
     }
 
     @Override
-    public void move(Space[][] a, int currentX, int currentY, int newX, int newY) {
-        if (legalmove(a, currentX, currentY, newX, newY)){
-            if((((Math.abs(currentX-newX)==1 && Math.abs(currentY-newY)==1) && Math.abs(currentY-newY)<2))||((Math.abs(currentX-newX)==1 && Math.abs(currentY-newY)==1) && Math.abs(currentX-newX)<2)){
+    public Position[] getAvailableMoves(int row, int col) {
+        return new Position[0];
+    }
+
+    @Override
+    public void move(Space[][] a, int currentRow, int currentCol, int newRow, int newCol) {
+        if (legalMove(a, newRow, newCol)){
+            if((((Math.abs(currentRow-newRow)==1 && Math.abs(currentCol-newCol)==1) && Math.abs(currentCol-newCol)<2))||((Math.abs(currentRow-newRow)==1 && Math.abs(currentCol-newCol)==1) && Math.abs(currentRow-newRow)<2)){
 
             }
 

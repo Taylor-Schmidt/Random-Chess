@@ -1,4 +1,4 @@
-public class Rook implements Piece {
+public class Rook extends Piece {
 
     private String color;
     private int value;
@@ -16,7 +16,7 @@ public class Rook implements Piece {
 
     @Override
     public void move(Space[][] a, int currentRow, int currentCol, int newRow, int newCol) {
-        if(legalmove(a, currentRow, currentCol, newRow, newCol))
+        if(legalMove(a, newRow, newCol))
         {
             if(currentRow == newRow || currentCol == newCol)
             {
