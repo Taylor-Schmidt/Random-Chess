@@ -1,4 +1,6 @@
-public class Knight implements Piece {private String color;
+public class Knight extends Piece {
+
+    private String color;
     private int value;
     private ChessPieceType chessPieceType = ChessPieceType.KNIGHT;
 
@@ -14,7 +16,7 @@ public class Knight implements Piece {private String color;
 
     @Override
     public void move(Space[][] a, int currentRow, int currentCol, int newRow, int newCol) {
-        if(legalmove(a, currentRow, currentCol, newRow, newCol))
+        if(legalMove(a, newRow, newCol))
         {
             if((((newRow==currentRow+2)||(newRow==currentRow-2))&&((newCol==currentCol+1)||(newCol==currentCol-1)))||((newCol==currentCol+2||(newCol==currentCol-2))&&((newRow==currentRow+1)||(newRow==currentRow-1))))
             {
@@ -25,7 +27,7 @@ public class Knight implements Piece {private String color;
                 System.out.println("Illegal move, please try another one.");
         }
         else
-            System.out.println("Illegal move(According to legalmove method in piece class), please try another one.");
+            System.out.println("Illegal move(According to legalMove method in piece class), please try another one.");
     }
 
     @Override

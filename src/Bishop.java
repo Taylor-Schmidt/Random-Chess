@@ -1,4 +1,4 @@
-public class Bishop implements Piece {
+public class Bishop extends Piece {
 
     private String color;
     private int value;
@@ -17,7 +17,7 @@ public class Bishop implements Piece {
     public void move(Space a[][], int currentRow, int currentCol, int newRow, int newCol)
     //Still need to program to only move piece if legal move. Also will need to make it so you can only move a pieceif it is that color's turn.
     {
-        if(legalmove(a, currentRow, currentCol, newRow, newCol))
+        if(legalMove(a, newRow, newCol))
         {
             if(Math.abs(newRow-currentRow)==Math.abs(newCol-currentCol))
             {

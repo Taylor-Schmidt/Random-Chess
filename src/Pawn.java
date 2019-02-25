@@ -1,7 +1,9 @@
-public class Pawn implements Piece {
+public class Pawn extends Piece {
+
     private String color;
     private int value;
     private ChessPieceType chessPieceType = ChessPieceType.PAWN;
+
 
     public Pawn(String c, int v) {
         color = c; //black,white
