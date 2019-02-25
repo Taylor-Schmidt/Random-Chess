@@ -16,18 +16,45 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public void move(Space[][] location, int currentRow, int currentCol, int newX, int newCol){
-        location[currentRow][currentCol] = null;
-        location[newX][newCol] = new Space(this);
+    public void move(Space[][] a, int currentRow, int currentCol, int newRow, int newCol){
+        if(legalMove(a , newRow, newCol) ) {
 
-        //programming logic/valid moves
-
-        //white (0 end of board y)
-        if(color.equals("white"));
-            //horizontal
-            if(currentRow != newX)
-                newX = currentRow;
-            //if(newCol != currentCol++)
+            if (color.equals("white")) {
+                //white pieces
+                if ((newRow == currentRow - 1) && (newCol == currentCol)) {
+                    //Forward movement
+                    a[newRow][newCol].setpiece(this);
+                    a[currentRow][currentCol].setpiece(null);
+                }
+                else if( (currentRow == 6) &&
+                        ( (newRow == currentRow - 2) && (newCol == currentCol) )
+                        ){
+                //Two spaces for first movement
+                    a[newRow][newCol].setpiece(this);
+                    a[currentRow][currentCol].setpiece(null);
+                }
+                else {
+                    System.out.println("Illegal move, please try another one.");
+                }
+            } else {
+                //black pieces
+                if ((newRow == currentRow + 1) && (newCol == currentCol)) {
+                    //Forward movment
+                    a[newRow][newCol].setpiece(this);
+                    a[currentRow][currentCol].setpiece(null);
+                }
+                else if( (currentRow == 1) &&
+                        ( (newRow == currentRow +2) && (newCol == currentCol) )
+                        ){
+                    //Two spaces for first movement
+                    a[newRow][newCol].setpiece(this);
+                    a[currentRow][currentCol].setpiece(null);
+                }
+                else {
+                    System.out.println("Illegal move, please try another one.");
+                }
+            }
+        }
 
     }
 
