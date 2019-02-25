@@ -52,6 +52,7 @@ public class Pawn extends Piece {
                 }
                 else {
                     System.out.println("Illegal move, please try another one.");
+
                 }
             }
         }
