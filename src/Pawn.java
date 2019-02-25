@@ -36,7 +36,8 @@ public class Pawn extends Piece {
                 else {
                     System.out.println("Illegal move, please try another one.");
                 }
-            } else {
+            }
+            else{
                 //black pieces
                 if ((newRow == currentRow + 1) && (newCol == currentCol)) {
                     //Forward movment
@@ -55,8 +56,11 @@ public class Pawn extends Piece {
 
                 }
             }
+            if( (newRow == 0) || (newRow == 7)){
+                //Promotion logic
+                chessPieceType = ChessPieceType.QUEEN;
+            }
         }
-
     }
 
     @Override
