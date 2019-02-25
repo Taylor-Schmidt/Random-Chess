@@ -55,6 +55,7 @@ public class Pawn extends Piece {
                 }
                 else {
                     //Invalid move
+                    //default if others fail
                     System.out.println("Illegal move, please try another one.");
                 }
             } else {
@@ -93,6 +94,7 @@ public class Pawn extends Piece {
                 }
                 else {
                     //Invalid move
+                    //default if others fail
                     System.out.println("Illegal move, please try another one.");
                 }
             }
