@@ -1,9 +1,12 @@
 import java.util.LinkedList;
 
+/**
+ * Used to output chess board (and a "console" output of text) to System.out
+ */
 public class TextActuator {
 
-    private LinkedList<String> consoleQueue = new LinkedList<>();
-    private int numberOfConsoleLines;
+    private LinkedList<String> consoleQueue = new LinkedList<>(); //List of items to be printed in console.
+    private int numberOfConsoleLines; //Number of lines of consoleQueue to print when printing console
 
     /**
      * Creates an instance of TextActuator
@@ -80,8 +83,8 @@ public class TextActuator {
     }
 
     /**
-     * Prints a row equal in width to to the size of the board.
-     * @param m
+     * Prints a equal in width to to the size of the board.
+     * @param m width of board (number of columns)
      */
     private void printHorizontalDivider(int m) {
         System.out.print("\t");
@@ -94,8 +97,9 @@ public class TextActuator {
     }
 
     /**
-     * Prints a row of labels (for above and below board
-     * @param m width of board
+     * Prints a row of letter labels to help the user identify the column in standard chess notation.
+     * Should be printed above and below the board.
+     * @param m width of board (number of columns)
      */
     private void printLetterRow(int m){
         System.out.print("\t");
