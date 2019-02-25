@@ -17,7 +17,7 @@ public class Pawn extends Piece {
 
     @Override
     public void move(Space[][] a, int currentRow, int currentCol, int newRow, int newCol){
-        if(legalMove(a , newRow, newCol) ) {
+        if( (legalMove(a,newRow,newCol)) && (chessPieceType == ChessPieceType.PAWN) ) {
 
             if (color.equals("white")) {
                 //white pieces
@@ -34,9 +34,10 @@ public class Pawn extends Piece {
                     a[currentRow][currentCol].setpiece(null);
                 }
                 else if( (newRow == currentRow - 1) &&
-                        ( (newCol == currentCol+1) || (newCol == currentCol-1) ) &&
+                        ( (newCol == currentCol +1 ) || (newCol == currentCol - 1) ) &&
                         (hasAPiece(a,newRow,newCol) && !colorsAreTheSame(a,newRow,newCol) )
                         ){
+                    //Diagonal capture
                     a[newRow][newCol].setpiece(this);
                     a[currentRow][currentCol].setpiece(null);
                 }
@@ -53,16 +54,17 @@ public class Pawn extends Piece {
                     a[currentRow][currentCol].setpiece(null);
                 }
                 else if( (currentRow == 1) &&
-                        ( (newRow == currentRow +2) && (newCol == currentCol) )
+                        ( (newRow == currentRow + 2) && (newCol == currentCol) )
                         ){
                     //Two spaces for first movement
                     a[newRow][newCol].setpiece(this);
                     a[currentRow][currentCol].setpiece(null);
                 }
                 else if( (newRow == currentRow + 1) &&
-                        ( (newCol == currentCol+1) || (newCol == currentCol-1) ) &&
+                        ( (newCol == currentCol + 1) || (newCol == currentCol -1 ) ) &&
                         (hasAPiece(a,newRow,newCol) && !colorsAreTheSame(a,newRow,newCol) )
                         ){
+                        //Diagonal capture
                     a[newRow][newCol].setpiece(this);
                     a[currentRow][currentCol].setpiece(null);
                 }
@@ -76,6 +78,18 @@ public class Pawn extends Piece {
                 chessPieceType = ChessPieceType.QUEEN;
             }
         }
+        if( (legalMove(a,newRow,newCol)) && (chessPieceType == ChessPieceType.QUEEN))
+        {
+            if(currentRow == newRow || currentCol == newCol || Math.abs(newRow-currentRow)==Math.abs(newCol-currentCol))
+            {
+                a[newRow][newCol].setpiece(this);
+                a[currentRow][currentCol].setpiece(null);
+            }
+            else
+                System.out.println("Illegal move, please try another one.");
+        }
+        else
+            System.out.println("Illegal move, please try another one.");
     }
 
     @Override
