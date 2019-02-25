@@ -21,7 +21,7 @@ public class Pawn extends Piece {
 
             if (color.equals("white")) {
                 //white pieces
-                if ((newRow == currentRow - 1) && (newCol == currentCol)) {
+                if ( (newRow == currentRow - 1) && (newCol == currentCol) ) {
                     //Forward movement
                     a[newRow][newCol].setpiece(this);
                     a[currentRow][currentCol].setpiece(null);
@@ -33,7 +33,15 @@ public class Pawn extends Piece {
                     a[newRow][newCol].setpiece(this);
                     a[currentRow][currentCol].setpiece(null);
                 }
+                else if( (newRow == currentRow - 1) &&
+                        ( (newCol == currentCol+1) || (newCol == currentCol-1) ) &&
+                        (hasAPiece(a,newRow,newCol) && !colorsAreTheSame(a,newRow,newCol) )
+                        ){
+                    a[newRow][newCol].setpiece(this);
+                    a[currentRow][currentCol].setpiece(null);
+                }
                 else {
+                    //Invalid move
                     System.out.println("Illegal move, please try another one.");
                 }
             }
@@ -51,9 +59,16 @@ public class Pawn extends Piece {
                     a[newRow][newCol].setpiece(this);
                     a[currentRow][currentCol].setpiece(null);
                 }
+                else if( (newRow == currentRow + 1) &&
+                        ( (newCol == currentCol+1) || (newCol == currentCol-1) ) &&
+                        (hasAPiece(a,newRow,newCol) && !colorsAreTheSame(a,newRow,newCol) )
+                        ){
+                    a[newRow][newCol].setpiece(this);
+                    a[currentRow][currentCol].setpiece(null);
+                }
                 else {
+                    //Invalid move
                     System.out.println("Illegal move, please try another one.");
-
                 }
             }
             if( (newRow == 0) || (newRow == 7)){
