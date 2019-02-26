@@ -53,7 +53,7 @@ class GameManager {
                     actuator.addLine("The space " + Position.parsePosition(pBefore) + " does not exist.");
                 } else if (!Piece.hasAPiece(board, pBefore)) {
                     actuator.addLine("The space " + Position.parsePosition(pBefore) + " does not contain a piece.");
-                } else if (currentState.getTurnColor()==board.getSpace(pBefore).getpiece().getColor()) {
+                } else if (!(currentState.getTurnColor()==board.getSpace(pBefore).getpiece().getColor())) {
                     actuator.addLine("It is not the piece you chose to move's turn.");
                 } else {
 
