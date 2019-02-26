@@ -20,7 +20,7 @@ public class King extends Piece {
     @Override
     public Status move(Space[][] a, int currentRow, int currentCol, int newRow, int newCol) {
         if (legalMove(a, newRow, newCol)){
-            if((((Math.abs(currentRow-newRow)==1 && Math.abs(currentCol-newCol)==1) && Math.abs(currentCol-newCol)<2))||((Math.abs(currentRow-newRow)==1 && Math.abs(currentCol-newCol)==1) && Math.abs(currentRow-newRow)<2)){
+            if((Math.abs(currentCol-newCol)+Math.abs(currentRow-newRow))<=2){
                 a[newRow][newCol].setpiece(this);
                 a[currentRow][currentCol].setpiece(null);
                 return Status.SucessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
