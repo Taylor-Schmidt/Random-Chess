@@ -20,27 +20,50 @@ class GameManager {
         Space[][] spaces = board.getBoard();
         initBoardStandardChess(spaces);
         GameState currentState = new GameState("white", board, null);
-        TextActuator actuator = new TextActuator(0);
+        TextActuator actuator = new TextActuator(10);
         Scanner kb = new Scanner(System.in);
 
         boolean gameIsRunning = true;
         String s;
-        Position PBefore, PAfter;
+        Position pBefore, pAfter;
         //actuator.addLine("White goes first.");
         //start of game loop
         while (gameIsRunning) {
 
             //actuator.addLine("Which piece would you like to move?");
-            actuator.printBoard(spaces);
-            System.out.println("Enter the move you want to make(Ex. B1,A3): ");
+            actuator.addLine("Enter the move you want to make(Ex. B1,A3): ");
+            actuator.printBoard(board);
+
             s = kb.nextLine();
+            actuator.addLine(s);
             String[] split = s.split(",");
-            PBefore = Position.parsePosition(split[0]);
-            PAfter = Position.parsePosition(split[1]);
-            System.out.println(PBefore.row + " " + PBefore.col + " " + PAfter.row + " " + PAfter.col);
-            //Add a check to make sure entered move works.
-            spaces[PBefore.row][PBefore.col].getpiece().move(spaces, PBefore.row, PBefore.col, PAfter.row, PAfter.col);
-            //Check for check mate, if in check mate set gameIsRunning to false.
+
+            if (split.length != 2) {
+                actuator.addLine("The input must be in the following form: A1,A2");
+            } else {
+                pBefore = Position.parsePosition(split[0]);
+                pAfter = Position.parsePosition(split[1]);
+
+                if (pBefore == null || pAfter == null) {
+                    actuator.addLine("The input '" + s + "' could not be understood.");
+                    actuator.addLine("The input must be in the following form: A1,A2");
+                }  else if (!(board.positionIsWithinBounds(pBefore) && board.positionIsWithinBounds(pAfter))){
+                    actuator.addLine("The input must be within the bounds of the board.");
+                }else if (!Piece.isASpace(board, pBefore)) {
+                    actuator.addLine("The space " + Position.parsePosition(pBefore) + " does not exist.");
+                } else if (!Piece.hasAPiece(board, pBefore)) {
+                    actuator.addLine("The space " + Position.parsePosition(pBefore) + " does not contain a piece.");
+                } else {
+
+//                actuator.addLine(pBefore + " " + pAfter); //Prints input in array coordinates
+
+                    //Add a check to make sure entered move works.
+                    Status status = board.getSpace(pBefore).getpiece().move(spaces, pBefore.row, pBefore.col, pAfter.row, pAfter.col);
+                    //Check for check mate, if in check mate set gameIsRunning to false.
+                    actuator.addLine(status.message);
+                }
+//            }
+            }
         }
     }
 

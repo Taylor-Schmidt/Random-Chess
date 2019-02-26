@@ -87,6 +87,15 @@ public class Position {
     }
 
     /**
+     * Shadows parsePosition(int row, int col) with Position class functionality.
+     * @param position Position to convert to standard Chess coordinates.
+     * @return String containing a set of standard Chess coordinates.
+     */
+    public static String parsePosition(Position position){
+        return parsePosition(position.row, position.col);
+    }
+
+    /**
      * Converts standard chess coordinates to "row and column" array coordinates.
      * Example:
      *      E3 -> [4][5]
@@ -97,7 +106,8 @@ public class Position {
      * @return a Position instance containing the row and column values of the same position.
      */
     public static Position parsePosition(String s) {
-        s = s.trim();
+        s = s.trim().toUpperCase();
+//        System.out.println("'" + s + "'");
         if (s.length() > 2) {
             return null;
         } else {
@@ -107,5 +117,10 @@ public class Position {
 
             return new Position(row, col);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "[" + row + "][" + col + "]";
     }
 }

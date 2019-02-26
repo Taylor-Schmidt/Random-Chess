@@ -14,7 +14,7 @@ public class Bishop extends Piece {
         return new Position[0];
     }
 
-    public void move(Space a[][], int currentRow, int currentCol, int newRow, int newCol)
+    public Status move(Space a[][], int currentRow, int currentCol, int newRow, int newCol)
     //Still need to program to only move piece if legal move. Also will need to make it so you can only move a pieceif it is that color's turn.
     {
         if(legalMove(a, newRow, newCol))
@@ -23,12 +23,14 @@ public class Bishop extends Piece {
             {
                 a[newRow][newCol].setpiece(this);
                 a[currentRow][currentCol].setpiece(null);
+
+                return Status.SucessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
             }
             else
-                System.out.println("Illegal move, please try another one.");
+                return Status.FailedMove();
         }
         else
-            System.out.println("Illegal move, please try another one.");
+            return Status.FailedMove();
     }
 
     public int getvalue() {

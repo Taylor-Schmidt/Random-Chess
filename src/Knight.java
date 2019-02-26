@@ -15,19 +15,20 @@ public class Knight extends Piece {
     }
 
     @Override
-    public void move(Space[][] a, int currentRow, int currentCol, int newRow, int newCol) {
+    public Status move(Space[][] a, int currentRow, int currentCol, int newRow, int newCol) {
         if(legalMove(a, newRow, newCol))
         {
             if((((newRow==currentRow+2)||(newRow==currentRow-2))&&((newCol==currentCol+1)||(newCol==currentCol-1)))||((newCol==currentCol+2||(newCol==currentCol-2))&&((newRow==currentRow+1)||(newRow==currentRow-1))))
             {
                 a[newRow][newCol].setpiece(this);
                 a[currentRow][currentCol].setpiece(null);
+                return Status.SucessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
             }
             else
-                System.out.println("Illegal move, please try another one.");
+                return Status.FailedMove();
         }
         else
-            System.out.println("Illegal move(According to legalMove method in piece class), please try another one.");
+            return Status.FailedMove();
     }
 
     @Override

@@ -1,12 +1,14 @@
 // Class to create a chess board for RandomChess program.
- /**
-  * Stores a chess board as an object, and provides helper methods.
-  * Mostly implies the Space[][] array.
-  *
-  * if the space is null, there is no space there
-  * if piece is null- no piece on the space
-  * if piece has(name of pieces)- that piece is on the space
-  */
+
+/**
+ * Stores a chess board as an object, and provides helper methods.
+ * Mostly implies the Space[][] array.
+ * <p>
+ *
+ * If the space is null, there is no space there
+ * If piece is null- no piece on the space
+ * If piece has(name of pieces)- that piece is on the space
+ */
 public class Board {
 
     private Space[][] b;// 2D array that represents board.
@@ -22,21 +24,22 @@ public class Board {
 
     /**
      * Makes a square board
+     *
      * @param size number of rows and columns that the board will have (# rows = # cols)
      */
-    public Board(int size){
+    public Board(int size) {
         this(size, size);
     }
 
-    public Board(int rows, int cols){
+    public Board(int rows, int cols) {
         this(rows, cols, false);
     }
 
-    public Board(int rows, int cols, boolean defaultNulls){
+    public Board(int rows, int cols, boolean defaultNulls) {
         b = new Space[rows][cols];
-        for (int i  = 0; i < rows; i++){
-            for (int j = 0; j < cols; j++){
-                b[i][j] = defaultNulls? null : new Space();
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                b[i][j] = defaultNulls ? null : new Space();
             }
         }
 
@@ -44,11 +47,12 @@ public class Board {
         this.cols = cols;
     }
 
-     /**
-      * Copy constructor
-      * @param other Board from which to copy data from
-      */
-    public Board(Board other){
+    /**
+     * Copy constructor
+     *
+     * @param other Board from which to copy data from
+     */
+    public Board(Board other) {
         rows = other.rows;
         cols = other.cols;
         b = new Space[rows][cols];
@@ -59,26 +63,43 @@ public class Board {
         }
     }
 
-     /**
-      * Returns all the explicit array that Board implies.
-      * @return
-      */
+    /**
+     * Returns the explicit array that Board implies.
+     *
+     * @return Space[][] of all the space that the board contains
+     */
     public Space[][] getBoard() {
         return b;
     }
 
-     /**
-      * Returns the Space at the given row, col coordinates.
-      * @param row
-      * @param col
-      * @return
-      */
+    /**
+     * Returns the Space at the given row, col coordinates.
+     *
+     * @param row
+     * @param col
+     * @return Space at the indicated coordinates in this board.
+     */
     public Space getSpace(int row, int col) {
         return b[row][col];
     }
 
-    public void setSpace(Space sp, int row, int col)
-    {
-        b[row][col]=sp;
+    public Space getSpace(Position position) {
+        return b[position.row][position.col];
+    }
+
+    public void setSpace(Space sp, int row, int col) {
+        b[row][col] = sp;
+    }
+
+    public int getRows() {
+        return rows;
+    }
+
+    public int getCols() {
+        return cols;
+    }
+
+    public boolean positionIsWithinBounds(Position position){
+        return (position.row >= 0 && position.row < rows) && (position.col >= 0 && position.col < cols);
     }
 }

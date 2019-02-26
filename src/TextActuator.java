@@ -7,6 +7,7 @@ public class TextActuator {
 
     private LinkedList<String> consoleQueue = new LinkedList<>(); //List of items to be printed in console.
     private int numberOfConsoleLines; //Number of lines of consoleQueue to print when printing console
+    private int oldsize = 0;
 
     /**
      * Creates an instance of TextActuator
@@ -20,21 +21,30 @@ public class TextActuator {
      * Prints Spaces to Board
      * Null Spaces are not able to be stepped on
      * Spaces with null getPiece() have no piece on them
-     * @param spaces 2D array of type Space
+     * @param board Instance of Board
      */
-    void printBoard(Space[][] spaces) {
-        int m = spaces.length;
-        int n = spaces[0].length;
+    void printBoard(Board board) {
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 
-        printLetterRow(m);
-        for (int i = 0; i < m; i++) {
+        int rows = board.getRows();
+        int cols = board.getCols();
+        Space[][] spaces = board.getBoard();
+
+        printSpaceArray(spaces, rows, cols);
+
+        printConsole();
+    }
+
+    void printSpaceArray(Space[][] spaces, int rows, int cols){
+        printLetterRow(rows);
+        for (int i = 0; i < rows; i++) {
             Space[] row = spaces[i];
-            printHorizontalDivider(m);
+            printHorizontalDivider(rows);
 
-            int rowNum = m - i;
+            int rowNum = rows - i;
 
             System.out.print(rowNum + "\t");
-            for (int j = 0; j < n; j++) {
+            for (int j = 0; j < cols; j++) {
                 Space space = row[j];
                 if (space == null) {
                     System.out.print("|##\t");
@@ -76,10 +86,8 @@ public class TextActuator {
             System.out.println();
         }
 
-        printHorizontalDivider(m);
-        printLetterRow(m);
-
-        printConsole();
+        printHorizontalDivider(rows);
+        printLetterRow(rows);
     }
 
     /**
@@ -117,14 +125,23 @@ public class TextActuator {
         consoleQueue.add(line);
     }
 
+
     /**
      * prints lines below the text board
      * Consists of feedback for user
      */
     private void printConsole(){
-        for (int i = 0; i < numberOfConsoleLines; i++){
+        int start = consoleQueue.size() > numberOfConsoleLines? consoleQueue.size() - numberOfConsoleLines : 0;
+        int blankLines = consoleQueue.size() > numberOfConsoleLines? 0 : numberOfConsoleLines - consoleQueue.size();
+        for (int i = 0; i < blankLines; i++){
+            System.out.println();
+        }
+        for (int i = start; i < consoleQueue.size(); i++){
+            if (i == oldsize + 1){
+                System.out.println();
+            }
             System.out.println(consoleQueue.get(i));
         }
+        oldsize = consoleQueue.size();
     }
-
 }

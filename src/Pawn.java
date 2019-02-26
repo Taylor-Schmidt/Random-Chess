@@ -16,14 +16,14 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public void move(Space[][] a, int currentRow, int currentCol, int newRow, int newCol) {
+    public Status move(Space[][] a, int currentRow, int currentCol, int newRow, int newCol) {
         if ((legalMove(a, newRow, newCol)) && (chessPieceType == ChessPieceType.PAWN)) {
             if (color.equals("white")) {
                 //white pieces
                 if ((newCol == currentCol) && (hasAPiece(a, newRow, newCol))) {
                     //disable capture forward
                     //Checks if column is same, and there is a piece in the new spot
-                    System.out.println("Illegal move, please try another one.");
+                    return Status.FailedMove();
                 }
                 else if ((newRow == currentRow - 1) && (newCol == currentCol)) {
                     //Forward movement
@@ -42,6 +42,7 @@ public class Pawn extends Piece {
                     //Make sure still in same column
                     a[newRow][newCol].setpiece(this);
                     a[currentRow][currentCol].setpiece(null);
+
                 }
                 else if ((newRow == currentRow - 1) &&
                         ((newCol == currentCol + 1) || (newCol == currentCol - 1)) &&
@@ -53,6 +54,7 @@ public class Pawn extends Piece {
                     //Ends with checking if there is a piece of different color, else fails
                     a[newRow][newCol].setpiece(this);
                     a[currentRow][currentCol].setpiece(null);
+
                 }
                 else if ((newRow == currentRow - 1) &&
                         ((newCol == currentCol + 1) || (newCol == currentCol - 1)) &&
@@ -71,20 +73,21 @@ public class Pawn extends Piece {
                 else {
                     //Invalid move
                     //default if others fail
-                    System.out.println("Illegal move, please try another one.");
+                    return Status.FailedMove();
                 }
             } else {
                 //black pieces
                 if ((newCol == currentCol) && (hasAPiece(a, newRow, newCol))) {
                     //disable capture forward
                     //Checks if column is same, and there is a piece in the new spot
-                    System.out.println("Illegal move, please try another one.");
+                    return Status.FailedMove();
                 }
                 else if ((newRow == currentRow + 1) && (newCol == currentCol)) {
                     //Forward movement
                     //Checks if column is same, and if moving correct distance
                     a[newRow][newCol].setpiece(this);
                     a[currentRow][currentCol].setpiece(null);
+
                 }
                 else if ((currentRow == 1) &&
                         ((newRow == currentRow + 2) && (newCol == currentCol)) &&
@@ -97,6 +100,7 @@ public class Pawn extends Piece {
                     //Make sure still in same column
                     a[newRow][newCol].setpiece(this);
                     a[currentRow][currentCol].setpiece(null);
+
                 }
                 else if ((newRow == currentRow + 1) &&
                         ((newCol == currentCol + 1) || (newCol == currentCol - 1)) &&
@@ -108,6 +112,7 @@ public class Pawn extends Piece {
                     //Ends with checking if there is a piece of different color, else fails
                     a[newRow][newCol].setpiece(this);
                     a[currentRow][currentCol].setpiece(null);
+
                 }
                 else if ((newRow == currentRow + 1) &&
                         ((newCol == currentCol + 1) || (newCol == currentCol - 1)) &&
@@ -122,26 +127,31 @@ public class Pawn extends Piece {
                     a[newRow-1][newCol].setpiece(null);
                     a[newRow][newCol].setpiece(this);
                     a[currentRow][currentCol].setpiece(null);
+
                 }
                 else {
                     //Invalid move
                     //default if others fail
-                    System.out.println("Illegal move, please try another one.");
+                    return Status.FailedMove();
                 }
             }
             if ((newRow == 0) || (newRow == 7)) {
                 //Promotion logic
                 chessPieceType = ChessPieceType.QUEEN;
             }
+            return Status.SucessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
         }
         if ((legalMove(a, newRow, newCol)) && (chessPieceType == ChessPieceType.QUEEN)) {
             //Direct copy of code from queen
             if (currentRow == newRow || currentCol == newCol || Math.abs(newRow - currentRow) == Math.abs(newCol - currentCol)) {
                 a[newRow][newCol].setpiece(this);
                 a[currentRow][currentCol].setpiece(null);
+                return Status.SucessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
+
             } else
-                System.out.println("Illegal move, please try another one.");
+                return Status.FailedMove();
         }
+        return Status.FailedMove();
     }
     @Override
     public int getvalue() {
