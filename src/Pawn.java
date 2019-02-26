@@ -137,7 +137,8 @@ public class Pawn extends Piece {
             }
             if ((newRow == 0) || (newRow == 7)) {
                 //Promotion logic
-                chessPieceType = ChessPieceType.QUEEN;
+                //chessPieceType = ChessPieceType.QUEEN;
+                a[newRow][newCol].setpiece(Queen);
             }
             return Status.SucessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
         }
