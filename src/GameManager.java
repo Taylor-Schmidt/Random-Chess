@@ -63,7 +63,7 @@ class GameManager {
                     Status status = board.getSpace(pBefore).getpiece().move(spaces, pBefore.row, pBefore.col, pAfter.row, pAfter.col);
                     //Check for check mate, if in check mate set gameIsRunning to false.
                     actuator.addLine(status.message);
-                    if(board.getSpace(pBefore)==null) {
+                    if(board.getSpace(pBefore).getpiece()==null) {
                         currentState.ChangeTurn();
                     }
                 }
