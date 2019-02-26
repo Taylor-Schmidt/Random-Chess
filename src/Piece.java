@@ -1,3 +1,5 @@
+import java.util.HashSet;
+
 /**
  * All chess pieces implement this interface.
  * Provides methods to make their usage more consistent across the board.
@@ -19,7 +21,7 @@ public abstract class Piece {
      * @param col column of the piece in the instance of Board
      * @return set of Positions that the piece is able to move to
      */
-    abstract Position[] getAvailableMoves(int row, int col);
+    abstract HashSet<Position> getAvailableMoves(int row, int col);
 
     /**
      * Tells the piece to attempt to move from a[currentRow][currentCol] to a[newRow][newCol].
