@@ -13,8 +13,19 @@ public class Bishop extends Piece {
 
 
     @Override
-    public HashSet<Position> getAvailableMoves(int row, int col) {
-        return new HashSet<>();
+    public HashSet<Position> getAvailableMoves(Board board, int row, int col) {
+        HashSet<Position> availablePositions = new HashSet<>();
+
+        for (int i = -1; row + i >= 0; i--){
+            for (int j = -1; col + j >= 0; j--){
+                Position newPostion = new Position(row + i, col + j);
+                if (legalMove(board, newPostion)){
+                    availablePositions.add(newPostion);
+                }
+            }
+        }
+
+        return availablePositions;
     }
 
     public Status move(Space a[][], int currentRow, int currentCol, int newRow, int newCol)
