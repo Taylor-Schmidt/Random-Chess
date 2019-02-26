@@ -1,3 +1,5 @@
+import java.util.HashSet;
+
 public class Pawn extends Piece {
 
     private String color;
@@ -11,8 +13,8 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public Position[] getAvailableMoves(int row, int col) {
-        return new Position[0];
+    public HashSet<Position> getAvailableMoves(int row, int col) {
+        return new HashSet<>();
     }
 
     @Override
