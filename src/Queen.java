@@ -12,7 +12,7 @@ public class Queen extends Piece {
     }
 
     @Override
-    public HashSet<Position> getAvailableMoves(int row, int col) {
+    public HashSet<Position> getAvailableMoves(Board board, int row, int col) {
         return new HashSet<>();
     }
 
