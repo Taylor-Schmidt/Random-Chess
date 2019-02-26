@@ -21,7 +21,7 @@ public abstract class Piece {
      * @param col column of the piece in the instance of Board
      * @return set of Positions that the piece is able to move to
      */
-    abstract HashSet<Position> getAvailableMoves(int row, int col);
+    abstract HashSet<Position> getAvailableMoves(Board board, int row, int col);
 
     /**
      * Tells the piece to attempt to move from a[currentRow][currentCol] to a[newRow][newCol].
@@ -71,6 +71,14 @@ public abstract class Piece {
         }
 
         return false;
+    }
+
+    boolean legalMove(Board board, Position position){
+        return legalMove(board.getBoard(), position.row, position.col);
+    }
+
+    boolean legalMove(Board board, int row, int col){
+        return legalMove(board.getBoard(), row, col);
     }
 
     static boolean isASpace(Space[][] a, int row, int col) {
