@@ -17,7 +17,8 @@ public class Knight extends Piece {
     }
 
     @Override
-    public Status move(Space[][] a, int currentRow, int currentCol, int newRow, int newCol) {
+    public Status move(Board board, int currentRow, int currentCol, int newRow, int newCol) {
+        Space[][] a = board.getBoard();
         if(legalMove(a, newRow, newCol))
         {
             if((((newRow==currentRow+2)||(newRow==currentRow-2))&&((newCol==currentCol+1)||(newCol==currentCol-1)))||((newCol==currentCol+2||(newCol==currentCol-2))&&((newRow==currentRow+1)||(newRow==currentRow-1))))

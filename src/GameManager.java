@@ -17,8 +17,7 @@ class GameManager {
      */
     void run() {
         Board board = new Board();
-        Space[][] spaces = board.getBoard();
-        initBoardStandardChess(spaces);
+        initBoardStandardChess(board);
         GameState currentState = new GameState("white", board, null);
         TextActuator actuator = new TextActuator(10);
         Scanner kb = new Scanner(System.in);
@@ -47,23 +46,23 @@ class GameManager {
                 if (pBefore == null || pAfter == null) {
                     actuator.addLine("The input '" + s + "' could not be understood.");
                     actuator.addLine("The input must be in the following form: A1,A2");
-                }  else if (!(board.positionIsWithinBounds(pBefore) && board.positionIsWithinBounds(pAfter))){
+                } else if (!(board.positionIsWithinBounds(pBefore) && board.positionIsWithinBounds(pAfter))) {
                     actuator.addLine("The input must be within the bounds of the board.");
-                }else if (!Piece.isASpace(board, pBefore)) {
+                } else if (!Piece.isASpace(board, pBefore)) {
                     actuator.addLine("The space " + Position.parsePosition(pBefore) + " does not exist.");
                 } else if (!Piece.hasAPiece(board, pBefore)) {
                     actuator.addLine("The space " + Position.parsePosition(pBefore) + " does not contain a piece.");
-                } else if (!(currentState.getTurnColor()==board.getSpace(pBefore).getpiece().getColor())) {
+                } else if (!(currentState.getTurnColor().equals(board.getSpace(pBefore).getpiece().getColor()))) {
                     actuator.addLine("It is not the piece you chose to move's turn.");
                 } else {
 
 //                actuator.addLine(pBefore + " " + pAfter); //Prints input in array coordinates
 
                     //Add a check to make sure entered move works.
-                    Status status = board.getSpace(pBefore).getpiece().move(spaces, pBefore.row, pBefore.col, pAfter.row, pAfter.col);
+                    Status status = board.getSpace(pBefore).getpiece().move(board, pBefore.row, pBefore.col, pAfter.row, pAfter.col);
                     //Check for check mate, if in check mate set gameIsRunning to false.
                     actuator.addLine(status.message);
-                    if(board.getSpace(pBefore).getpiece()==null) {
+                    if (board.getSpace(pBefore).getpiece() == null) {
                         currentState.ChangeTurn();
                     }
                 }
@@ -73,8 +72,9 @@ class GameManager {
     }
 
 
-    private void initBoardStandardChess(Space[][] spaces) {
-        for (int i = 0; i < spaces.length; i++) {
+    private void initBoardStandardChess(Board board) {
+        Space[][] spaces = board.getBoard();
+        for (int i = 0; i < board.getRows(); i++) {
             spaces[1][i] = new Space(new Pawn(black, 0));
             spaces[spaces.length - 2][i] = new Space(new Pawn(white, 0));
         }

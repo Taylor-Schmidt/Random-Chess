@@ -1,3 +1,5 @@
+import javafx.geometry.Pos;
+
 /**
  * Stores the value for a row and col.
  * Primarily used to get both values from a method, since Java can return only one object;
@@ -122,5 +124,14 @@ public class Position {
     @Override
     public String toString() {
         return "[" + row + "][" + col + "]";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Position)){
+            return false;
+        }
+        Position p = (Position) obj;
+        return p.row == row && p.col == col;
     }
 }

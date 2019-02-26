@@ -17,7 +17,8 @@ public class Rook extends Piece {
     }
 
     @Override
-    public Status move(Space[][] a, int currentRow, int currentCol, int newRow, int newCol) {
+    public Status move(Board board, int currentRow, int currentCol, int newRow, int newCol) {
+        Space[][] a = board.getBoard();
         if(legalMove(a, newRow, newCol))
         {
             if(currentRow == newRow || currentCol == newCol)

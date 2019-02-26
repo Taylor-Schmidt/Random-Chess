@@ -26,14 +26,14 @@ public abstract class Piece {
     /**
      * Tells the piece to attempt to move from a[currentRow][currentCol] to a[newRow][newCol].
      *
-     * @param a          instance of the board as a Space[][] (a for "array")
+     * @param board         instance of the board
      * @param currentRow row where the piece currently is located.
      * @param currentCol column where the piece currently is location.
      * @param newRow     row where the piece is attempting to move to.
      * @param newCol     column where the piece is attempting to move to.
      * @return A Status indicating whether the move was successful, or not.
      */
-    abstract Status move(Space a[][], int currentRow, int currentCol, int newRow, int newCol);
+    abstract Status move(Board board, int currentRow, int currentCol, int newRow, int newCol);
 
     /**
      * The AI is expected to make decisions based on the idea that different pieces are of different worth.

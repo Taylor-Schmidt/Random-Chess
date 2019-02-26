@@ -18,7 +18,8 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public Status move(Space[][] a, int currentRow, int currentCol, int newRow, int newCol) {
+    public Status move(Board b, int currentRow, int currentCol, int newRow, int newCol) {
+        Space[][] a = b.getBoard();
         if ((legalMove(a, newRow, newCol)) && (chessPieceType == ChessPieceType.PAWN)) {
             if (color.equals("white")) {
                 //white pieces
