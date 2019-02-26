@@ -16,21 +16,143 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public void move(Space[][] location, int currentRow, int currentCol, int newX, int newCol){
-        location[currentRow][currentCol] = null;
-        location[newX][newCol] = new Space(this);
+    public Status move(Space[][] a, int currentRow, int currentCol, int newRow, int newCol) {
+        if ((legalMove(a, newRow, newCol)) && (chessPieceType == ChessPieceType.PAWN)) {
+            if (color.equals("white")) {
+                //white pieces
+                if ((newCol == currentCol) && (hasAPiece(a, newRow, newCol))) {
+                    //disable capture forward
+                    //Checks if column is same, and there is a piece in the new spot
+                    return Status.FailedMove();
+                }
+                else if ((newRow == currentRow - 1) && (newCol == currentCol)) {
+                    //Forward movement
+                    //Checks if column is same, and if moving correct distance
+                    a[newRow][newCol].setpiece(this);
+                    a[currentRow][currentCol].setpiece(null);
+                }
+                else if ((currentRow == 6) &&
+                        ((newRow == currentRow - 2) && (newCol == currentCol)) &&
+                        ((!hasAPiece(a,4,newCol)) && (!hasAPiece(a,5,newCol)))
+                ) {
+                    //Two spaces for first movement
+                    //First checks if piece is in original row
+                    //Then allows movement two spaces instead of one
+                    //Also checks if there is a piece in the space needed to move
+                    //Make sure still in same column
+                    a[newRow][newCol].setpiece(this);
+                    a[currentRow][currentCol].setpiece(null);
 
-        //programming logic/valid moves
+                }
+                else if ((newRow == currentRow - 1) &&
+                        ((newCol == currentCol + 1) || (newCol == currentCol - 1)) &&
+                        (hasAPiece(a, newRow, newCol) && !colorsAreTheSame(a, newRow, newCol))
+                ) {
+                    //Diagonal capture
+                    //Checks if the row was still changed
+                    //Then checks if column is next to current one
+                    //Ends with checking if there is a piece of different color, else fails
+                    a[newRow][newCol].setpiece(this);
+                    a[currentRow][currentCol].setpiece(null);
 
-        //white (0 end of board y)
-        if(color.equals("white"));
-            //horizontal
-            if(currentRow != newX)
-                newX = currentRow;
-            //if(newCol != currentCol++)
+                }
+                else if ((newRow == currentRow - 1) &&
+                        ((newCol == currentCol + 1) || (newCol == currentCol - 1)) &&
+                        (hasAPiece(a, currentRow, newCol) && !colorsAreTheSame(a, currentRow, newCol)) &&
+                        (currentRow == 3)
+                ) {
+                    //En passant
+                    //checks row is incremented
+                    //Then checks if column is changed
+                    //then checks if there is a piece next to it
+                    //Lastly checks if the row is the appropriate spot for performing this action
+                    a[newRow+1][newCol].setpiece(null);
+                    a[newRow][newCol].setpiece(this);
+                    a[currentRow][currentCol].setpiece(null);
+                }
+                else {
+                    //Invalid move
+                    //default if others fail
+                    return Status.FailedMove();
+                }
+            } else {
+                //black pieces
+                if ((newCol == currentCol) && (hasAPiece(a, newRow, newCol))) {
+                    //disable capture forward
+                    //Checks if column is same, and there is a piece in the new spot
+                    return Status.FailedMove();
+                }
+                else if ((newRow == currentRow + 1) && (newCol == currentCol)) {
+                    //Forward movement
+                    //Checks if column is same, and if moving correct distance
+                    a[newRow][newCol].setpiece(this);
+                    a[currentRow][currentCol].setpiece(null);
 
+                }
+                else if ((currentRow == 1) &&
+                        ((newRow == currentRow + 2) && (newCol == currentCol)) &&
+                ((!hasAPiece(a,2,newCol)) && (!hasAPiece(a,3,newCol)))
+                ) {
+                    //Two spaces for first movement
+                    //First checks if piece is in original row
+                    //Then allows movement two spaces instead of one
+                    //Also checks if there is a piece in the space needed to move
+                    //Make sure still in same column
+                    a[newRow][newCol].setpiece(this);
+                    a[currentRow][currentCol].setpiece(null);
+
+                }
+                else if ((newRow == currentRow + 1) &&
+                        ((newCol == currentCol + 1) || (newCol == currentCol - 1)) &&
+                        (hasAPiece(a, newRow, newCol) && !colorsAreTheSame(a, newRow, newCol))
+                ) {
+                    //Diagonal capture
+                    //Checks if the row was still changed
+                    //Then checks if column is next to current one
+                    //Ends with checking if there is a piece of different color, else fails
+                    a[newRow][newCol].setpiece(this);
+                    a[currentRow][currentCol].setpiece(null);
+
+                }
+                else if ((newRow == currentRow + 1) &&
+                        ((newCol == currentCol + 1) || (newCol == currentCol - 1)) &&
+                        (hasAPiece(a, currentRow, newCol) && !colorsAreTheSame(a, currentRow, newCol)) &&
+                        (currentRow == 4)
+                ) {
+                    //En passant
+                    //checks row is incremented
+                    //Then checks if column is changed
+                    //then checks if there is a piece next to it
+                    //Lastly checks if the row is the appropriate spot for performing this action
+                    a[newRow-1][newCol].setpiece(null);
+                    a[newRow][newCol].setpiece(this);
+                    a[currentRow][currentCol].setpiece(null);
+
+                }
+                else {
+                    //Invalid move
+                    //default if others fail
+                    return Status.FailedMove();
+                }
+            }
+            if ((newRow == 0) || (newRow == 7)) {
+                //Promotion logic
+                chessPieceType = ChessPieceType.QUEEN;
+            }
+            return Status.SucessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
+        }
+        if ((legalMove(a, newRow, newCol)) && (chessPieceType == ChessPieceType.QUEEN)) {
+            //Direct copy of code from queen
+            if (currentRow == newRow || currentCol == newCol || Math.abs(newRow - currentRow) == Math.abs(newCol - currentCol)) {
+                a[newRow][newCol].setpiece(this);
+                a[currentRow][currentCol].setpiece(null);
+                return Status.SucessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
+
+            } else
+                return Status.FailedMove();
+        }
+        return Status.FailedMove();
     }
-
     @Override
     public int getvalue() {
         return value;

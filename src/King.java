@@ -15,13 +15,14 @@ public class King extends Piece {
     }
 
     @Override
-    public void move(Space[][] a, int currentRow, int currentCol, int newRow, int newCol) {
+    public Status move(Space[][] a, int currentRow, int currentCol, int newRow, int newCol) {
         if (legalMove(a, newRow, newCol)){
             if((((Math.abs(currentRow-newRow)==1 && Math.abs(currentCol-newCol)==1) && Math.abs(currentCol-newCol)<2))||((Math.abs(currentRow-newRow)==1 && Math.abs(currentCol-newCol)==1) && Math.abs(currentRow-newRow)<2)){
 
             }
 
         }
+        return Status.FailedMove();
     }
 
 

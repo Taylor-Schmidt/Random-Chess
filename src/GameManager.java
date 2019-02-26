@@ -6,61 +6,80 @@ import java.util.Scanner;
 
 /**
  * Initialized the state of the game, and runs the game loop.
- *
  */
-public class GameManager {
-    private static String black = "black";
-    private static String white = "white";
+class GameManager {
+    static String black = "black";
+    static String white = "white";
+
 
     /**
-     *
-     * @param args
+     * Runs the game loop
      */
-    public static void main(String[] args) {
-        // Initializes standard chess board and sets up TextActuator.
+    void run() {
         Board board = new Board();
         Space[][] spaces = board.getBoard();
         initBoardStandardChess(spaces);
-        GameState currentState = new GameState(0, board);
-        TextActuator actuator = new TextActuator(0);
+        GameState currentState = new GameState("white", board, null);
+        TextActuator actuator = new TextActuator(10);
         Scanner kb = new Scanner(System.in);
 
-        // Sets up game loop.
         boolean gameIsRunning = true;
         String s;
-        Position PBefore, PAfter;
+        Position pBefore, pAfter;
+        //actuator.addLine("White goes first.");
+        //start of game loop
+        while (gameIsRunning) {
 
-        // The game loop.
-        while (gameIsRunning){
+            //actuator.addLine("Which piece would you like to move?");
+            actuator.addLine("Enter the move you want to make(Ex. B1,A3): ");
+            actuator.printBoard(board);
 
-            //Prints Board.
-            actuator.printBoard(spaces);
-            // Gets move from player, parses move and attempts to make move if legal.
-            System.out.println("Enter the move you want to make(Ex. B1,A3): ");
-            s=kb.nextLine();
+            s = kb.nextLine();
+            actuator.addLine(s);
             String[] split = s.split(",");
-            PBefore = Position.parsePosition(split[0]);
-            PAfter = Position.parsePosition(split[1]);
-            System.out.println(PBefore.row + " " + PBefore.col + " " + PAfter.row + " " + PAfter.col);
-            //Add a check to make sure entered move works.
-            spaces[PBefore.row][PBefore.col].getpiece().move(spaces, PBefore.row, PBefore.col, PAfter.row, PAfter.col);
-            //Check for check mate, if in check mate set gameIsRunning to false.
+
+            if (split.length != 2) {
+                actuator.addLine("The input must be in the following form: A1,A2");
+            } else {
+                pBefore = Position.parsePosition(split[0]);
+                pAfter = Position.parsePosition(split[1]);
+
+                if (pBefore == null || pAfter == null) {
+                    actuator.addLine("The input '" + s + "' could not be understood.");
+                    actuator.addLine("The input must be in the following form: A1,A2");
+                }  else if (!(board.positionIsWithinBounds(pBefore) && board.positionIsWithinBounds(pAfter))){
+                    actuator.addLine("The input must be within the bounds of the board.");
+                }else if (!Piece.isASpace(board, pBefore)) {
+                    actuator.addLine("The space " + Position.parsePosition(pBefore) + " does not exist.");
+                } else if (!Piece.hasAPiece(board, pBefore)) {
+                    actuator.addLine("The space " + Position.parsePosition(pBefore) + " does not contain a piece.");
+                } else {
+
+//                actuator.addLine(pBefore + " " + pAfter); //Prints input in array coordinates
+
+                    //Add a check to make sure entered move works.
+                    Status status = board.getSpace(pBefore).getpiece().move(spaces, pBefore.row, pBefore.col, pAfter.row, pAfter.col);
+                    //Check for check mate, if in check mate set gameIsRunning to false.
+                    actuator.addLine(status.message);
+                }
+//            }
+            }
         }
     }
 
 
-    private static void initBoardStandardChess(Space[][] spaces) {
+    private void initBoardStandardChess(Space[][] spaces) {
         for (int i = 0; i < spaces.length; i++) {
             spaces[1][i] = new Space(new Pawn(black, 0));
             spaces[spaces.length - 2][i] = new Space(new Pawn(white, 0));
         }
 
-        int[] emptyArray = new int[]{0,0,0,0,0,0,0,0}; //TODO: add values OR have classes have predefined values
+        int[] emptyArray = new int[]{0, 0, 0, 0, 0, 0, 0, 0}; //TODO: add values OR have classes have predefined values
         initStandardRow(spaces[0], black, emptyArray);
         initStandardRow(spaces[spaces.length - 1], white, emptyArray);
     }
 
-    private static void initStandardRow(Space[] row, String color, int[] valueArray) {
+    private void initStandardRow(Space[] row, String color, int[] valueArray) {
         row[0] = new Space(new Rook(color, valueArray[0]));
         row[1] = new Space(new Knight(color, valueArray[1]));
         row[2] = new Space(new Bishop(color, valueArray[2]));
