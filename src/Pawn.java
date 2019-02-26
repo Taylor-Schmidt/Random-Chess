@@ -139,7 +139,8 @@ public class Pawn extends Piece {
             }
             if ((newRow == 0) || (newRow == 7)) {
                 //Promotion logic
-                //chessPieceType = ChessPieceType.QUEEN;
+                //Checks if pawn is in last row on board
+                //Then sets a new piece in it's place
                 a[newRow][newCol].setpiece(new Queen(this.color,0));
             }
             return Status.SucessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
