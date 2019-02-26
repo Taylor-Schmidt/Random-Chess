@@ -138,22 +138,13 @@ public class Pawn extends Piece {
             if ((newRow == 0) || (newRow == 7)) {
                 //Promotion logic
                 //chessPieceType = ChessPieceType.QUEEN;
-                a[newRow][newCol].setpiece(Queen);
+                a[newRow][newCol].setpiece(new Queen(this.color,0));
             }
             return Status.SucessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
         }
-        if ((legalMove(a, newRow, newCol)) && (chessPieceType == ChessPieceType.QUEEN)) {
-            //Direct copy of code from queen
-            if (currentRow == newRow || currentCol == newCol || Math.abs(newRow - currentRow) == Math.abs(newCol - currentCol)) {
-                a[newRow][newCol].setpiece(this);
-                a[currentRow][currentCol].setpiece(null);
-                return Status.SucessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
-
-            } else
-                return Status.FailedMove();
-        }
         return Status.FailedMove();
     }
+
     @Override
     public int getvalue() {
         return value;
