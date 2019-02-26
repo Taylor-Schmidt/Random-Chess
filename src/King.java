@@ -1,3 +1,5 @@
+import java.util.HashSet;
+
 public class King extends Piece {
 
     private String color;
@@ -9,9 +11,10 @@ public class King extends Piece {
         value = v;
     }
 
+
     @Override
-    public Position[] getAvailableMoves(int row, int col) {
-        return new Position[0];
+    public HashSet<Position> getAvailableMoves(int row, int col) {
+        return new HashSet<>();
     }
 
     @Override
