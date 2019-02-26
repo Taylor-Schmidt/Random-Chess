@@ -31,7 +31,7 @@ class GameManager {
         while (gameIsRunning) {
 
             //actuator.addLine("Which piece would you like to move?");
-            actuator.addLine("Enter the move you want to make(Ex. B1,A3): ");
+            actuator.addLine("It is " + currentState.getTurnColor() + "'s turn. Enter the move you want to make(Ex. B1,A3): ");
             actuator.printBoard(board);
 
             s = kb.nextLine();
@@ -53,6 +53,8 @@ class GameManager {
                     actuator.addLine("The space " + Position.parsePosition(pBefore) + " does not exist.");
                 } else if (!Piece.hasAPiece(board, pBefore)) {
                     actuator.addLine("The space " + Position.parsePosition(pBefore) + " does not contain a piece.");
+                } else if (currentState.getTurnColor()==board.getSpace(pBefore).getpiece().getColor()) {
+                    actuator.addLine("It is not the piece you chose to move's turn.");
                 } else {
 
 //                actuator.addLine(pBefore + " " + pAfter); //Prints input in array coordinates
@@ -61,6 +63,7 @@ class GameManager {
                     Status status = board.getSpace(pBefore).getpiece().move(spaces, pBefore.row, pBefore.col, pAfter.row, pAfter.col);
                     //Check for check mate, if in check mate set gameIsRunning to false.
                     actuator.addLine(status.message);
+                    currentState.ChangeTurn();
                 }
 //            }
             }
