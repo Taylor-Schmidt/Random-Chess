@@ -42,4 +42,17 @@ public class GameState {
         board = new Board(gameState.board);
         lastMove = new Position(gameState.lastMove);
     }
+
+    public void ChangeTurn()
+    {
+        if(turnColor=="black")
+            turnColor="white";
+        else
+            turnColor="black";
+    }
+
+    public String getTurnColor()
+    {
+        return turnColor;
+    }
 }
