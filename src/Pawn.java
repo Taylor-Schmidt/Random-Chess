@@ -38,6 +38,7 @@ public class Pawn extends Piece {
                     //Two spaces for first movement
                     //First checks if piece is in original row
                     //Then allows movement two spaces instead of one
+                    //Also checks if there is a piece in the space needed to move
                     //Make sure still in same column
                     a[newRow][newCol].setpiece(this);
                     a[currentRow][currentCol].setpiece(null);
@@ -50,6 +51,20 @@ public class Pawn extends Piece {
                     //Checks if the row was still changed
                     //Then checks if column is next to current one
                     //Ends with checking if there is a piece of different color, else fails
+                    a[newRow][newCol].setpiece(this);
+                    a[currentRow][currentCol].setpiece(null);
+                }
+                else if ((newRow == currentRow - 1) &&
+                        ((newCol == currentCol + 1) || (newCol == currentCol - 1)) &&
+                        (hasAPiece(a, currentRow, newCol) && !colorsAreTheSame(a, currentRow, newCol)) &&
+                        (currentRow == 3)
+                ) {
+                    //En passant
+                    //checks row is incremented
+                    //Then checks if column is changed
+                    //then checks if there is a piece next to it
+                    //Lastly checks if the row is the appropriate spot for performing this action
+                    a[newRow+1][newCol].setpiece(null);
                     a[newRow][newCol].setpiece(this);
                     a[currentRow][currentCol].setpiece(null);
                 }
@@ -78,6 +93,7 @@ public class Pawn extends Piece {
                     //Two spaces for first movement
                     //First checks if piece is in original row
                     //Then allows movement two spaces instead of one
+                    //Also checks if there is a piece in the space needed to move
                     //Make sure still in same column
                     a[newRow][newCol].setpiece(this);
                     a[currentRow][currentCol].setpiece(null);
@@ -93,6 +109,20 @@ public class Pawn extends Piece {
                     a[newRow][newCol].setpiece(this);
                     a[currentRow][currentCol].setpiece(null);
                 }
+                else if ((newRow == currentRow + 1) &&
+                        ((newCol == currentCol + 1) || (newCol == currentCol - 1)) &&
+                        (hasAPiece(a, currentRow, newCol) && !colorsAreTheSame(a, currentRow, newCol)) &&
+                        (currentRow == 4)
+                ) {
+                    //En passant
+                    //checks row is incremented
+                    //Then checks if column is changed
+                    //then checks if there is a piece next to it
+                    //Lastly checks if the row is the appropriate spot for performing this action
+                    a[newRow-1][newCol].setpiece(null);
+                    a[newRow][newCol].setpiece(this);
+                    a[currentRow][currentCol].setpiece(null);
+                }
                 else {
                     //Invalid move
                     //default if others fail
@@ -105,6 +135,7 @@ public class Pawn extends Piece {
             }
         }
         if ((legalMove(a, newRow, newCol)) && (chessPieceType == ChessPieceType.QUEEN)) {
+            //Direct copy of code from queen
             if (currentRow == newRow || currentCol == newCol || Math.abs(newRow - currentRow) == Math.abs(newCol - currentCol)) {
                 a[newRow][newCol].setpiece(this);
                 a[currentRow][currentCol].setpiece(null);
