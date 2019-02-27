@@ -30,7 +30,7 @@ public class Bishop extends Piece {
 
         encounteredIllegalMove = false;
         for (int i = -1, j = 1; row + i >= 0 && col + j < board.getCols() && !encounteredIllegalMove; i--, j++) {
-             encounteredIllegalMove = isEncounteredIllegalMove(board, row, col, availablePositions, i, j);
+            encounteredIllegalMove = isEncounteredIllegalMove(board, row, col, availablePositions, i, j);
         }
 
         encounteredIllegalMove = false;
@@ -60,7 +60,9 @@ public class Bishop extends Piece {
     public Status move(Board board, int currentRow, int currentCol, int newRow, int newCol)
     //Still need to program to only move piece if legal move. Also will need to make it so you can only move a pieceif it is that color's turn.
     {
-        if (getAvailableMoves(board, currentRow, currentCol).contains(new Position(newRow, newCol))){
+        if (getAvailableMoves(board, currentRow, currentCol).contains(new Position(newRow, newCol))) {
+            board.getSpace(newRow, newCol).setpiece(this);
+            board.getSpace(currentRow, currentCol).setpiece(null);
             return Status.SucessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
         } else {
             return Status.FailedMove();

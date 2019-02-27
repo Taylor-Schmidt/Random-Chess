@@ -1,5 +1,7 @@
 import javafx.geometry.Pos;
 
+import java.util.Objects;
+
 /**
  * Stores the value for a row and col.
  * Primarily used to get both values from a method, since Java can return only one object;
@@ -127,11 +129,16 @@ public class Position {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Position)){
-            return false;
-        }
-        Position p = (Position) obj;
-        return p.row == row && p.col == col;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Position)) return false;
+        Position position = (Position) o;
+        return row == position.row &&
+                col == position.col;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(row, col);
     }
 }

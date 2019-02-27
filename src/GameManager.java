@@ -53,7 +53,8 @@ class GameManager {
                 } else if (!Piece.hasAPiece(board, pBefore)) {
                     actuator.addLine("The space " + Position.parsePosition(pBefore) + " does not contain a piece.");
                 } else if (!(currentState.getTurnColor().equals(board.getSpace(pBefore).getpiece().getColor()))) {
-                    actuator.addLine("It is not the piece you chose to move's turn.");
+                    actuator.addLine("The selected piece is the wrong color. Please select a " +
+                            currentState.getTurnColor() + " piece.");
                 } else {
 
 //                actuator.addLine(pBefore + " " + pAfter); //Prints input in array coordinates
