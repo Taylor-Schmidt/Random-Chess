@@ -13,7 +13,9 @@ public class Queen extends Piece {
 
     @Override
     public HashSet<Position> getAvailableMoves(Board board, int row, int col) {
-        return new HashSet<>();
+        HashSet<Position> availableMoves = new HashSet<>(getAvailableDiagonalMoves(board, row, col));
+        availableMoves.addAll(getAvailableHorizontalVerticalMoves(board, row, col));
+        return availableMoves;
     }
 
     @Override
@@ -25,7 +27,7 @@ public class Queen extends Piece {
             {
                 a[newRow][newCol].setpiece(this);
                 a[currentRow][currentCol].setpiece(null);
-                return Status.SucessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
+                return Status.SuccessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
             }
             else
                 return Status.FailedMove();

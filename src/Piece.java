@@ -23,6 +23,54 @@ public abstract class Piece {
      */
     abstract HashSet<Position> getAvailableMoves(Board board, int row, int col);
 
+    public HashSet<Position> getAvailableDiagonalMoves(Board board, int row, int col) {
+        HashSet<Position> availablePositions = new HashSet<>();
+
+        probeByDirectionVector(board, row, col, new Position(1, 1), availablePositions);
+
+        probeByDirectionVector(board, row, col, new Position(-1, 1), availablePositions);
+
+        probeByDirectionVector(board, row, col, new Position(1, -1), availablePositions);
+
+        probeByDirectionVector(board, row, col, new Position(-1, -1), availablePositions);
+
+        return availablePositions;
+    }
+
+    public HashSet<Position> getAvailableHorizontalVerticalMoves(Board board, int row, int col){
+        HashSet<Position> availablePositions = new HashSet<>();
+
+        probeByDirectionVector(board, row, col, Position.i, availablePositions);
+
+        probeByDirectionVector(board, row, col, Position.i.scalarMult(-1), availablePositions);
+
+        probeByDirectionVector(board, row, col, Position.j, availablePositions);
+
+        probeByDirectionVector(board, row, col, Position.j.scalarMult(-1), availablePositions);
+
+        return availablePositions;
+    }
+
+    public static void main(String[] args) {
+        Queen queen = new Queen("white", 0);
+        Board board = new Board();
+        System.out.println(queen.getAvailableDiagonalMoves(board, 3, 3));
+    }
+
+    private void probeByDirectionVector(Board board, int row, int col, Position directionVector, HashSet<Position> availablePositions){
+        boolean encounteredIllegalMove = false;
+        for (int i = 1, j = 1; 0 <= row + (directionVector.row * i) && row + (directionVector.row * i) < board.getRows()
+                && 0 <= col + (directionVector.col * j) && col + (directionVector.col * j) < board.getCols() &&
+                !encounteredIllegalMove; i++, j++){
+            Position newPosition = new Position(row + (directionVector.row * i), col + (directionVector.col * j) );
+            encounteredIllegalMove = !legalMove(board, newPosition);
+
+            if (!encounteredIllegalMove){
+                availablePositions.add(newPosition);
+            }
+        }
+    }
+
     /**
      * Tells the piece to attempt to move from a[currentRow][currentCol] to a[newRow][newCol].
      *

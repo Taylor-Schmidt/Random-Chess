@@ -1,5 +1,4 @@
-import javafx.geometry.Pos;
-
+import java.awt.*;
 import java.util.Objects;
 
 /**
@@ -8,6 +7,8 @@ import java.util.Objects;
  */
 public class Position {
     int row, col;
+
+
 
     /**
      * Basic constructor, exposes row and col values
@@ -140,5 +141,12 @@ public class Position {
     @Override
     public int hashCode() {
         return Objects.hash(row, col);
+    }
+
+    final static Position i = new Position(1, 0);
+    final static Position j = new Position(0, 1);
+
+    public Position scalarMult(int scalar){
+        return new Position(row * scalar, col * scalar);
     }
 }

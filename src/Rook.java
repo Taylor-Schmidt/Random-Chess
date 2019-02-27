@@ -13,7 +13,7 @@ public class Rook extends Piece {
 
     @Override
     public HashSet<Position> getAvailableMoves(Board board, int row, int col) {
-        return new HashSet<>();
+        return getAvailableHorizontalVerticalMoves(board, row, col);
     }
 
     @Override
@@ -25,7 +25,7 @@ public class Rook extends Piece {
             {
                 a[newRow][newCol].setpiece(this);
                 a[currentRow][currentCol].setpiece(null);
-                return Status.SucessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
+                return Status.SuccessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
             }
             else
                 return Status.FailedMove();

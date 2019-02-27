@@ -24,7 +24,7 @@ public class King extends Piece {
             if ((Math.abs(currentCol - newCol) + Math.abs(currentRow - newRow)) <= 2) {
                 a[newRow][newCol].setpiece(this);
                 a[currentRow][currentCol].setpiece(null);
-                return Status.SucessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
+                return Status.SuccessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
             } else
                 return Status.FailedMove();
         }

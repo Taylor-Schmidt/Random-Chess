@@ -19,7 +19,7 @@ public class Status {
     /**
      * A default implementation of Status for easy returns when the move is successful.
      */
-    public static Status SucessfulMove(Piece.ChessPieceType chessPieceType, int oldRow, int oldCol, int newRow, int newCol){
+    public static Status SuccessfulMove(Piece.ChessPieceType chessPieceType, int oldRow, int oldCol, int newRow, int newCol){
         return new Status(chessPieceType + " moved from " + Position.parsePosition(oldRow, oldCol) + " to " +
                 Position.parsePosition(newRow, newCol) + ".");
     }

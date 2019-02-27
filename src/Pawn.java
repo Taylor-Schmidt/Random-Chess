@@ -144,7 +144,7 @@ public class Pawn extends Piece {
                 //Then sets a new piece in it's place
                 a[newRow][newCol].setpiece(new Queen(this.color,0));
             }
-            return Status.SucessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
+            return Status.SuccessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
         }
         return Status.FailedMove();
     }
