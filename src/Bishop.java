@@ -16,18 +16,6 @@ public class Bishop extends Piece {
         return getAvailableDiagonalMoves(board, row, col);
     }
 
-    public Status move(Board board, int currentRow, int currentCol, int newRow, int newCol)
-    //Still need to program to only move piece if legal move. Also will need to make it so you can only move a pieceif it is that color's turn.
-    {
-        if (getAvailableMoves(board, currentRow, currentCol).contains(new Position(newRow, newCol))) {
-            board.getSpace(newRow, newCol).setPiece(this);
-            board.getSpace(currentRow, currentCol).setPiece(null);
-            return Status.SuccessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
-        } else {
-            return Status.FailedMove();
-        }
-    }
-
     public int getvalue() {
         return value;
     }

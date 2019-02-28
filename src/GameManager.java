@@ -159,23 +159,29 @@ class GameManager {
     }
 
     private void writePreferences(HashMap<String, String> preferences){
+//        System.out.println("Writing prefs");
         File file = new File("prefs.dat");
         try {
             file.createNewFile();
         } catch (IOException e) {
+//            System.out.println("Could not create new file.");
             return;
         }
         FileWriter fileWriter;
         try {
              fileWriter = new FileWriter(file);
         } catch (IOException e) {
+//            System.out.println("Could not write preferences to file.");
             return;
         }
 
         for (String key: preferences.keySet()){
             try {
-                fileWriter.write(key + ":" + preferences.get(key));
+                String s = key + ":" + preferences.get(key);
+                fileWriter.write(s);
+//                System.out.println("Wrote: " + s);
             } catch (IOException e) {
+//                System.out.println("Write error.");
                 return;
             }
         }

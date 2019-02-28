@@ -19,18 +19,6 @@ public class Queen extends Piece {
     }
 
     @Override
-    public Status move(Board board, int currentRow, int currentCol, int newRow, int newCol) {
-        Space[][] a = board.getBoard();
-        if (getAvailableMoves(board, currentRow, currentCol).contains(new Position(newRow, newCol))) {
-            board.getSpace(newRow, newCol).setPiece(this);
-            board.getSpace(currentRow, currentCol).setPiece(null);
-            return Status.SuccessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
-        } else {
-            return Status.FailedMove();
-        }
-    }
-
-    @Override
     public int getvalue() {
         return value;
     }

@@ -50,19 +50,45 @@ public abstract class Piece {
 
         return availablePositions;
     }
-//
-//    public static void main(String[] args) {
-//        Queen queen = new Queen("white", 0);
-//        Board board = new Board();
-//        System.out.println(queen.getAvailableDiagonalMoves(board, 3, 3));
-//    }
 
-    private void probeByDirectionVector(Board board, int row, int col, Position directionVector, HashSet<Position> availablePositions){
+    public static void main(String[] args) {
+        King king = new King("white", 0);
+        Board board = new Board();
+        System.out.println(king.getAvailableMoves(board, 3, 3));
+    }
+
+    /**
+     * Uses a 2x1 direction vector (an instance of Position class) and probes in that direction by scaling in that
+     * direction by scalar multiples of the vector.
+     * @param board
+     * @param row
+     * @param col
+     * @param directionVector
+     * @param availablePositions
+     */
+     void probeByDirectionVector(Board board, int row, int col, Position directionVector, HashSet<Position> availablePositions){
+        probeByDirectionVector(board, row, col, directionVector, availablePositions, board.getRows(), board.getCols());
+    }
+
+    void probeByDirectionVector(Board board, int row, int col, Position directionVector,
+                                HashSet<Position> availablePositions, int maxRowScale, int maxColScale){
         boolean encounteredIllegalMove = false;
         for (int i = 1, j = 1; 0 <= row + (directionVector.row * i) && row + (directionVector.row * i) < board.getRows()
                 && 0 <= col + (directionVector.col * j) && col + (directionVector.col * j) < board.getCols() &&
-                !encounteredIllegalMove; i++, j++){
+                 i <= maxRowScale && j <= maxColScale && !encounteredIllegalMove; i++, j++){
+
             Position newPosition = new Position(row + (directionVector.row * i), col + (directionVector.col * j) );
+
+            if (isASpace(board, newPosition)) {
+                if (hasAPiece(board, newPosition)) {
+                    encounteredIllegalMove = true;
+                    if (!colorsAreTheSame(board, newPosition)){
+                        availablePositions.add(newPosition);
+                    }
+                }
+            } else {
+                encounteredIllegalMove = true;
+            }
             encounteredIllegalMove = !legalMove(board, newPosition);
 
             if (!encounteredIllegalMove){
@@ -70,6 +96,7 @@ public abstract class Piece {
             }
         }
     }
+
 
     /**
      * Tells the piece to attempt to move from a[currentRow][currentCol] to a[newRow][newCol].
@@ -81,7 +108,15 @@ public abstract class Piece {
      * @param newCol     column where the piece is attempting to move to.
      * @return A Status indicating whether the move was successful, or not.
      */
-    abstract Status move(Board board, int currentRow, int currentCol, int newRow, int newCol);
+     Status move(Board board, int currentRow, int currentCol, int newRow, int newCol){
+         if (getAvailableMoves(board, currentRow, currentCol).contains(new Position(newRow, newCol))) {
+             board.getSpace(newRow, newCol).setPiece(this);
+             board.getSpace(currentRow, currentCol).setPiece(null);
+             return Status.SuccessfulMove(getType(), currentRow, currentCol, newRow, newCol);
+         } else {
+             return Status.FailedMove();
+         }
+     }
 
     /**
      * The AI is expected to make decisions based on the idea that different pieces are of different worth.
@@ -147,6 +182,10 @@ public abstract class Piece {
 
     boolean colorsAreTheSame(Space[][] a, int row, int col) {
         return getColor().equals(a[row][col].getPiece().getColor());
+    }
+
+    boolean colorsAreTheSame(Board board, Position position){
+        return getColor().equals(board.getSpace(position).getPiece().getColor());
     }
 
 }

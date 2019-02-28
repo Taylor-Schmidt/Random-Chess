@@ -14,23 +14,12 @@ public class King extends Piece {
 
     @Override
     public HashSet<Position> getAvailableMoves(Board board, int row, int col) {
-        return new HashSet<>();
-    }
-
-    @Override
-    public Status move(Board board, int currentRow, int currentCol, int newRow, int newCol) {
-        Space[][] a = board.getBoard();
-        if (legalMove(a, newRow, newCol)) {
-            if ((Math.abs(currentCol - newCol) + Math.abs(currentRow - newRow)) < 2) {
-                a[newRow][newCol].setPiece(this);
-                a[currentRow][currentCol].setPiece(null);
-                return Status.SuccessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
-            } else
-                return Status.FailedMove();
+        HashSet<Position> availableMoves = new HashSet<>();
+        for (Position direction: Position.cardinalDirections){
+            probeByDirectionVector(board, row, col, direction, availableMoves, 1, 1);
         }
-        return Status.FailedMove();
+        return availableMoves;
     }
-
 
     @Override
     public int getvalue() {
