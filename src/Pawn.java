@@ -78,7 +78,16 @@ public class Pawn extends Piece {
                     //default if others fail
                     return Status.FailedMove();
                 }
-            } else {
+                //promotion logic
+                if (newRow == 0) {
+                    //Promotion logic
+                    //Checks if pawn is in last row on board
+                    //Then sets a new piece in it's place
+                    a[newRow][newCol].setpiece(new Queen(this.color,0));
+                }
+                return Status.SuccessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
+            }
+            else {
                 //black pieces
                 if ((newCol == currentCol) && (hasAPiece(a, newRow, newCol))) {
                     //disable capture forward
@@ -137,14 +146,15 @@ public class Pawn extends Piece {
                     //default if others fail
                     return Status.FailedMove();
                 }
+                //promotion logic
+                if (newRow == 7) {
+                    //Promotion logic
+                    //Checks if pawn is in last row on board
+                    //Then sets a new piece in it's place
+                    a[newRow][newCol].setpiece(new Queen(this.color,0));
+                }
+                return Status.SuccessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
             }
-            if ((newRow == 0) || (newRow == 7)) {
-                //Promotion logic
-                //Checks if pawn is in last row on board
-                //Then sets a new piece in it's place
-                a[newRow][newCol].setpiece(new Queen(this.color,0));
-            }
-            return Status.SuccessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
         }
         return Status.FailedMove();
     }
