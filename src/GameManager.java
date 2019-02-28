@@ -48,6 +48,12 @@ class GameManager {
         while (gameIsRunning) {
 
             //actuator.addLine("Which piece would you like to move?");
+
+            //Checks if the current player is in check and alerts them if they are at the start of their turn.
+            if(currentState.KingInCheck(currentState.getTurnColor())) {
+                actuator.addLine("The " + currentState.getTurnColor() + " King is in check.");
+            }
+
             actuator.addLine("It is " + currentState.getTurnColor() + "'s turn. Enter the move you want to make(Ex. B1,A3): ");
             actuator.printBoard(board);
 
