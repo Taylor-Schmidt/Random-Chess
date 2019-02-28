@@ -71,18 +71,6 @@ class GameManager {
                     actuator.addLine(status.message);
                     if (board.getSpace(pBefore).getPiece() == null) {
                         currentState.ChangeTurn();
-                        if(currentState.KingInCheck())
-                        {
-                            if(currentState.getTurnColor()=="white") {
-                                OppositeColor = "black";
-                            }
-                            else {
-                                OppositeColor="white";
-
-                            }
-                            actuator.addLine(OppositeColor + " is now in check.");
-                        }
-
                     }
                 }
 //            }
