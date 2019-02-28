@@ -16,15 +16,28 @@ class GameManager {
     static String black = "black";
     static String white = "white";
 
+    private HashMap<String, String> preferences;
+
+    private final String USE_ASCII = "use_ascii";
 
     /**
      * Runs the game loop
      */
     void run() {
+        preferences = readPreferences();
+        boolean useAsciiCharacters = false;
+        if (preferences.containsKey(USE_ASCII)){
+            useAsciiCharacters = Boolean.valueOf(preferences.get(USE_ASCII));
+        } else {
+            useAsciiCharacters = !asciiCompatCheck();
+            preferences.put(USE_ASCII, Boolean.toString(useAsciiCharacters));
+            writePreferences(preferences);
+        }
+
         Board board = new Board();
         initBoardStandardChess(board);
         GameState currentState = new GameState("white", board, null);
-        TextActuator actuator = new TextActuator(10);
+        TextActuator actuator = new TextActuator(10, useAsciiCharacters);
         Scanner kb = new Scanner(System.in);
 
         boolean gameIsRunning = true;
@@ -75,6 +88,15 @@ class GameManager {
 //            }
             }
         }
+    }
+
+    private boolean asciiCompatCheck(){
+        System.out.println("COMPATIBILITY CHECK!");
+        System.out.println("Does the following character look like a question mark? (y/n)");
+        System.out.println("♙");
+        Scanner kb = new Scanner(System.in);
+        String s = kb.nextLine();
+        return s.toLowerCase().contains("s");
     }
 
 
