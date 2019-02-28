@@ -21,19 +21,13 @@ public class Queen extends Piece {
     @Override
     public Status move(Board board, int currentRow, int currentCol, int newRow, int newCol) {
         Space[][] a = board.getBoard();
-        if(legalMove(a, newRow, newCol))
-        {
-            if(currentRow == newRow || currentCol == newCol || Math.abs(newRow-currentRow)==Math.abs(newCol-currentCol))
-            {
-                a[newRow][newCol].setpiece(this);
-                a[currentRow][currentCol].setpiece(null);
-                return Status.SuccessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
-            }
-            else
-                return Status.FailedMove();
-        }
-        else
+        if (getAvailableMoves(board, currentRow, currentCol).contains(new Position(newRow, newCol))) {
+            board.getSpace(newRow, newCol).setPiece(this);
+            board.getSpace(currentRow, currentCol).setPiece(null);
+            return Status.SuccessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
+        } else {
             return Status.FailedMove();
+        }
     }
 
     @Override

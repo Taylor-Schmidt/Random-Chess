@@ -72,9 +72,9 @@ public class GameState {
                 for (int j = 0; j < board.getCols(); j++) {
                     Space pieceSpace = board.getSpace(i, j);
 
-                    if ((pieceSpace.getpiece() != null) && (pieceSpace.getpiece().getType() == Piece.ChessPieceType.KING)) {
+                    if ((pieceSpace.getPiece() != null) && (pieceSpace.getPiece().getType() == Piece.ChessPieceType.KING)) {
                         kingSpace = pieceSpace;
-                        kingColor = pieceSpace.getpiece().getColor();
+                        kingColor = pieceSpace.getPiece().getColor();
                         foundKing = true;
 
                     }
@@ -86,10 +86,10 @@ public class GameState {
         for (int a = 0; a < board.getRows(); a++){
             for (int b = 0; b < board.getCols(); b++){
                 Space space = board.getSpace(a,b);
-                if (space.getpiece() != null  ){
-                    HashSet<Position> moves = space.getpiece().getAvailableMoves(board, a, b);
+                if (space.getPiece() != null  ){
+                    HashSet<Position> moves = space.getPiece().getAvailableMoves(board, a, b);
                    // Iterator<Position> it = moves.iterator();
-                    if(moves.contains(kingSpace) && !(space.getpiece().getColor().equals(kingColor)))
+                    if(moves.contains(kingSpace) && !(space.getPiece().getColor().equals(kingColor)))
                     {
                         checkKing = true;
                         break;

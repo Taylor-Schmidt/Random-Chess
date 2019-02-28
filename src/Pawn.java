@@ -31,8 +31,8 @@ public class Pawn extends Piece {
                 else if ((newRow == currentRow - 1) && (newCol == currentCol)) {
                     //Forward movement
                     //Checks if column is same, and if moving correct distance
-                    a[newRow][newCol].setpiece(this);
-                    a[currentRow][currentCol].setpiece(null);
+                    a[newRow][newCol].setPiece(this);
+                    a[currentRow][currentCol].setPiece(null);
                 }
                 else if ((currentRow == 6) &&
                         ((newRow == currentRow - 2) && (newCol == currentCol)) &&
@@ -43,8 +43,8 @@ public class Pawn extends Piece {
                     //Then allows movement two spaces instead of one
                     //Also checks if there is a piece in the space needed to move
                     //Make sure still in same column
-                    a[newRow][newCol].setpiece(this);
-                    a[currentRow][currentCol].setpiece(null);
+                    a[newRow][newCol].setPiece(this);
+                    a[currentRow][currentCol].setPiece(null);
 
                 }
                 else if ((newRow == currentRow - 1) &&
@@ -55,8 +55,8 @@ public class Pawn extends Piece {
                     //Checks if the row was still changed
                     //Then checks if column is next to current one
                     //Ends with checking if there is a piece of different color, else fails
-                    a[newRow][newCol].setpiece(this);
-                    a[currentRow][currentCol].setpiece(null);
+                    a[newRow][newCol].setPiece(this);
+                    a[currentRow][currentCol].setPiece(null);
 
                 }
                 else if ((newRow == currentRow - 1) &&
@@ -69,9 +69,9 @@ public class Pawn extends Piece {
                     //Then checks if column is changed
                     //then checks if there is a piece next to it
                     //Lastly checks if the row is the appropriate spot for performing this action
-                    a[newRow+1][newCol].setpiece(null);
-                    a[newRow][newCol].setpiece(this);
-                    a[currentRow][currentCol].setpiece(null);
+                    a[newRow+1][newCol].setPiece(null);
+                    a[newRow][newCol].setPiece(this);
+                    a[currentRow][currentCol].setPiece(null);
                 }
                 else {
                     //Invalid move
@@ -83,7 +83,7 @@ public class Pawn extends Piece {
                     //Promotion logic
                     //Checks if pawn is in last row on board
                     //Then sets a new piece in it's place
-                    a[newRow][newCol].setpiece(new Queen(this.color,0));
+                    a[newRow][newCol].setPiece(new Queen(this.color,0));
                 }
                 return Status.SuccessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
             }
@@ -97,8 +97,8 @@ public class Pawn extends Piece {
                 else if ((newRow == currentRow + 1) && (newCol == currentCol)) {
                     //Forward movement
                     //Checks if column is same, and if moving correct distance
-                    a[newRow][newCol].setpiece(this);
-                    a[currentRow][currentCol].setpiece(null);
+                    a[newRow][newCol].setPiece(this);
+                    a[currentRow][currentCol].setPiece(null);
 
                 }
                 else if ((currentRow == 1) &&
@@ -110,8 +110,8 @@ public class Pawn extends Piece {
                     //Then allows movement two spaces instead of one
                     //Also checks if there is a piece in the space needed to move
                     //Make sure still in same column
-                    a[newRow][newCol].setpiece(this);
-                    a[currentRow][currentCol].setpiece(null);
+                    a[newRow][newCol].setPiece(this);
+                    a[currentRow][currentCol].setPiece(null);
 
                 }
                 else if ((newRow == currentRow + 1) &&
@@ -122,8 +122,8 @@ public class Pawn extends Piece {
                     //Checks if the row was still changed
                     //Then checks if column is next to current one
                     //Ends with checking if there is a piece of different color, else fails
-                    a[newRow][newCol].setpiece(this);
-                    a[currentRow][currentCol].setpiece(null);
+                    a[newRow][newCol].setPiece(this);
+                    a[currentRow][currentCol].setPiece(null);
 
                 }
                 else if ((newRow == currentRow + 1) &&
@@ -136,9 +136,9 @@ public class Pawn extends Piece {
                     //Then checks if column is changed
                     //then checks if there is a piece next to it
                     //Lastly checks if the row is the appropriate spot for performing this action
-                    a[newRow-1][newCol].setpiece(null);
-                    a[newRow][newCol].setpiece(this);
-                    a[currentRow][currentCol].setpiece(null);
+                    a[newRow-1][newCol].setPiece(null);
+                    a[newRow][newCol].setPiece(this);
+                    a[currentRow][currentCol].setPiece(null);
 
                 }
                 else {
@@ -151,7 +151,7 @@ public class Pawn extends Piece {
                     //Promotion logic
                     //Checks if pawn is in last row on board
                     //Then sets a new piece in it's place
-                    a[newRow][newCol].setpiece(new Queen(this.color,0));
+                    a[newRow][newCol].setPiece(new Queen(this.color,0));
                 }
                 return Status.SuccessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
             }

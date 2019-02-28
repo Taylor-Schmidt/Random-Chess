@@ -24,7 +24,7 @@ public class Space {
      * Getter for the piece on this Space
      * @return the Piece placed on this space. (Returns null if there is no piece.)
      */
-    public Piece getpiece() {
+    public Piece getPiece() {
         return p;
     }
 
@@ -32,7 +32,7 @@ public class Space {
      * Places the given Piece on this Space
      * @param P Piece to place on this Space.
      */
-    public void setpiece(Piece P) {
+    public void setPiece(Piece P) {
         p=P;
     }
 
