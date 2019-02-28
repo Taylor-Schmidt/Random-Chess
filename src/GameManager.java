@@ -29,7 +29,7 @@ class GameManager {
         if (preferences.containsKey(USE_ASCII)){
             useAsciiCharacters = Boolean.valueOf(preferences.get(USE_ASCII));
         } else {
-            useAsciiCharacters = !asciiCompatCheck();
+            useAsciiCharacters = asciiCompatCheck();
             preferences.put(USE_ASCII, Boolean.toString(useAsciiCharacters));
             writePreferences(preferences);
         }
@@ -102,7 +102,7 @@ class GameManager {
         System.out.println("♙");
         Scanner kb = new Scanner(System.in);
         String s = kb.nextLine();
-        return s.toLowerCase().contains("s");
+        return s.toLowerCase().contains("n");
     }
 
 
