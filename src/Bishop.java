@@ -20,8 +20,8 @@ public class Bishop extends Piece {
     //Still need to program to only move piece if legal move. Also will need to make it so you can only move a pieceif it is that color's turn.
     {
         if (getAvailableMoves(board, currentRow, currentCol).contains(new Position(newRow, newCol))) {
-            board.getSpace(newRow, newCol).setpiece(this);
-            board.getSpace(currentRow, currentCol).setpiece(null);
+            board.getSpace(newRow, newCol).setPiece(this);
+            board.getSpace(currentRow, currentCol).setPiece(null);
             return Status.SuccessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
         } else {
             return Status.FailedMove();

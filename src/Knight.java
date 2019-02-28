@@ -23,8 +23,8 @@ public class Knight extends Piece {
         {
             if((((newRow==currentRow+2)||(newRow==currentRow-2))&&((newCol==currentCol+1)||(newCol==currentCol-1)))||((newCol==currentCol+2||(newCol==currentCol-2))&&((newRow==currentRow+1)||(newRow==currentRow-1))))
             {
-                a[newRow][newCol].setpiece(this);
-                a[currentRow][currentCol].setpiece(null);
+                a[newRow][newCol].setPiece(this);
+                a[currentRow][currentCol].setPiece(null);
                 return Status.SuccessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
             }
             else

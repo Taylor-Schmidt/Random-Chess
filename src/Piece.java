@@ -50,12 +50,12 @@ public abstract class Piece {
 
         return availablePositions;
     }
-
-    public static void main(String[] args) {
-        Queen queen = new Queen("white", 0);
-        Board board = new Board();
-        System.out.println(queen.getAvailableDiagonalMoves(board, 3, 3));
-    }
+//
+//    public static void main(String[] args) {
+//        Queen queen = new Queen("white", 0);
+//        Board board = new Board();
+//        System.out.println(queen.getAvailableDiagonalMoves(board, 3, 3));
+//    }
 
     private void probeByDirectionVector(Board board, int row, int col, Position directionVector, HashSet<Position> availablePositions){
         boolean encounteredIllegalMove = false;
@@ -138,15 +138,15 @@ public abstract class Piece {
     }
 
     static boolean hasAPiece(Space[][] a, int row, int col) {
-        return a[row][col].getpiece() != null;
+        return a[row][col].getPiece() != null;
     }
 
     static boolean hasAPiece(Board b, Position p){
-        return b.getSpace(p).getpiece() != null;
+        return b.getSpace(p).getPiece() != null;
     }
 
     boolean colorsAreTheSame(Space[][] a, int row, int col) {
-        return getColor().equals(a[row][col].getpiece().getColor());
+        return getColor().equals(a[row][col].getPiece().getColor());
     }
 
 }

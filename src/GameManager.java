@@ -2,6 +2,11 @@
  * Main Driver for game loop.
  */
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.Scanner;
 
 /**
@@ -52,7 +57,7 @@ class GameManager {
                     actuator.addLine("The space " + Position.parsePosition(pBefore) + " does not exist.");
                 } else if (!Piece.hasAPiece(board, pBefore)) {
                     actuator.addLine("The space " + Position.parsePosition(pBefore) + " does not contain a piece.");
-                } else if (!(currentState.getTurnColor().equals(board.getSpace(pBefore).getpiece().getColor()))) {
+                } else if (!(currentState.getTurnColor().equals(board.getSpace(pBefore).getPiece().getColor()))) {
                     actuator.addLine("The selected piece is the wrong color. Please select a " +
                             currentState.getTurnColor() + " piece.");
                 } else {
@@ -60,10 +65,10 @@ class GameManager {
 //                actuator.addLine(pBefore + " " + pAfter); //Prints input in array coordinates
 
                     //Add a check to make sure entered move works.
-                    Status status = board.getSpace(pBefore).getpiece().move(board, pBefore.row, pBefore.col, pAfter.row, pAfter.col);
+                    Status status = board.getSpace(pBefore).getPiece().move(board, pBefore.row, pBefore.col, pAfter.row, pAfter.col);
                     //Check for check mate, if in check mate set gameIsRunning to false.
                     actuator.addLine(status.message);
-                    if (board.getSpace(pBefore).getpiece() == null) {
+                    if (board.getSpace(pBefore).getPiece() == null) {
                         currentState.ChangeTurn();
                     }
                 }
@@ -101,6 +106,50 @@ class GameManager {
             T temp = array[i];
             array[i] = array[array.length - 1 - i];
             array[array.length - 1 - i] = temp;
+        }
+    }
+
+    private HashMap<String, String> readPreferences(){
+        Scanner fileScanner;
+        HashMap<String, String> preferences = new HashMap<>();
+
+        try {
+            fileScanner = new Scanner(new File("prefs.dat"));
+        } catch (FileNotFoundException e) {
+            return preferences;
+        }
+
+
+        while (fileScanner.hasNextLine()){
+            String[] parts = fileScanner.nextLine().split(":");
+            if (parts.length == 2){
+                preferences.put(parts[0],parts[1]);
+            }
+        }
+
+        return preferences;
+    }
+
+    private void writePreferences(HashMap<String, String> preferences){
+        File file = new File("prefs.dat");
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            return;
+        }
+        FileWriter fileWriter;
+        try {
+             fileWriter = new FileWriter(file);
+        } catch (IOException e) {
+            return;
+        }
+
+        for (String key: preferences.keySet()){
+            try {
+                fileWriter.write(key + ":" + preferences.get(key));
+            } catch (IOException e) {
+                return;
+            }
         }
     }
 }
