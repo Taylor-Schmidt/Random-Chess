@@ -89,7 +89,7 @@ public abstract class Piece {
             } else {
                 encounteredIllegalMove = true;
             }
-            encounteredIllegalMove = !legalMove(board, newPosition);
+//            encounteredIllegalMove = !legalMove(board, newPosition);
 
             if (!encounteredIllegalMove){
                 availablePositions.add(newPosition);
