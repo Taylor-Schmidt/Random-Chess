@@ -19,19 +19,13 @@ public class Rook extends Piece {
     @Override
     public Status move(Board board, int currentRow, int currentCol, int newRow, int newCol) {
         Space[][] a = board.getBoard();
-        if(legalMove(a, newRow, newCol))
-        {
-            if(currentRow == newRow || currentCol == newCol)
-            {
-                a[newRow][newCol].setpiece(this);
-                a[currentRow][currentCol].setpiece(null);
-                return Status.SuccessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
-            }
-            else
-                return Status.FailedMove();
-        }
-        else
+        if (getAvailableMoves(board, currentRow, currentCol).contains(new Position(newRow, newCol))) {
+            board.getSpace(newRow, newCol).setpiece(this);
+            board.getSpace(currentRow, currentCol).setpiece(null);
+            return Status.SuccessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
+        } else {
             return Status.FailedMove();
+        }
     }
 
     @Override
