@@ -97,6 +97,7 @@ public class GameState {
                 }
             }
         }
+        //comment
 
         return checkKing;
     }
