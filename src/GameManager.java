@@ -19,6 +19,7 @@ class GameManager {
         Board board = new Board();
         initBoardStandardChess(board);
         GameState currentState = new GameState("white", board, null);
+        String OppositeColor = "black";
         TextActuator actuator = new TextActuator(10);
         Scanner kb = new Scanner(System.in);
 
@@ -65,6 +66,18 @@ class GameManager {
                     actuator.addLine(status.message);
                     if (board.getSpace(pBefore).getpiece() == null) {
                         currentState.ChangeTurn();
+                        if(currentState.KingInCheck())
+                        {
+                            if(currentState.getTurnColor()=="white") {
+                                OppositeColor = "black";
+                            }
+                            else {
+                                OppositeColor="white";
+
+                            }
+                            actuator.addLine(OppositeColor + " is now in check.");
+                        }
+
                     }
                 }
 //            }
