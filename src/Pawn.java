@@ -14,22 +14,22 @@ public class Pawn extends Piece {
 
     @Override
     public HashSet<Position> getAvailableMoves(Board board, int row, int col) {
-        HashSet<Position> AvailablePositions= new HashSet<>();;
+        HashSet<Position> availablePositions= new HashSet<>();;
         if(color=="black")
         {
             Position p = new Position(row+1, col+1);
-            AvailablePositions.add(p);
+            availablePositions.add(p);
             p= new Position(row+1, col-1);
-            AvailablePositions.add(p);
+            availablePositions.add(p);
         }
         else
         {
             Position p = new Position(row-1, col+1);
-            AvailablePositions.add(p);
+            availablePositions.add(p);
             p= new Position(row-1, col-1);
-            AvailablePositions.add(p);
+            availablePositions.add(p);
         }
-        return AvailablePositions;
+        return availablePositions;
     }
 
     @Override
