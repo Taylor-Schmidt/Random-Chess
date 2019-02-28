@@ -59,37 +59,39 @@ public class GameState {
         is in the possible moves of a piece on the current board
 
      */
-    public boolean KingInCheck ()
+    public boolean KingInCheck (String color)
     {
         boolean foundKing = false;
         boolean checkKing = false;
-        Space kingSpace = null;
-        String kingColor = "";
+//        Space kingSpace = null;
+//        String kingColor = "";
+        Position kingPosition = new Position(-1, -1);
 
         // find kings position to compare to possible moves
-        while(!foundKing) {
-            for (int i = 0; i < board.getRows(); i++) {
-                for (int j = 0; j < board.getCols(); j++) {
+//        while(!foundKing) {
+            for (int i = 0; i < board.getRows() && !foundKing; i++) {
+                for (int j = 0; j < board.getCols() && !foundKing; j++) {
                     Space pieceSpace = board.getSpace(i, j);
 
-                    if ((pieceSpace.getPiece() != null) && (pieceSpace.getPiece().getType() == Piece.ChessPieceType.KING)) {
-                        kingSpace = pieceSpace;
-                        kingColor = pieceSpace.getPiece().getColor();
+                    if ((pieceSpace.getPiece() != null) && (pieceSpace.getPiece().getType() == Piece.ChessPieceType.KING)
+                    && pieceSpace.getPiece().getColor().equals(color)) {
+//                        kingSpace = pieceSpace;
+                        kingPosition = new Position(i, j);
+//                        kingColor = pieceSpace.getPiece().getColor();
                         foundKing = true;
-
                     }
                 }
             }
-        }
+//        }
 
-        //then takes the set of all p;ossible moves and sees if they contain the kings position
+        //then takes the set of all possible moves and sees if they contain the kings position
         for (int a = 0; a < board.getRows(); a++){
             for (int b = 0; b < board.getCols(); b++){
                 Space space = board.getSpace(a,b);
                 if (space.getPiece() != null  ){
                     HashSet<Position> moves = space.getPiece().getAvailableMoves(board, a, b);
                    // Iterator<Position> it = moves.iterator();
-                    if(moves.contains(kingSpace) && !(space.getPiece().getColor().equals(kingColor)))
+                    if(moves.contains(kingPosition) && !(space.getPiece().getColor().equals(color)))
                     {
                         checkKing = true;
                         break;
