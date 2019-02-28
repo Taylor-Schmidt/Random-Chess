@@ -8,6 +8,7 @@ public class TextActuator {
     private LinkedList<String> consoleQueue = new LinkedList<>(); //List of items to be printed in console.
     private int numberOfConsoleLines; //Number of lines of consoleQueue to print when printing console
     private int oldsize = 0;
+    private boolean useAscii = false;
 
     /**
      * Creates an instance of TextActuator
@@ -15,6 +16,11 @@ public class TextActuator {
      */
     TextActuator(int size){
         numberOfConsoleLines = size;
+    }
+
+    TextActuator(int size, boolean useAscii){
+        numberOfConsoleLines = size;
+        this.useAscii = useAscii;
     }
 
     /**
@@ -26,7 +32,7 @@ public class TextActuator {
     void printBoard(Board board) {
         String s = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 
-        s += printSpaceArray(board.getBoard(), board.getRows(), board.getCols(), false);
+        s += printSpaceArray(board.getBoard(), board.getRows(), board.getCols(), useAscii);
 
         s += printConsole();
 
