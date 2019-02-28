@@ -17,16 +17,16 @@ public class Pawn extends Piece {
         HashSet<Position> AvailablePositions= new HashSet<>();;
         if(color=="black")
         {
-            Position p = new Position(row-1, col+1);
+            Position p = new Position(row+1, col+1);
             AvailablePositions.add(p);
-            p= new Position(row-1, col-1);
+            p= new Position(row+1, col-1);
             AvailablePositions.add(p);
         }
         else
         {
-            Position p = new Position(row+1, col+1);
+            Position p = new Position(row-1, col+1);
             AvailablePositions.add(p);
-            p= new Position(row+1, col-1);
+            p= new Position(row-1, col-1);
             AvailablePositions.add(p);
         }
         return AvailablePositions;
