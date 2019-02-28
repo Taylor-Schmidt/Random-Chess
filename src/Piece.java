@@ -50,12 +50,12 @@ public abstract class Piece {
 
         return availablePositions;
     }
-
-    public static void main(String[] args) {
-        King king = new King("white", 0);
-        Board board = new Board();
-        System.out.println(king.getAvailableMoves(board, 3, 3));
-    }
+//
+//    public static void main(String[] args) {
+//        Knight knight = new Knight("white", 0);
+//        Board board = new Board();
+//        System.out.println(knight.getAvailableMoves(board, 3, 3));
+//    }
 
     /**
      * Uses a 2x1 direction vector (an instance of Position class) and probes in that direction by scaling in that

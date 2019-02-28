@@ -11,28 +11,21 @@ public class Knight extends Piece {
         value = v;
     }
 
-    @Override
-    public HashSet<Position> getAvailableMoves(Board board, int row, int col) {
-        return new HashSet<>();
-    }
+    private static final Position[] directionVectors = new Position[]{new Position(2, 1),
+            new Position(2, -1), new Position(-1, 2), new Position(-1, -2),
+            new Position(-2, 1), new Position(-2, -1), new Position(1, 2),
+            new Position(1, -2)
+    };
 
     @Override
-    public Status move(Board board, int currentRow, int currentCol, int newRow, int newCol) {
-        Space[][] a = board.getBoard();
-        if(legalMove(a, newRow, newCol))
-        {
-            if((((newRow==currentRow+2)||(newRow==currentRow-2))&&((newCol==currentCol+1)||(newCol==currentCol-1)))||((newCol==currentCol+2||(newCol==currentCol-2))&&((newRow==currentRow+1)||(newRow==currentRow-1))))
-            {
-                a[newRow][newCol].setPiece(this);
-                a[currentRow][currentCol].setPiece(null);
-                return Status.SuccessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
-            }
-            else
-                return Status.FailedMove();
+    public HashSet<Position> getAvailableMoves(Board board, int row, int col) {
+        HashSet<Position> availableMoves = new HashSet<>();
+        for (Position direction: directionVectors){
+            probeByDirectionVector(board, row, col, direction, availableMoves, 1, 1);
         }
-        else
-            return Status.FailedMove();
+        return availableMoves;
     }
+
 
     @Override
     public int getvalue() {
