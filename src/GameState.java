@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Keeps track on information during a game, such as the color of whose turn it is, the locations of all pieces on the
@@ -54,5 +52,52 @@ public class GameState {
     public String getTurnColor()
     {
         return turnColor;
+    }
+
+    /*
+        KingInCheck method returns true if the opposite king's position
+        is in the possible moves of a piece on the current board
+
+     */
+    public boolean KingInCheck ()
+    {
+        boolean foundKing = false;
+        boolean checkKing = false;
+        Space kingSpace = null;
+        String kingColor = "";
+
+        // find kings position to compare to possible moves
+        while(!foundKing) {
+            for (int i = 0; i < board.getRows(); i++) {
+                for (int j = 0; j < board.getCols(); j++) {
+                    Space pieceSpace = board.getSpace(i, j);
+
+                    if ((pieceSpace.getpiece() != null) && (pieceSpace.getpiece().getType() == Piece.ChessPieceType.KING)) {
+                        kingSpace = pieceSpace;
+                        kingColor = pieceSpace.getpiece().getColor();
+                        foundKing = true;
+
+                    }
+                }
+            }
+        }
+
+        //then takes the set of all p;ossible moves and sees if they contain the kings position
+        for (int a = 0; a < board.getRows(); a++){
+            for (int b = 0; b < board.getCols(); b++){
+                Space space = board.getSpace(a,b);
+                if (space.getpiece() != null  ){
+                    HashSet<Position> moves = space.getpiece().getAvailableMoves(board, a, b);
+                   // Iterator<Position> it = moves.iterator();
+                    if(moves.contains(kingSpace) && !(space.getpiece().getColor().equals(kingColor)))
+                    {
+                        checkKing = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return checkKing;
     }
 }
