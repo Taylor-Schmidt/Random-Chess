@@ -13,8 +13,8 @@ import java.util.Scanner;
  * Initialized the state of the game, and runs the game loop.
  */
 class GameManager {
-    static String black = "black";
-    static String white = "white";
+    private static String black = "black";
+    private static String white = "white";
 
     private HashMap<String, String> preferences;
 
@@ -25,7 +25,7 @@ class GameManager {
      */
     void run() {
         preferences = readPreferences();
-        boolean useAsciiCharacters = false;
+        boolean useAsciiCharacters;
         if (preferences.containsKey(USE_ASCII)){
             useAsciiCharacters = Boolean.valueOf(preferences.get(USE_ASCII));
         } else {
@@ -36,7 +36,7 @@ class GameManager {
 
         Board board = new Board();
         initBoardStandardChess(board);
-        GameState currentState = new GameState("white", board, null);
+        GameState currentState = new GameState(white, board, null);
         TextActuator actuator = new TextActuator(10, useAsciiCharacters);
         Scanner kb = new Scanner(System.in);
 
@@ -94,6 +94,8 @@ class GameManager {
 //            }
             }
         }
+
+        kb.close();
     }
 
     private boolean asciiCompatCheck(){
@@ -102,6 +104,7 @@ class GameManager {
         System.out.println("♙");
         Scanner kb = new Scanner(System.in);
         String s = kb.nextLine();
+        kb.close();
         return s.toLowerCase().contains("n");
     }
 
