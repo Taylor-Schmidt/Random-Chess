@@ -1,7 +1,3 @@
-/**
- * Main Driver for game loop.
- */
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -10,6 +6,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 /**
+ * Main Driver for game loop.
  * Initialized the state of the game, and runs the game loop.
  */
 class GameManager {
