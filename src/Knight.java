@@ -3,12 +3,11 @@ import java.util.HashSet;
 public class Knight extends Piece {
 
     private String color;
-    private int value;
+    private int value = 3;
     private ChessPieceType chessPieceType = ChessPieceType.KNIGHT;
 
-    public Knight(String c, int v) {
+    public Knight(String c) {
         color = c;
-        value = v;
     }
 
     private static final Position[] directionVectors = new Position[]{new Position(2, 1),

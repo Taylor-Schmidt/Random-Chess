@@ -3,12 +3,11 @@ import java.util.HashSet;
 public class King extends Piece {
 
     private String color;
-    private int value;
+    private int value = 0;
     private ChessPieceType chessPieceType = ChessPieceType.KING;
 
-    public King(String c, int v) {
+    public King(String c) {
         color = c;
-        value = v;
     }
 
 

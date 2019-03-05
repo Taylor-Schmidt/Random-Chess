@@ -3,30 +3,26 @@ import java.util.HashSet;
 public class Pawn extends Piece {
 
     private String color;
-    private int value;
+    private int value = 1;
     private ChessPieceType chessPieceType = ChessPieceType.PAWN;
 
 
-    public Pawn(String c, int v) {
+    public Pawn(String c) {
         color = c; //black,white
-        value = v;
     }
 
     @Override
     public HashSet<Position> getAvailableMoves(Board board, int row, int col) {
-        HashSet<Position> availablePositions= new HashSet<>();;
-        if(color=="black")
-        {
-            Position p = new Position(row+1, col+1);
+        HashSet<Position> availablePositions = new HashSet<>();
+        if (color.equals("black")) {
+            Position p = new Position(row + 1, col + 1);
             availablePositions.add(p);
-            p= new Position(row+1, col-1);
+            p = new Position(row + 1, col - 1);
             availablePositions.add(p);
-        }
-        else
-        {
-            Position p = new Position(row-1, col+1);
+        } else {
+            Position p = new Position(row - 1, col + 1);
             availablePositions.add(p);
-            p= new Position(row-1, col-1);
+            p = new Position(row - 1, col - 1);
             availablePositions.add(p);
         }
         return availablePositions;
@@ -42,16 +38,14 @@ public class Pawn extends Piece {
                     //disable capture forward
                     //Checks if column is same, and there is a piece in the new spot
                     return Status.FailedMove();
-                }
-                else if ((newRow == currentRow - 1) && (newCol == currentCol)) {
+                } else if ((newRow == currentRow - 1) && (newCol == currentCol)) {
                     //Forward movement
                     //Checks if column is same, and if moving correct distance
                     a[newRow][newCol].setPiece(this);
                     a[currentRow][currentCol].setPiece(null);
-                }
-                else if ((currentRow == 6) &&
+                } else if ((currentRow == 6) &&
                         ((newRow == currentRow - 2) && (newCol == currentCol)) &&
-                        ((!hasAPiece(a,4,newCol)) && (!hasAPiece(a,5,newCol)))
+                        ((!hasAPiece(a, 4, newCol)) && (!hasAPiece(a, 5, newCol)))
                 ) {
                     //Two spaces for first movement
                     //First checks if piece is in original row
@@ -61,8 +55,7 @@ public class Pawn extends Piece {
                     a[newRow][newCol].setPiece(this);
                     a[currentRow][currentCol].setPiece(null);
 
-                }
-                else if ((newRow == currentRow - 1) &&
+                } else if ((newRow == currentRow - 1) &&
                         ((newCol == currentCol + 1) || (newCol == currentCol - 1)) &&
                         (hasAPiece(a, newRow, newCol) && !colorsAreTheSame(a, newRow, newCol))
                 ) {
@@ -73,8 +66,7 @@ public class Pawn extends Piece {
                     a[newRow][newCol].setPiece(this);
                     a[currentRow][currentCol].setPiece(null);
 
-                }
-                else if ((newRow == currentRow - 1) &&
+                } else if ((newRow == currentRow - 1) &&
                         ((newCol == currentCol + 1) || (newCol == currentCol - 1)) &&
                         (hasAPiece(a, currentRow, newCol) && !colorsAreTheSame(a, currentRow, newCol)) &&
                         (currentRow == 3)
@@ -84,11 +76,10 @@ public class Pawn extends Piece {
                     //Then checks if column is changed
                     //then checks if there is a piece next to it
                     //Lastly checks if the row is the appropriate spot for performing this action
-                    a[newRow+1][newCol].setPiece(null);
+                    a[newRow + 1][newCol].setPiece(null);
                     a[newRow][newCol].setPiece(this);
                     a[currentRow][currentCol].setPiece(null);
-                }
-                else {
+                } else {
                     //Invalid move
                     //default if others fail
                     return Status.FailedMove();
@@ -98,27 +89,24 @@ public class Pawn extends Piece {
                     //Promotion logic
                     //Checks if pawn is in last row on board
                     //Then sets a new piece in it's place
-                    a[newRow][newCol].setPiece(new Queen(this.color,0));
+                    a[newRow][newCol].setPiece(new Queen(this.color));
                 }
                 return Status.SuccessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
-            }
-            else {
+            } else {
                 //black pieces
                 if ((newCol == currentCol) && (hasAPiece(a, newRow, newCol))) {
                     //disable capture forward
                     //Checks if column is same, and there is a piece in the new spot
                     return Status.FailedMove();
-                }
-                else if ((newRow == currentRow + 1) && (newCol == currentCol)) {
+                } else if ((newRow == currentRow + 1) && (newCol == currentCol)) {
                     //Forward movement
                     //Checks if column is same, and if moving correct distance
                     a[newRow][newCol].setPiece(this);
                     a[currentRow][currentCol].setPiece(null);
 
-                }
-                else if ((currentRow == 1) &&
+                } else if ((currentRow == 1) &&
                         ((newRow == currentRow + 2) && (newCol == currentCol)) &&
-                ((!hasAPiece(a,2,newCol)) && (!hasAPiece(a,3,newCol)))
+                        ((!hasAPiece(a, 2, newCol)) && (!hasAPiece(a, 3, newCol)))
                 ) {
                     //Two spaces for first movement
                     //First checks if piece is in original row
@@ -128,8 +116,7 @@ public class Pawn extends Piece {
                     a[newRow][newCol].setPiece(this);
                     a[currentRow][currentCol].setPiece(null);
 
-                }
-                else if ((newRow == currentRow + 1) &&
+                } else if ((newRow == currentRow + 1) &&
                         ((newCol == currentCol + 1) || (newCol == currentCol - 1)) &&
                         (hasAPiece(a, newRow, newCol) && !colorsAreTheSame(a, newRow, newCol))
                 ) {
@@ -140,8 +127,7 @@ public class Pawn extends Piece {
                     a[newRow][newCol].setPiece(this);
                     a[currentRow][currentCol].setPiece(null);
 
-                }
-                else if ((newRow == currentRow + 1) &&
+                } else if ((newRow == currentRow + 1) &&
                         ((newCol == currentCol + 1) || (newCol == currentCol - 1)) &&
                         (hasAPiece(a, currentRow, newCol) && !colorsAreTheSame(a, currentRow, newCol)) &&
                         (currentRow == 4)
@@ -151,12 +137,11 @@ public class Pawn extends Piece {
                     //Then checks if column is changed
                     //then checks if there is a piece next to it
                     //Lastly checks if the row is the appropriate spot for performing this action
-                    a[newRow-1][newCol].setPiece(null);
+                    a[newRow - 1][newCol].setPiece(null);
                     a[newRow][newCol].setPiece(this);
                     a[currentRow][currentCol].setPiece(null);
 
-                }
-                else {
+                } else {
                     //Invalid move
                     //default if others fail
                     return Status.FailedMove();
@@ -166,7 +151,7 @@ public class Pawn extends Piece {
                     //Promotion logic
                     //Checks if pawn is in last row on board
                     //Then sets a new piece in it's place
-                    a[newRow][newCol].setPiece(new Queen(this.color,0));
+                    a[newRow][newCol].setPiece(new Queen(this.color));
                 }
                 return Status.SuccessfulMove(chessPieceType, currentRow, currentCol, newRow, newCol);
             }

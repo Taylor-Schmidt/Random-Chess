@@ -104,7 +104,7 @@ class GameManager {
         System.out.println("♙");
         Scanner kb = new Scanner(System.in);
         String s = kb.nextLine();
-        kb.close();
+//        kb.close();
         return s.toLowerCase().contains("n");
     }
 
@@ -112,24 +112,23 @@ class GameManager {
     private void initBoardStandardChess(Board board) {
         Space[][] spaces = board.getBoard();
         for (int i = 0; i < board.getRows(); i++) {
-            spaces[1][i] = new Space(new Pawn(black, 0));
-            spaces[spaces.length - 2][i] = new Space(new Pawn(white, 0));
+            spaces[1][i] = new Space(new Pawn(black));
+            spaces[spaces.length - 2][i] = new Space(new Pawn(white));
         }
 
-        int[] emptyArray = new int[]{0, 0, 0, 0, 0, 0, 0, 0}; //TODO: add values OR have classes have predefined values
-        initStandardRow(spaces[0], black, emptyArray);
-        initStandardRow(spaces[spaces.length - 1], white, emptyArray);
+        initStandardRow(spaces[0], black);
+        initStandardRow(spaces[spaces.length - 1], white);
     }
 
-    private void initStandardRow(Space[] row, String color, int[] valueArray) {
-        row[0] = new Space(new Rook(color, valueArray[0]));
-        row[1] = new Space(new Knight(color, valueArray[1]));
-        row[2] = new Space(new Bishop(color, valueArray[2]));
-        row[3] = new Space(new Queen(color, valueArray[3]));
-        row[4] = new Space(new King(color, valueArray[4]));
-        row[5] = new Space(new Bishop(color, valueArray[5]));
-        row[6] = new Space(new Knight(color, valueArray[6]));
-        row[7] = new Space(new Rook(color, valueArray[7]));
+    private void initStandardRow(Space[] row, String color) {
+        row[0] = new Space(new Rook(color));
+        row[1] = new Space(new Knight(color));
+        row[2] = new Space(new Bishop(color));
+        row[3] = new Space(new Queen(color));
+        row[4] = new Space(new King(color));
+        row[5] = new Space(new Bishop(color));
+        row[6] = new Space(new Knight(color));
+        row[7] = new Space(new Rook(color));
     }
 
     private static <T> void reverseArray(T[] array) {

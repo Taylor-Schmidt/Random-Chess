@@ -3,12 +3,11 @@ import java.util.HashSet;
 public class Bishop extends Piece {
 
     private String color;
-    private int value;
+    private int value = 3;
     private ChessPieceType chessPieceType = ChessPieceType.BISHOP;
 
-    public Bishop(String c, int v) {
+    public Bishop(String c) {
         color = c;
-        value = v;
     }
 
     @Override

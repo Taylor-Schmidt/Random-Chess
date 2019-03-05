@@ -6,9 +6,8 @@ public class Rook extends Piece {
     private int value;
     private ChessPieceType chessPieceType = ChessPieceType.ROOK;
 
-    public Rook(String c, int v) {
+    public Rook(String c) {
         color = c;
-        value = v;
     }
 
     @Override
