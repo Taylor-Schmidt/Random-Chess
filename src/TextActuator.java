@@ -3,16 +3,16 @@ import java.util.LinkedList;
 /**
  * Used to output chess board (and a "console" output of text) to System.out
  */
-public class TextActuator {
+class TextActuator {
 
     private LinkedList<String> consoleQueue = new LinkedList<>(); //List of items to be printed in console.
     private int numberOfConsoleLines; //Number of lines of consoleQueue to print when printing console
-    private int oldsize = 0;
+    private int oldSize = 0;
     private boolean useAscii = false;
 
     /**
      * Creates an instance of TextActuator
-     * @param size Max lines that the attache console print can have
+     * @param size Max lines that the "console" can have
      */
     TextActuator(int size){
         numberOfConsoleLines = size;
@@ -39,7 +39,14 @@ public class TextActuator {
         System.out.println(s);
     }
 
-
+    /**
+     *
+     * @param spaces
+     * @param rows
+     * @param cols
+     * @param asciiEnabled
+     * @return
+     */
     String printSpaceArray(Space[][] spaces, int rows, int cols, boolean asciiEnabled){
         StringBuilder sb = new StringBuilder();
 
@@ -51,38 +58,27 @@ public class TextActuator {
             int rowNum = rows - i;
 
             sb.append(rowNum).append("\t");
-//            System.out.print(rowNum + "\t");
             for (int j = 0; j < cols; j++) {
                 Space space = row[j];
                 if (space == null) {
                     sb.append("|##\t");
-//                    System.out.print("|##\t");
                 } else {
                     sb.append("|");
-//                    System.out.print("| ");
                     Piece piece = space.getPiece();
                     if (piece == null) {
                         sb.append("\t");
-//                        System.out.print("\t");
                     } else {
                         String s = asciiEnabled?
                                 asciiChessCharacters(space.getPiece()) : letterChessCharacters(space.getPiece());
                         sb.append(s).append("\t");
-//                        System.out.print( s + "\t");
                     }
                 }
             }
             sb.append("|\t").append(rowNum).append("\n");
-//            System.out.print("|");
-//            System.out.print("\t" + rowNum);
-//            System.out.println();
         }
 
         sb.append(getHorizontalDivider(rows));
         sb.append(letterRow(rows));
-//        printHorizontalDivider(rows);
-//        printLetterRow(rows);
-//        System.out.print(sb.toString());
         return sb.toString();
     }
 
@@ -147,19 +143,9 @@ public class TextActuator {
     }
 
     /**
-     * Prints a equal in width to to the size of the board.
+     * Returns a line of '+--' equal in width to to the size of the board.
      * @param m width of board (number of columns)
      */
-    private void printHorizontalDivider(int m) {
-        System.out.print("\t");
-        for (int r = 0; r <= m; r++) {
-            if (r != m)
-                System.out.print("+--\t");
-            else System.out.print("+");
-        }
-        System.out.println();
-    }
-
     private String getHorizontalDivider(int m){
         StringBuilder stringBuilder = new StringBuilder("\t");
         for (int r = 0; r <= m; r++) {
@@ -172,22 +158,14 @@ public class TextActuator {
     }
 
     /**
-     * Prints a row of letter labels to help the user identify the column in standard chess notation.
+     * Returns a row of letter labels to help the user identify the column in standard chess notation.
      * Should be printed above and below the board.
      * @param m width of board (number of columns)
      */
-    private void printLetterRow(int m){
-        System.out.print("\t");
-        for (int i = 0; i < m; i++){
-            System.out.print(("  " + (char) ('A' + i)) + "\t");
-        }
-        System.out.println();
-    }
-
     private String letterRow(int m){
         StringBuilder stringBuilder = new StringBuilder("\t");
         for (int i = 0; i < m; i++){
-            stringBuilder.append(' ');
+            stringBuilder.append("  ");
             stringBuilder.append((char) ('A' + i));
             stringBuilder.append("\t");
         }
@@ -196,7 +174,7 @@ public class TextActuator {
     }
 
     /**
-     * Adds a line to the console
+     * Adds a line to the console.
      * @param line string to print (should be a feedback message to user)
      */
     public void addLine(String line){
@@ -205,7 +183,7 @@ public class TextActuator {
 
 
     /**
-     * prints lines below the text board
+     * Prints lines below the text board
      * Consists of feedback for user
      */
     private String printConsole(){
@@ -216,14 +194,14 @@ public class TextActuator {
             sb.append('\n');
         }
         for (int i = start; i < consoleQueue.size(); i++){
-            if (i == oldsize + 1){
+            if (i == oldSize + 1){
                 sb.append('\n');
             }
             sb.append(consoleQueue.get(i));
             sb.append('\n');
 //            System.out.println(consoleQueue.get(i));
         }
-        oldsize = consoleQueue.size();
+        oldSize = consoleQueue.size();
 
         return sb.toString();
     }

@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -21,9 +22,12 @@ class GameManager {
      * Runs the game loop
      */
     void run() {
+
+        //Reads preferences file.
+        //If ASCII chess character behavior is not defined, updates it to reflect
         preferences = readPreferences();
         boolean useAsciiCharacters;
-        if (preferences.containsKey(USE_ASCII)){
+        if (preferences.containsKey(USE_ASCII)) {
             useAsciiCharacters = Boolean.valueOf(preferences.get(USE_ASCII));
         } else {
             useAsciiCharacters = asciiCompatCheck();
@@ -31,10 +35,23 @@ class GameManager {
             writePreferences(preferences);
         }
 
+        //Initialize basic classes
         Board board = new Board();
-        initBoardStandardChess(board);
         GameState currentState = new GameState(white, board, null);
+        ArrayList<GameState> gameStates = new ArrayList<>();
+        gameStates.add(new GameState(currentState));
         TextActuator actuator = new TextActuator(10, useAsciiCharacters);
+
+        //If you add a file named test to the root folder, the game launches in test mode.
+//        File testFile = new File("test");
+//        if (testFile.exists()) {
+//            System.out.println("TEST Board setup");
+//            board.getSpace(new Position(Position.parsePosition("D1"))).setPiece(new King(white));
+//            board.getSpace(new Position(Position.parsePosition("B3"))).setPiece(new Bishop(black));
+//        } else {
+//            Initializes board with standard piece layout.
+            initBoardStandardChess(board);
+//        }
         Scanner kb = new Scanner(System.in);
 
         boolean gameIsRunning = true;
@@ -44,10 +61,11 @@ class GameManager {
         //start of game loop
         while (gameIsRunning) {
 
-            //actuator.addLine("Which piece would you like to move?");
+            //Stores a copy of the currentGameState for later retrieval.
+//            System.out.println(currentState.equals(gameStates.get(gameStates.size() - 1)));
 
             //Checks if the current player is in check and alerts them if they are at the start of their turn.
-            if(currentState.KingInCheck(currentState.getTurnColor())) {
+            if (currentState.kingInCheck(currentState.getTurnColor())) {
                 actuator.addLine("The " + currentState.getTurnColor() + " King is in check.");
             }
 
@@ -77,15 +95,38 @@ class GameManager {
                     actuator.addLine("The selected piece is the wrong color. Please select a " +
                             currentState.getTurnColor() + " piece.");
                 } else {
+                    gameStates.add(new GameState(currentState));
 
-//                actuator.addLine(pBefore + " " + pAfter); //Prints input in array coordinates
+                    //De-links references
+                    currentState = new GameState(currentState);
+                    board = currentState.getBoard();
 
                     //Add a check to make sure entered move works.
                     Status status = board.getSpace(pBefore).getPiece().move(board, pBefore.row, pBefore.col, pAfter.row, pAfter.col);
-                    //Check for check mate, if in check mate set gameIsRunning to false.
-                    actuator.addLine(status.message);
-                    if (board.getSpace(pBefore).getPiece() == null) {
-                        currentState.ChangeTurn();
+
+                    if (status.status.equals(Status.STATUS_BAD)){
+                        actuator.addLine(status.message);
+                    } else if (currentState.kingInCheck(currentState.getTurnColor())) {//Check for check; if player is in check, revert.
+                        actuator.addLine("You cannot move there! You cannot put your king in check.");
+
+                        //updates references to refer to the last legal state.
+                        currentState = new GameState(gameStates.get(gameStates.size() - 1));
+                        gameStates.remove(gameStates.size() - 1);
+                        board = currentState.getBoard();
+                    } else {
+                        actuator.addLine(status.message);
+
+                        //If the selected piece has moved, update board, and change turns.
+                        if (board.getSpace(pBefore).getPiece() == null) {
+                            currentState.changeTurn();
+                            currentState.setLastMove(pAfter);
+
+                            //If a piece was captured, adds that piece to the list of captured pieces in the state.
+                            Piece previousPiece = gameStates.get(gameStates.size() - 1).getBoard().getSpace(pAfter).getPiece();
+                            if (previousPiece != null) {
+                                currentState.addTakenPiece(previousPiece);
+                            }
+                        }
                     }
                 }
 //            }
@@ -94,17 +135,6 @@ class GameManager {
 
         kb.close();
     }
-
-    private boolean asciiCompatCheck(){
-        System.out.println("COMPATIBILITY CHECK!");
-        System.out.println("Does the following character look like a question mark? (y/n)");
-        System.out.println("♙");
-        Scanner kb = new Scanner(System.in);
-        String s = kb.nextLine();
-//        kb.close();
-        return s.toLowerCase().contains("n");
-    }
-
 
     private void initBoardStandardChess(Board board) {
         Space[][] spaces = board.getBoard();
@@ -136,7 +166,7 @@ class GameManager {
         }
     }
 
-    private HashMap<String, String> readPreferences(){
+    private HashMap<String, String> readPreferences() {
         Scanner fileScanner;
         HashMap<String, String> preferences = new HashMap<>();
 
@@ -146,43 +176,56 @@ class GameManager {
             return preferences;
         }
 
-
-        while (fileScanner.hasNextLine()){
-            String[] parts = fileScanner.nextLine().split(":");
-            if (parts.length == 2){
-                preferences.put(parts[0],parts[1]);
+        while (fileScanner.hasNextLine()) {
+            String next = fileScanner.nextLine();
+            String[] parts = next.split(":");
+            if (parts.length == 2) {
+                preferences.put(parts[0], parts[1]);
             }
         }
 
         return preferences;
     }
 
-    private void writePreferences(HashMap<String, String> preferences){
-//        System.out.println("Writing prefs");
+    private void writePreferences(HashMap<String, String> preferences) {
         File file = new File("prefs.dat");
         try {
-            file.createNewFile();
+            if (!file.exists()) {
+                //noinspection ResultOfMethodCallIgnored
+                file.createNewFile();
+            }
         } catch (IOException e) {
-//            System.out.println("Could not create new file.");
             return;
         }
         FileWriter fileWriter;
         try {
-             fileWriter = new FileWriter(file);
+            fileWriter = new FileWriter(file);
         } catch (IOException e) {
-//            System.out.println("Could not write preferences to file.");
             return;
         }
 
-        for (String key: preferences.keySet()){
+        for (String key : preferences.keySet()) {
             try {
                 String s = key + ":" + preferences.get(key);
                 fileWriter.write(s);
-//                System.out.println("Wrote: " + s);
             } catch (IOException e) {
-//                System.out.println("Write error.");
                 return;
             }
         }
+
+        try {
+            fileWriter.close();
+        } catch (IOException ignored) {
+
+        }
+    }
+
+    private boolean asciiCompatCheck() {
+        System.out.println("COMPATIBILITY CHECK!");
+        System.out.println("Does the following character look like a question mark? (y/n)");
+        System.out.println("♙");
+        Scanner kb = new Scanner(System.in);
+        String s = kb.nextLine();
+        return s.toLowerCase().contains("n");
     }
 }

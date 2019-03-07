@@ -1,5 +1,9 @@
 // Class to create a chess board for RandomChess program.
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
  * Stores a chess board as an object, and provides helper methods.
  * Mostly implies the Space[][] array.
@@ -58,7 +62,28 @@ public class Board {
         b = new Space[rows][cols];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                b[i][j] = other.getBoard()[i][j];
+                Space oldSpace = other.getBoard()[i][j];
+                Space newSpace = null;
+                if (oldSpace != null) {
+                    newSpace = new Space();
+
+                    Piece oldPiece = oldSpace.getPiece();
+                    Piece newPiece = null;
+
+                    if (oldPiece != null){
+                        try {
+                            newPiece = oldSpace.getPiece()
+                                    .getClass()
+                                    .getConstructor(String.class)
+                                    .newInstance(oldSpace.getPiece().getColor());
+                        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    newSpace.setPiece(newPiece);
+                }
+                b[i][j] = newSpace;
             }
         }
     }
@@ -101,5 +126,22 @@ public class Board {
 
     public boolean positionIsWithinBounds(Position position){
         return (position.row >= 0 && position.row < rows) && (position.col >= 0 && position.col < cols);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Board)) return false;
+        Board board = (Board) o;
+        return rows == board.rows &&
+                cols == board.cols &&
+                Arrays.equals(b, board.b);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(rows, cols);
+        result = 31 * result + Arrays.hashCode(b);
+        return result;
     }
 }

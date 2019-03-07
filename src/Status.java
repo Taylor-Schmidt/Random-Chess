@@ -6,6 +6,9 @@ public class Status {
     String message;
     String status;
 
+    public static final String STATUS_GOOD = "good";
+    public static final String STATUS_BAD = "bad";
+
     public Status(String status, String message) {
         this.message = message;
         this.status = status;
@@ -20,7 +23,7 @@ public class Status {
      * A default implementation of Status for easy returns when the move is successful.
      */
     public static Status SuccessfulMove(Piece.ChessPieceType chessPieceType, int oldRow, int oldCol, int newRow, int newCol){
-        return new Status(chessPieceType + " moved from " + Position.parsePosition(oldRow, oldCol) + " to " +
+        return new Status(STATUS_GOOD, chessPieceType + " moved from " + Position.parsePosition(oldRow, oldCol) + " to " +
                 Position.parsePosition(newRow, newCol) + ".");
     }
 
@@ -28,6 +31,6 @@ public class Status {
      * A default implementation of Status for easy returns when the moves fails.
      */
     public static Status FailedMove(){
-        return new Status("Illegal move, please try another one.");
+        return new Status(STATUS_BAD, "Illegal move, please try another one.");
     }
 }
