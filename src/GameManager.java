@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Scanner;
 
 /**
@@ -43,15 +44,16 @@ class GameManager {
         TextActuator actuator = new TextActuator(10, useAsciiCharacters);
 
         //If you add a file named test to the root folder, the game launches in test mode.
-//        File testFile = new File("test");
-//        if (testFile.exists()) {
-//            System.out.println("TEST Board setup");
-//            board.getSpace(new Position(Position.parsePosition("D1"))).setPiece(new King(white));
-//            board.getSpace(new Position(Position.parsePosition("B3"))).setPiece(new Bishop(black));
-//        } else {
-//            Initializes board with standard piece layout.
+        File testFile = new File("test");
+        if (testFile.exists()) {
+            System.out.println("TEST Board setup");
+            board.getSpace(new Position(Position.parsePosition("D1"))).setPiece(new King(white));
+            board.getSpace(new Position(Position.parsePosition("B3"))).setPiece(new Bishop(black));
+            board.getSpace(new Position(Position.parsePosition("C1"))).setPiece(new Pawn(white));
+        } else {
+//      Initializes board with standard piece layout.
             initBoardStandardChess(board);
-//        }
+        }
         Scanner kb = new Scanner(System.in);
 
         boolean gameIsRunning = true;
@@ -65,8 +67,34 @@ class GameManager {
 //            System.out.println(currentState.equals(gameStates.get(gameStates.size() - 1)));
 
             //Checks if the current player is in check and alerts them if they are at the start of their turn.
-            if (currentState.kingInCheck(currentState.getTurnColor())) {
+            boolean isInCheck = board.kingInCheck(currentState.getTurnColor());
+            if (isInCheck) {
                 actuator.addLine("The " + currentState.getTurnColor() + " King is in check.");
+            } else {
+                for (int i = 0; i < board.getRows(); i++){
+                    for (int j = 0; j < board.getCols(); j++){
+                        Position position = new Position(i, j);
+                        Space space = board.getSpace(position);
+
+                        if (space != null){
+                            Piece piece = space.getPiece();
+                            if (piece != null){
+                                if (piece.getColor().equals(currentState.getTurnColor())){
+                                    System.out.println("Piece was the correct color!");
+                                    HashSet<Position> moves = piece.getAvailableMoves(board, position);
+
+                                    for (Position move: moves){
+                                        if (piece.legalMove(board, move)) {
+                                            Board tempBoard = new Board(board);
+                                            Space space1 = null;
+                                            Status status = tempBoard.getSpace(position).getPiece().move(tempBoard, position, move);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             actuator.addLine("It is " + currentState.getTurnColor() + "'s turn. Enter the move you want to make(Ex. B1,A3): ");
@@ -106,7 +134,7 @@ class GameManager {
 
                     if (status.status.equals(Status.STATUS_BAD)){
                         actuator.addLine(status.message);
-                    } else if (currentState.kingInCheck(currentState.getTurnColor())) {//Check for check; if player is in check, revert.
+                    } else if (board.kingInCheck(currentState.getTurnColor())) {//Check for check; if player is in check, revert.
                         actuator.addLine("You cannot move there! You cannot put your king in check.");
 
                         //updates references to refer to the last legal state.

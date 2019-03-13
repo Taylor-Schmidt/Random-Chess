@@ -2,13 +2,14 @@
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Objects;
 
 /**
  * Stores a chess board as an object, and provides helper methods.
  * Mostly implies the Space[][] array.
  * <p>
- *
+ * <p>
  * If the space is null, there is no space there
  * If piece is null- no piece on the space
  * If piece has(name of pieces)- that piece is on the space
@@ -70,7 +71,7 @@ public class Board {
                     Piece oldPiece = oldSpace.getPiece();
                     Piece newPiece = null;
 
-                    if (oldPiece != null){
+                    if (oldPiece != null) {
                         try {
                             newPiece = oldSpace.getPiece()
                                     .getClass()
@@ -124,8 +125,48 @@ public class Board {
         return cols;
     }
 
-    public boolean positionIsWithinBounds(Position position){
+    public boolean positionIsWithinBounds(Position position) {
         return (position.row >= 0 && position.row < rows) && (position.col >= 0 && position.col < cols);
+    }
+
+    /**
+     * kingInCheck method returns true if the opposite king's position
+     * is in the possible moves of a piece on the current board
+     */
+    public boolean kingInCheck(String color) {
+        boolean foundKing = false;
+        boolean checkKing = false;
+        Position kingPosition = new Position(-1, -1);
+
+        // find kings position to compare to possible moves
+        for (int i = 0; i < getRows() && !foundKing; i++) {
+            for (int j = 0; j < getCols() && !foundKing; j++) {
+                Space pieceSpace = getSpace(i, j);
+
+                if ((pieceSpace.getPiece() != null) && (pieceSpace.getPiece().getType() == Piece.ChessPieceType.KING)
+                        && pieceSpace.getPiece().getColor().equals(color)) {
+                    kingPosition = new Position(i, j);
+                    foundKing = true;
+                }
+            }
+        }
+
+        //then takes the set of all possible moves and sees if they contain the kings position
+        for (int a = 0; a < getRows(); a++) {
+            for (int b = 0; b < getCols(); b++) {
+                Space space = getSpace(a, b);
+                if (space.getPiece() != null) {
+                    HashSet<Position> moves = space.getPiece().getAvailableMoves(this, a, b);
+                    // Iterator<Position> it = moves.iterator();
+                    if (moves.contains(kingPosition) && !(space.getPiece().getColor().equals(color))) {
+                        checkKing = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return checkKing;
     }
 
     @Override

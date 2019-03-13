@@ -14,24 +14,79 @@ public class Pawn extends Piece {
     @Override
     public HashSet<Position> getAvailableMoves(Board board, int row, int col) {
         HashSet<Position> availablePositions = new HashSet<>();
+
+        int newRow;
+        int firstMoveRowOption;
+        boolean isFirstMove;
+
         if (color.equals("black")) {
-            Position p = new Position(row + 1, col + 1);
-            availablePositions.add(p);
-            p = new Position(row + 1, col - 1);
-            availablePositions.add(p);
+            newRow = row + 1;
+            firstMoveRowOption = row + 2;
+            isFirstMove = row == 1;
         } else {
-            Position p = new Position(row - 1, col + 1);
-            availablePositions.add(p);
-            p = new Position(row - 1, col - 1);
-            availablePositions.add(p);
+            newRow = row - 1;
+            firstMoveRowOption = row - 2;
+            isFirstMove = row == 6;
         }
-        return availablePositions;
+
+        if (isFirstMove){
+            Position newPosition = new Position(col, firstMoveRowOption);
+            if (legalMove(board, newPosition)){
+                availablePositions.add(newPosition);
+            }
+        }
+
+        Position center = new Position(newRow, col);
+        Position left = new Position(newRow, col - 1);
+        Position right = new Position(newRow, col + 1);
+
+        if (legalMove(board, center)){
+            availablePositions.add(center);
+        }
+        if (board.positionIsWithinBounds(left) && isASpace(board, left)){
+            if (hasAPiece(board, left)){
+                if (colorsAreDifferent(board, left)){
+                    availablePositions.add(left);
+                }
+            } else {
+                if (hasAPiece(board, new Position(row, col - 1)) && colorsAreDifferent(board, new Position(row, col - 1))){
+                    availablePositions.add(left);
+                }
+            }
+        }
+        if (board.positionIsWithinBounds(right) && isASpace(board, right)){
+            if (hasAPiece(board, right)){
+                if (colorsAreDifferent(board, right)){
+                    availablePositions.add(right);
+                }
+            } else {
+                if (hasAPiece(board, new Position(row, col + 1)) && colorsAreDifferent(board, new Position(row, col + 1))){
+                    availablePositions.add(right);
+                }
+            }
+        }
+
+
+//        if (color.equals("black")) {
+//            Position p = new Position(row + 1, col + 1);
+//            availablePositions.add(p);
+//            p = new Position(row + 1, col - 1);
+//            availablePositions.add(p);
+//        } else {
+//            Position p = new Position(row - 1, col + 1);
+//            availablePositions.add(p);
+//            p = new Position(row - 1, col - 1);
+//            availablePositions.add(p);
+//        }
+            return availablePositions;
     }
 
     @Override
     public Status move(Board b, int currentRow, int currentCol, int newRow, int newCol) {
         Space[][] a = b.getBoard();
-        if ((legalMove(a, newRow, newCol)) && (chessPieceType == ChessPieceType.PAWN)) {
+        Position newPosition = new Position(newRow, newRow);
+
+        if ((legalMove(b, newPosition)) && (chessPieceType == ChessPieceType.PAWN)) {
             if (color.equals("white")) {
                 //white pieces
                 if ((newCol == currentCol) && (hasAPiece(a, newRow, newCol))) {
@@ -57,7 +112,7 @@ public class Pawn extends Piece {
 
                 } else if ((newRow == currentRow - 1) &&
                         ((newCol == currentCol + 1) || (newCol == currentCol - 1)) &&
-                        (hasAPiece(a, newRow, newCol) && !colorsAreTheSame(a, newRow, newCol))
+                        (hasAPiece(a, newRow, newCol) && colorsAreDifferent(a, newRow, newCol))
                 ) {
                     //Diagonal capture
                     //Checks if the row was still changed
@@ -68,7 +123,7 @@ public class Pawn extends Piece {
 
                 } else if ((newRow == currentRow - 1) &&
                         ((newCol == currentCol + 1) || (newCol == currentCol - 1)) &&
-                        (hasAPiece(a, currentRow, newCol) && !colorsAreTheSame(a, currentRow, newCol)) &&
+                        (hasAPiece(a, currentRow, newCol) && colorsAreDifferent(a, currentRow, newCol)) &&
                         (currentRow == 3)
                 ) {
                     //En passant
@@ -118,7 +173,7 @@ public class Pawn extends Piece {
 
                 } else if ((newRow == currentRow + 1) &&
                         ((newCol == currentCol + 1) || (newCol == currentCol - 1)) &&
-                        (hasAPiece(a, newRow, newCol) && !colorsAreTheSame(a, newRow, newCol))
+                        (hasAPiece(a, newRow, newCol) && colorsAreDifferent(a, newRow, newCol))
                 ) {
                     //Diagonal capture
                     //Checks if the row was still changed
@@ -129,7 +184,7 @@ public class Pawn extends Piece {
 
                 } else if ((newRow == currentRow + 1) &&
                         ((newCol == currentCol + 1) || (newCol == currentCol - 1)) &&
-                        (hasAPiece(a, currentRow, newCol) && !colorsAreTheSame(a, currentRow, newCol)) &&
+                        (hasAPiece(a, currentRow, newCol) && colorsAreDifferent(a, currentRow, newCol)) &&
                         (currentRow == 4)
                 ) {
                     //En passant

@@ -23,6 +23,10 @@ public abstract class Piece {
      */
     abstract HashSet<Position> getAvailableMoves(Board board, int row, int col);
 
+    HashSet<Position> getAvailableMoves(Board board, Position position){
+        return getAvailableMoves(board, position.row, position.col);
+    }
+
     public HashSet<Position> getAvailableDiagonalMoves(Board board, int row, int col) {
         HashSet<Position> availablePositions = new HashSet<>();
 
@@ -82,7 +86,7 @@ public abstract class Piece {
             if (isASpace(board, newPosition)) {
                 if (hasAPiece(board, newPosition)) {
                     encounteredIllegalMove = true;
-                    if (!colorsAreTheSame(board, newPosition)){
+                    if (colorsAreDifferent(board, newPosition)){
                         availablePositions.add(newPosition);
                     }
                 }
@@ -118,6 +122,10 @@ public abstract class Piece {
          }
      }
 
+     Status move(Board board, Position pBefore, Position pAfter){
+         return move(board, pBefore.row, pBefore.col, pAfter.row, pAfter.col);
+     }
+
     /**
      * The AI is expected to make decisions based on the idea that different pieces are of different worth.
      * The value that this method returns determines the Piece's worth to the AI.
@@ -143,29 +151,16 @@ public abstract class Piece {
      * Helper method which indicates whether the given space is withing the bounds of the board and does not contain a
      * piece of the same color as this one.
      *
-     * @param a      "Board" (as Space[][]) in which to perform this check
-     * @param newRow Row of the space upon which to perform this check
-     * @param newCol Column of the space upon which to perform this check
+     * @param board      "Board" in which to perform this check
+     * @param position Position of the space upon which to perform this check
      * @return true if this (Piece) is able to be moved to this location. Else false.
      */
-    boolean legalMove(Space[][] a, int newRow, int newCol) {
-        if (isASpace(a, newRow, newCol)) {
-            return (!hasAPiece(a, newRow, newCol) || !colorsAreTheSame(a, newRow, newCol));
+    boolean legalMove(Board board, Position position){
+        if (board.positionIsWithinBounds(position) && isASpace(board, position)){
+            return (!hasAPiece(board, position) || colorsAreDifferent(board, position));
         }
 
         return false;
-    }
-
-    boolean legalMove(Board board, Position position){
-        return legalMove(board.getBoard(), position.row, position.col);
-    }
-
-    boolean legalMove(Board board, int row, int col){
-        return legalMove(board.getBoard(), row, col);
-    }
-
-    static boolean isASpace(Space[][] a, int row, int col) {
-        return a[row][col] != null;
     }
 
     static boolean isASpace(Board b, Position p){
@@ -180,12 +175,12 @@ public abstract class Piece {
         return b.getSpace(p).getPiece() != null;
     }
 
-    boolean colorsAreTheSame(Space[][] a, int row, int col) {
-        return getColor().equals(a[row][col].getPiece().getColor());
+    boolean colorsAreDifferent(Space[][] a, int row, int col) {
+        return !getColor().equals(a[row][col].getPiece().getColor());
     }
 
-    boolean colorsAreTheSame(Board board, Position position){
-        return getColor().equals(board.getSpace(position).getPiece().getColor());
+    boolean colorsAreDifferent(Board board, Position position){
+        return !getColor().equals(board.getSpace(position).getPiece().getColor());
     }
 
 }
