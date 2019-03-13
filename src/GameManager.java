@@ -80,13 +80,11 @@ class GameManager {
                             Piece piece = space.getPiece();
                             if (piece != null){
                                 if (piece.getColor().equals(currentState.getTurnColor())){
-                                    System.out.println("Piece was the correct color!");
                                     HashSet<Position> moves = piece.getAvailableMoves(board, position);
 
                                     for (Position move: moves){
                                         if (piece.legalMove(board, move)) {
                                             Board tempBoard = new Board(board);
-                                            Space space1 = null;
                                             Status status = tempBoard.getSpace(position).getPiece().move(tempBoard, position, move);
                                         }
                                     }
