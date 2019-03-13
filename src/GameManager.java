@@ -2,10 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Main Driver for game loop.
@@ -18,6 +15,8 @@ class GameManager {
     private HashMap<String, String> preferences;
 
     private final String USE_ASCII = "use_ascii";
+
+    private ArrayList<GameState> gameStates = new ArrayList<>();
 
     /**
      * Runs the game loop
@@ -39,7 +38,6 @@ class GameManager {
         //Initialize basic classes
         Board board = new Board();
         GameState currentState = new GameState(white, board, null);
-        ArrayList<GameState> gameStates = new ArrayList<>();
         gameStates.add(new GameState(currentState));
         TextActuator actuator = new TextActuator(10, useAsciiCharacters);
 
@@ -47,9 +45,10 @@ class GameManager {
         File testFile = new File("test");
         if (testFile.exists()) {
             System.out.println("TEST Board setup");
-            board.getSpace(new Position(Position.parsePosition("D1"))).setPiece(new King(white));
-            board.getSpace(new Position(Position.parsePosition("B3"))).setPiece(new Bishop(black));
-            board.getSpace(new Position(Position.parsePosition("C1"))).setPiece(new Pawn(white));
+            currentState.changeTurn();
+            board.getSpace(new Position(Position.parsePosition("H8"))).setPiece(new King(black));
+            board.getSpace(new Position(Position.parsePosition("F7"))).setPiece(new King(white));
+            board.getSpace(new Position(Position.parsePosition("G6"))).setPiece(new Queen(white));
         } else {
 //      Initializes board with standard piece layout.
             initBoardStandardChess(board);
@@ -63,103 +62,91 @@ class GameManager {
         //start of game loop
         while (gameIsRunning) {
 
-            //Stores a copy of the currentGameState for later retrieval.
-//            System.out.println(currentState.equals(gameStates.get(gameStates.size() - 1)));
-
             //Checks if the current player is in check and alerts them if they are at the start of their turn.
             boolean isInCheck = board.kingInCheck(currentState.getTurnColor());
             if (isInCheck) {
                 actuator.addLine("The " + currentState.getTurnColor() + " King is in check.");
             } else {
-                for (int i = 0; i < board.getRows(); i++){
-                    for (int j = 0; j < board.getCols(); j++){
-                        Position position = new Position(i, j);
-                        Space space = board.getSpace(position);
-
-                        if (space != null){
-                            Piece piece = space.getPiece();
-                            if (piece != null){
-                                if (piece.getColor().equals(currentState.getTurnColor())){
-                                    HashSet<Position> moves = piece.getAvailableMoves(board, position);
-
-                                    for (Position move: moves){
-                                        if (piece.legalMove(board, move)) {
-                                            Board tempBoard = new Board(board);
-                                            Status status = tempBoard.getSpace(position).getPiece().move(tempBoard, position, move);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                boolean hasAvailableMove = hasAvailableMove(board, currentState.getTurnColor());
+                if (!hasAvailableMove) {
+                    actuator.addLine("It's a stalemate! Game over.");
+                    gameIsRunning = false;
                 }
             }
 
-            actuator.addLine("It is " + currentState.getTurnColor() + "'s turn. Enter the move you want to make(Ex. B1,A3): ");
-            actuator.printBoard(board);
+            currentState = getUserInput(kb, currentState, actuator);
 
-            s = kb.nextLine();
-            actuator.addLine(s);
-            String[] split = s.split(",");
-
-            if (split.length != 2) {
-                actuator.addLine("The input must be in the following form: A1,A2");
-            } else {
-                pBefore = Position.parsePosition(split[0]);
-                pAfter = Position.parsePosition(split[1]);
-
-                if (pBefore == null || pAfter == null) {
-                    actuator.addLine("The input '" + s + "' could not be understood.");
-                    actuator.addLine("The input must be in the following form: A1,A2");
-                } else if (!(board.positionIsWithinBounds(pBefore) && board.positionIsWithinBounds(pAfter))) {
-                    actuator.addLine("The input must be within the bounds of the board.");
-                } else if (!Piece.isASpace(board, pBefore)) {
-                    actuator.addLine("The space " + Position.parsePosition(pBefore) + " does not exist.");
-                } else if (!Piece.hasAPiece(board, pBefore)) {
-                    actuator.addLine("The space " + Position.parsePosition(pBefore) + " does not contain a piece.");
-                } else if (!(currentState.getTurnColor().equals(board.getSpace(pBefore).getPiece().getColor()))) {
-                    actuator.addLine("The selected piece is the wrong color. Please select a " +
-                            currentState.getTurnColor() + " piece.");
-                } else {
-                    gameStates.add(new GameState(currentState));
-
-                    //De-links references
-                    currentState = new GameState(currentState);
-                    board = currentState.getBoard();
-
-                    //Add a check to make sure entered move works.
-                    Status status = board.getSpace(pBefore).getPiece().move(board, pBefore.row, pBefore.col, pAfter.row, pAfter.col);
-
-                    if (status.status.equals(Status.STATUS_BAD)){
-                        actuator.addLine(status.message);
-                    } else if (board.kingInCheck(currentState.getTurnColor())) {//Check for check; if player is in check, revert.
-                        actuator.addLine("You cannot move there! You cannot put your king in check.");
-
-                        //updates references to refer to the last legal state.
-                        currentState = new GameState(gameStates.get(gameStates.size() - 1));
-                        gameStates.remove(gameStates.size() - 1);
-                        board = currentState.getBoard();
-                    } else {
-                        actuator.addLine(status.message);
-
-                        //If the selected piece has moved, update board, and change turns.
-                        if (board.getSpace(pBefore).getPiece() == null) {
-                            currentState.changeTurn();
-                            currentState.setLastMove(pAfter);
-
-                            //If a piece was captured, adds that piece to the list of captured pieces in the state.
-                            Piece previousPiece = gameStates.get(gameStates.size() - 1).getBoard().getSpace(pAfter).getPiece();
-                            if (previousPiece != null) {
-                                currentState.addTakenPiece(previousPiece);
-                            }
-                        }
-                    }
-                }
-//            }
-            }
         }
 
         kb.close();
+    }
+
+    private GameState getUserInput(Scanner kb, GameState currentState, TextActuator actuator) {
+        Board board = currentState.getBoard();
+
+        actuator.addLine("It is " + currentState.getTurnColor() + "'s turn. Enter the move you want to make(Ex. B1,A3): ");
+        actuator.printBoard(board);
+
+        String s = kb.nextLine();
+        actuator.addLine(s);
+        String[] split = s.split(",");
+
+        if (split.length != 2) {
+            actuator.addLine("The input must be in the following form: A1,A2");
+        } else {
+            Position pBefore = Position.parsePosition(split[0]);
+            Position pAfter = Position.parsePosition(split[1]);
+
+            if (pBefore == null || pAfter == null) {
+                actuator.addLine("The input '" + s + "' could not be understood.");
+                actuator.addLine("The input must be in the following form: A1,A2");
+            } else if (!(board.positionIsWithinBounds(pBefore) && board.positionIsWithinBounds(pAfter))) {
+                actuator.addLine("The input must be within the bounds of the board.");
+            } else if (!Piece.isASpace(board, pBefore)) {
+                actuator.addLine("The space " + Position.parsePosition(pBefore) + " does not exist.");
+            } else if (!Piece.hasAPiece(board, pBefore)) {
+                actuator.addLine("The space " + Position.parsePosition(pBefore) + " does not contain a piece.");
+            } else if (!(currentState.getTurnColor().equals(board.getSpace(pBefore).getPiece().getColor()))) {
+                actuator.addLine("The selected piece is the wrong color. Please select a " +
+                        currentState.getTurnColor() + " piece.");
+            } else {
+                gameStates.add(new GameState(currentState));
+
+                //De-links references
+                currentState = new GameState(currentState);
+                board = currentState.getBoard();
+
+                //Add a check to make sure entered move works.
+                Status status = board.getSpace(pBefore).getPiece().move(board, pBefore.row, pBefore.col, pAfter.row, pAfter.col);
+
+                if (status.status.equals(Status.STATUS_BAD)) {
+                    actuator.addLine(status.message);
+                } else if (board.kingInCheck(currentState.getTurnColor())) {//Check for check; if player is in check, revert.
+                    actuator.addLine("You cannot move there! You cannot put your king in check.");
+
+                    //updates references to refer to the last legal state.
+                    currentState = new GameState(gameStates.get(gameStates.size() - 1));
+                    gameStates.remove(gameStates.size() - 1);
+                    board = currentState.getBoard();
+                } else {
+                    actuator.addLine(status.message);
+
+                    //If the selected piece has moved, update board, and change turns.
+                    if (board.getSpace(pBefore).getPiece() == null) {
+                        currentState.changeTurn();
+                        currentState.setLastMove(pAfter);
+
+                        //If a piece was captured, adds that piece to the list of captured pieces in the state.
+                        Piece previousPiece = gameStates.get(gameStates.size() - 1).getBoard().getSpace(pAfter).getPiece();
+                        if (previousPiece != null) {
+                            currentState.addTakenPiece(previousPiece);
+                        }
+                    }
+                }
+            }
+        }
+
+        return currentState;
     }
 
     private void initBoardStandardChess(Board board) {
@@ -183,6 +170,49 @@ class GameManager {
         row[6] = new Space(new Knight(color));
         row[7] = new Space(new Rook(color));
     }
+
+    /**
+     * Returns true if the player has a possible move that doesn't put the king in check
+     * @param board
+     * @param turnColor color of the current playerco
+     * @return
+     */
+    private boolean hasAvailableMove(Board board, String turnColor) {
+        boolean hasAvailableMove = false;
+
+        //iterate through every space on the board
+        for (int i = 0; i < board.getRows() && !hasAvailableMove; i++) {
+            for (int j = 0; j < board.getCols() && !hasAvailableMove; j++) {
+                Position position = new Position(i, j);
+                Space space = board.getSpace(position);
+
+                //Check for a piece at that location
+                if (space != null) {
+                    Piece piece = space.getPiece();
+                    if (piece != null) {
+                        if (piece.getColor().equals(turnColor)) {
+                            HashSet<Position> moves = piece.getAvailableMoves(board, position);
+
+                            Iterator<Position> movesIterator = moves.iterator();
+                            while (movesIterator.hasNext() && !hasAvailableMove) {
+                                Position move = movesIterator.next();
+                                if (piece.legalMove(board, move)) {
+                                    Board tempBoard = new Board(board);
+                                    Status status = tempBoard.getSpace(position).getPiece().move(tempBoard, position, move);
+
+                                    hasAvailableMove = !status.status.equals(Status.STATUS_BAD) && !tempBoard.kingInCheck(turnColor);
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return hasAvailableMove;
+    }
+
 
     private static <T> void reverseArray(T[] array) {
         for (int i = 0; i < (array.length / 2) - 1; i++) {

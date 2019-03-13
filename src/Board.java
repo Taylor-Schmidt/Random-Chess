@@ -142,25 +142,29 @@ public class Board {
         for (int i = 0; i < getRows() && !foundKing; i++) {
             for (int j = 0; j < getCols() && !foundKing; j++) {
                 Space pieceSpace = getSpace(i, j);
-
-                if ((pieceSpace.getPiece() != null) && (pieceSpace.getPiece().getType() == Piece.ChessPieceType.KING)
-                        && pieceSpace.getPiece().getColor().equals(color)) {
-                    kingPosition = new Position(i, j);
-                    foundKing = true;
+                if (pieceSpace != null) {
+                    if ((pieceSpace.getPiece() != null) && (pieceSpace.getPiece().getType() == Piece.ChessPieceType.KING)
+                            && pieceSpace.getPiece().getColor().equals(color)) {
+                        kingPosition = new Position(i, j);
+                        foundKing = true;
+                    }
                 }
             }
         }
 
         //then takes the set of all possible moves and sees if they contain the kings position
-        for (int a = 0; a < getRows(); a++) {
-            for (int b = 0; b < getCols(); b++) {
-                Space space = getSpace(a, b);
-                if (space.getPiece() != null) {
-                    HashSet<Position> moves = space.getPiece().getAvailableMoves(this, a, b);
-                    // Iterator<Position> it = moves.iterator();
-                    if (moves.contains(kingPosition) && !(space.getPiece().getColor().equals(color))) {
-                        checkKing = true;
-                        break;
+        for (int a = 0; a < getRows() && !checkKing; a++) {
+            for (int b = 0; b < getCols() && !checkKing; b++) {
+                Position p = new Position(a, b);
+                if (Piece.isASpace(this, p)) {
+                    Space space = getSpace(p);
+                    if (Piece.hasAPiece(this, p)) {
+                        if (!space.getPiece().getColor().equals(color)) {
+                            HashSet<Position> moves = space.getPiece().getAvailableMoves(this, p);
+                            if (moves.contains(kingPosition)) {
+                                checkKing = true;
+                            }
+                        }
                     }
                 }
             }

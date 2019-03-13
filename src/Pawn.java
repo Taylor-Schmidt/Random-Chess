@@ -30,7 +30,8 @@ public class Pawn extends Piece {
         }
 
         if (isFirstMove){
-            Position newPosition = new Position(col, firstMoveRowOption);
+            Position newPosition = new Position(firstMoveRowOption, col);
+//            System.out.println(newPosition);
             if (legalMove(board, newPosition)){
                 availablePositions.add(newPosition);
             }
