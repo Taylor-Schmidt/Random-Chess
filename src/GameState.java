@@ -14,6 +14,7 @@ public class GameState {
     private Board board; //
     private Position lastMove;
     private HashMap<String, ArrayList<Piece>> takenPieces = new HashMap<>();    //Stores the takenPieces pieces by their color.
+    private int fiftyMoveDrawCounter = 0;
 
     /**
      * Default constructor. Warning! Objects created with this constructor must have values initialized in some other
@@ -41,6 +42,7 @@ public class GameState {
         board = new Board(gameState.board);
         lastMove = gameState.lastMove != null? new Position(gameState.lastMove) : null;
         takenPieces = gameState.takenPieces;
+        fiftyMoveDrawCounter = gameState.fiftyMoveDrawCounter;
     }
 
     public void changeTurn() {
@@ -82,7 +84,25 @@ public class GameState {
         takenPieces.get(piece.getColor()).add(piece);
     }
 
+    public void incrementFiftyMoveDrawCounter(){
+        fiftyMoveDrawCounter++;
+    }
 
+    public void resetFiftyMoveDrawCounter(){
+        fiftyMoveDrawCounter = 0;
+    }
+
+    public boolean fiftyMoveDraw(){
+        return fiftyMoveDrawCounter == 50;
+    }
+
+    public int getFiftyMoveDrawCounter() {
+        return fiftyMoveDrawCounter;
+    }
+
+    public void setFiftyMoveDrawCounter(int fiftyMoveDrawCounter) {
+        this.fiftyMoveDrawCounter = fiftyMoveDrawCounter;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -90,13 +110,11 @@ public class GameState {
         if (!(o instanceof GameState)) return false;
         GameState gameState = (GameState) o;
         return Objects.equals(turnColor, gameState.turnColor) &&
-                Objects.equals(board, gameState.board) &&
-                Objects.equals(lastMove, gameState.lastMove) &&
-                Objects.equals(takenPieces, gameState.takenPieces);
+                Objects.equals(board, gameState.board);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(turnColor, board, lastMove, takenPieces);
+        return Objects.hash(turnColor, board);
     }
 }

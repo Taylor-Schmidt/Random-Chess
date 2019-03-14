@@ -12,13 +12,14 @@ class TextActuator {
 
     /**
      * Creates an instance of TextActuator
+     *
      * @param size Max lines that the "console" can have
      */
-    TextActuator(int size){
+    TextActuator(int size) {
         numberOfConsoleLines = size;
     }
 
-    TextActuator(int size, boolean useAscii){
+    TextActuator(int size, boolean useAscii) {
         numberOfConsoleLines = size;
         this.useAscii = useAscii;
     }
@@ -27,6 +28,7 @@ class TextActuator {
      * Prints Spaces to Board
      * Null Spaces are not able to be stepped on
      * Spaces with null getPiece() have no piece on them
+     *
      * @param board Instance of Board
      */
     void printBoard(Board board) {
@@ -40,14 +42,13 @@ class TextActuator {
     }
 
     /**
-     *
      * @param spaces
      * @param rows
      * @param cols
      * @param asciiEnabled
      * @return
      */
-    String printSpaceArray(Space[][] spaces, int rows, int cols, boolean asciiEnabled){
+    String printSpaceArray(Space[][] spaces, int rows, int cols, boolean asciiEnabled) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(letterRow(rows));
@@ -68,7 +69,7 @@ class TextActuator {
                     if (piece == null) {
                         sb.append("\t");
                     } else {
-                        String s = asciiEnabled?
+                        String s = asciiEnabled ?
                                 asciiChessCharacters(space.getPiece()) : letterChessCharacters(space.getPiece());
                         sb.append(s).append("\t");
                     }
@@ -82,7 +83,7 @@ class TextActuator {
         return sb.toString();
     }
 
-    private String letterChessCharacters(Piece piece){
+    private String letterChessCharacters(Piece piece) {
         char name = ' ';
         switch (piece.getType()) {
             case KING:
@@ -105,16 +106,16 @@ class TextActuator {
                 break;
         }
         char color = ' ';
-        if (piece.getColor().equals("black")){
+        if (piece.getColor().equals("black")) {
             color = 'b';
         } else {
             color = 'w';
         }
 
-        return  name + "" + color;
+        return name + "" + color;
     }
 
-    private String asciiChessCharacters(Piece piece){
+    private String asciiChessCharacters(Piece piece) {
         char c = ' ';
         switch (piece.getType()) {
             case KING:
@@ -139,14 +140,15 @@ class TextActuator {
         if (piece.getColor().equals("black"))
             c += 6;
 
-        return  " " + c;
+        return " " + c;
     }
 
     /**
      * Returns a line of '+--' equal in width to to the size of the board.
+     *
      * @param m width of board (number of columns)
      */
-    private String getHorizontalDivider(int m){
+    private String getHorizontalDivider(int m) {
         StringBuilder stringBuilder = new StringBuilder("\t");
         for (int r = 0; r <= m; r++) {
             if (r != m)
@@ -160,11 +162,12 @@ class TextActuator {
     /**
      * Returns a row of letter labels to help the user identify the column in standard chess notation.
      * Should be printed above and below the board.
+     *
      * @param m width of board (number of columns)
      */
-    private String letterRow(int m){
+    private String letterRow(int m) {
         StringBuilder stringBuilder = new StringBuilder("\t");
-        for (int i = 0; i < m; i++){
+        for (int i = 0; i < m; i++) {
             stringBuilder.append("  ");
             stringBuilder.append((char) ('A' + i));
             stringBuilder.append("\t");
@@ -175,10 +178,13 @@ class TextActuator {
 
     /**
      * Adds a line to the console.
-     * @param line string to print (should be a feedback message to user)
+     *
+     * @param object object to print (should be a feedback message to user)
      */
-    public void addLine(String line){
-        consoleQueue.add(line);
+    public void addLine(Object object) {
+        if (object != null) {
+            consoleQueue.add(object.toString());
+        }
     }
 
 
@@ -186,15 +192,15 @@ class TextActuator {
      * Prints lines below the text board
      * Consists of feedback for user
      */
-    private String printConsole(){
+    private String printConsole() {
         StringBuilder sb = new StringBuilder();
-        int start = consoleQueue.size() > numberOfConsoleLines? consoleQueue.size() - numberOfConsoleLines : 0;
-        int blankLines = consoleQueue.size() > numberOfConsoleLines? 0 : numberOfConsoleLines - consoleQueue.size();
-        for (int i = 0; i < blankLines; i++){
+        int start = consoleQueue.size() > numberOfConsoleLines ? consoleQueue.size() - numberOfConsoleLines : 0;
+        int blankLines = consoleQueue.size() > numberOfConsoleLines ? 0 : numberOfConsoleLines - consoleQueue.size();
+        for (int i = 0; i < blankLines; i++) {
             sb.append('\n');
         }
-        for (int i = start; i < consoleQueue.size(); i++){
-            if (i == oldSize + 1){
+        for (int i = start; i < consoleQueue.size(); i++) {
+            if (i == oldSize + 1) {
                 sb.append('\n');
             }
             sb.append(consoleQueue.get(i));

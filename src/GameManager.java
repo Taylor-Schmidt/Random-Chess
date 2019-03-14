@@ -45,47 +45,92 @@ class GameManager {
         File testFile = new File("test");
         if (testFile.exists()) {
             System.out.println("TEST Board setup");
-            currentState.changeTurn();
+//            currentState.changeTurn();
             board.getSpace(new Position(Position.parsePosition("H8"))).setPiece(new King(black));
-            board.getSpace(new Position(Position.parsePosition("F7"))).setPiece(new King(white));
-            board.getSpace(new Position(Position.parsePosition("G6"))).setPiece(new Queen(white));
+//            board.getSpace(new Position(Position.parsePosition("F7"))).setPiece(new King(white));
+            board.getSpace(new Position(Position.parsePosition("f6"))).setPiece(new Queen(white));
         } else {
 //      Initializes board with standard piece layout.
             initBoardStandardChess(board);
         }
         Scanner kb = new Scanner(System.in);
 
+        currentState.setFiftyMoveDrawCounter(49);
+
         boolean gameIsRunning = true;
-        String s;
-        Position pBefore, pAfter;
         //actuator.addLine("White goes first.");
         //start of game loop
         while (gameIsRunning) {
 
             //Checks if the current player is in check and alerts them if they are at the start of their turn.
             boolean isInCheck = board.kingInCheck(currentState.getTurnColor());
-            if (isInCheck) {
-                actuator.addLine("The " + currentState.getTurnColor() + " King is in check.");
+            boolean hasAvailableMove = hasAvailableMove(board, currentState.getTurnColor());
+
+            //Game over checks and notifies if king is in check
+            actuator.addLine(currentState.getFiftyMoveDrawCounter());
+            if (isThreeFoldDraw()) {
+                actuator.addLine("It's a threefold repetition; the same position occurred three times, with the same player to move.");
+                actuator.addLine("The game has ended in a draw.");
+                gameIsRunning = false;
+            } else if (currentState.fiftyMoveDraw()) {
+                actuator.addLine("There has been fifty moves without a capture or a pawn moving.");
+                actuator.addLine("The game has ended in a draw.");
+                gameIsRunning = false;
+            } else if (isInCheck) {
+                if (hasAvailableMove) {
+                    actuator.addLine("The " + currentState.getTurnColor() + " King is in check.");
+                } else {
+                    actuator.addLine("It is checkmate for " + currentState.getTurnColor() + ".");
+                    String winningColor = (currentState.getTurnColor().equals("white")) ? "Black" : "White";
+                    actuator.addLine(winningColor + " wins.");
+                    gameIsRunning = false;
+                }
             } else {
-                boolean hasAvailableMove = hasAvailableMove(board, currentState.getTurnColor());
                 if (!hasAvailableMove) {
-                    actuator.addLine("It's a stalemate! Game over.");
+                    actuator.addLine("It's a stalemate.");
+                    actuator.addLine("The game has ended in a draw.");
                     gameIsRunning = false;
                 }
             }
 
-            currentState = getUserInput(kb, currentState, actuator);
+            if (gameIsRunning) {
+                board = currentState.getBoard();
+                actuator.addLine("It is " + currentState.getTurnColor() + "'s turn. Enter the move you want to make(Ex. B1,A3): ");
+                actuator.printBoard(board);
+                currentState = getUserInput(kb, currentState, actuator);
+            } else {
+                actuator.printBoard(board);
+            }
 
         }
 
         kb.close();
     }
 
+    private void initBoardStandardChess(Board board) {
+        Space[][] spaces = board.getBoard();
+        for (int i = 0; i < board.getRows(); i++) {
+            spaces[1][i] = new Space(new Pawn(black));
+            spaces[spaces.length - 2][i] = new Space(new Pawn(white));
+        }
+
+        initStandardRow(spaces[0], black);
+        initStandardRow(spaces[spaces.length - 1], white);
+    }
+
+    private void initStandardRow(Space[] row, String color) {
+        row[0] = new Space(new Rook(color));
+        row[1] = new Space(new Knight(color));
+        row[2] = new Space(new Bishop(color));
+        row[3] = new Space(new Queen(color));
+        row[4] = new Space(new King(color));
+        row[5] = new Space(new Bishop(color));
+        row[6] = new Space(new Knight(color));
+        row[7] = new Space(new Rook(color));
+    }
+
     private GameState getUserInput(Scanner kb, GameState currentState, TextActuator actuator) {
         Board board = currentState.getBoard();
-
-        actuator.addLine("It is " + currentState.getTurnColor() + "'s turn. Enter the move you want to make(Ex. B1,A3): ");
-        actuator.printBoard(board);
 
         String s = kb.nextLine();
         actuator.addLine(s);
@@ -117,7 +162,8 @@ class GameManager {
                 board = currentState.getBoard();
 
                 //Add a check to make sure entered move works.
-                Status status = board.getSpace(pBefore).getPiece().move(board, pBefore.row, pBefore.col, pAfter.row, pAfter.col);
+                Piece currentPiece = board.getSpace(pBefore).getPiece();
+                Status status = currentPiece.move(board, pBefore.row, pBefore.col, pAfter.row, pAfter.col);
 
                 if (status.status.equals(Status.STATUS_BAD)) {
                     actuator.addLine(status.message);
@@ -127,7 +173,7 @@ class GameManager {
                     //updates references to refer to the last legal state.
                     currentState = new GameState(gameStates.get(gameStates.size() - 1));
                     gameStates.remove(gameStates.size() - 1);
-                    board = currentState.getBoard();
+//                    board = currentState.getBoard();
                 } else {
                     actuator.addLine(status.message);
 
@@ -138,8 +184,18 @@ class GameManager {
 
                         //If a piece was captured, adds that piece to the list of captured pieces in the state.
                         Piece previousPiece = gameStates.get(gameStates.size() - 1).getBoard().getSpace(pAfter).getPiece();
+
+                        //TODO: en passante special case
                         if (previousPiece != null) {
                             currentState.addTakenPiece(previousPiece);
+                            currentState.resetFiftyMoveDrawCounter();
+                            actuator.addLine("resetting because a piece was captured ");
+                        } else if (currentPiece.getType() == Piece.ChessPieceType.PAWN) {
+                            currentState.resetFiftyMoveDrawCounter();
+                            actuator.addLine("resetting because a pawn moved");
+                        } else {
+                            currentState.incrementFiftyMoveDrawCounter();
+                            actuator.addLine("incrementing move counter");
                         }
                     }
                 }
@@ -149,30 +205,10 @@ class GameManager {
         return currentState;
     }
 
-    private void initBoardStandardChess(Board board) {
-        Space[][] spaces = board.getBoard();
-        for (int i = 0; i < board.getRows(); i++) {
-            spaces[1][i] = new Space(new Pawn(black));
-            spaces[spaces.length - 2][i] = new Space(new Pawn(white));
-        }
-
-        initStandardRow(spaces[0], black);
-        initStandardRow(spaces[spaces.length - 1], white);
-    }
-
-    private void initStandardRow(Space[] row, String color) {
-        row[0] = new Space(new Rook(color));
-        row[1] = new Space(new Knight(color));
-        row[2] = new Space(new Bishop(color));
-        row[3] = new Space(new Queen(color));
-        row[4] = new Space(new King(color));
-        row[5] = new Space(new Bishop(color));
-        row[6] = new Space(new Knight(color));
-        row[7] = new Space(new Rook(color));
-    }
 
     /**
      * Returns true if the player has a possible move that doesn't put the king in check
+     *
      * @param board
      * @param turnColor color of the current playerco
      * @return
@@ -211,6 +247,30 @@ class GameManager {
         }
 
         return hasAvailableMove;
+    }
+
+    /**
+     * Indicates whether a Three-Fold Repetition Draw has occurred.
+     * A Three-Fold Repetition is when the same position occurs three times, with the same player to move.
+     *
+     * @return true if the repetition has occurred.
+     */
+    private boolean isThreeFoldDraw() {
+        if (gameStates.size() > 8) {
+            GameState currentState = gameStates.get(gameStates.size() - 1);
+
+            int repetitions = 0;
+            for (int i = 0; i < gameStates.size() - 2; i++) {
+                if (gameStates.get(i).equals(currentState)) {
+                    repetitions++;
+                    if (repetitions == 3) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
 

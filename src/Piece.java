@@ -1,4 +1,5 @@
 import java.util.HashSet;
+import java.util.Objects;
 
 /**
  * All chess pieces implement this interface.
@@ -146,6 +147,13 @@ public abstract class Piece {
      * @return type as a ChessPieceType (from Piece.ChessPieceType enum)
      */
     abstract ChessPieceType getType();
+//
+//    /**
+//     * @return the number of times this specific piece has moved.
+//     */
+//    abstract int getMoveCount();
+//
+//    abstract void setMoveCount();
 
     /**
      * Helper method which indicates whether the given space is withing the bounds of the board and does not contain a
@@ -183,4 +191,17 @@ public abstract class Piece {
         return !getColor().equals(board.getSpace(position).getPiece().getColor());
     }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Piece)) return false;
+        Piece p = (Piece) o;
+        return getType() == p.getType()
+                && getColor().equals(p.getColor());
+    }
 }

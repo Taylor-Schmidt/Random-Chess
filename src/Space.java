@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 /**
  * Represents on tile on a Board instance.
  */
@@ -41,4 +43,16 @@ public class Space {
         p = P;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Space)) return false;
+        Space space = (Space) o;
+        return Objects.equals(p, space.p);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(p);
+    }
 }
