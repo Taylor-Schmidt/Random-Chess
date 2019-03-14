@@ -5,6 +5,7 @@ public class Knight extends Piece {
     private String color;
     private int value = 3;
     private ChessPieceType chessPieceType = ChessPieceType.KNIGHT;
+    private int moveCount;
 
     public Knight(String c) {
         color = c;
@@ -27,7 +28,7 @@ public class Knight extends Piece {
 
 
     @Override
-    public int getvalue() {
+    public int getValue() {
         return value;
     }
 
@@ -39,5 +40,15 @@ public class Knight extends Piece {
     @Override
     public ChessPieceType getType() {
         return chessPieceType;
+    }
+
+    @Override
+    public int getMoveCount() {
+        return moveCount;
+    }
+
+    @Override
+    public void setMoveCount(int moveCount) {
+        this.moveCount = moveCount;
     }
 }

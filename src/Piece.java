@@ -131,7 +131,7 @@ public abstract class Piece {
      * The AI is expected to make decisions based on the idea that different pieces are of different worth.
      * The value that this method returns determines the Piece's worth to the AI.
      */
-    abstract int getvalue();
+    abstract int getValue();
 
     /**
      * Pieces are associated with a color (in a standard game, black and white). This returns the color associated with
@@ -147,13 +147,13 @@ public abstract class Piece {
      * @return type as a ChessPieceType (from Piece.ChessPieceType enum)
      */
     abstract ChessPieceType getType();
-//
-//    /**
-//     * @return the number of times this specific piece has moved.
-//     */
-//    abstract int getMoveCount();
-//
-//    abstract void setMoveCount();
+
+    /**
+     * @return the number of times this specific piece has moved.
+     */
+    abstract int getMoveCount();
+
+    abstract void setMoveCount(int moveCount);
 
     /**
      * Helper method which indicates whether the given space is withing the bounds of the board and does not contain a

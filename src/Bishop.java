@@ -5,6 +5,7 @@ public class Bishop extends Piece {
     private String color;
     private int value = 3;
     private ChessPieceType chessPieceType = ChessPieceType.BISHOP;
+    private int moveCount;
 
     public Bishop(String c) {
         color = c;
@@ -15,7 +16,7 @@ public class Bishop extends Piece {
         return getAvailableDiagonalMoves(board, row, col);
     }
 
-    public int getvalue() {
+    public int getValue() {
         return value;
     }
 
@@ -26,5 +27,15 @@ public class Bishop extends Piece {
     @Override
     public ChessPieceType getType() {
         return chessPieceType;
+    }
+
+    @Override
+    public int getMoveCount() {
+        return moveCount;
+    }
+
+    @Override
+    public void setMoveCount(int moveCount) {
+        this.moveCount = moveCount;
     }
 }

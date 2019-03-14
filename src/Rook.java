@@ -5,6 +5,7 @@ public class Rook extends Piece {
     private String color;
     private int value;
     private ChessPieceType chessPieceType = ChessPieceType.ROOK;
+    private int moveCount;
 
     public Rook(String c) {
         color = c;
@@ -16,7 +17,7 @@ public class Rook extends Piece {
     }
 
     @Override
-    public int getvalue() {
+    public int getValue() {
         return value;
     }
 
@@ -28,5 +29,15 @@ public class Rook extends Piece {
     @Override
     public ChessPieceType getType() {
         return chessPieceType;
+    }
+
+    @Override
+    public int getMoveCount() {
+        return moveCount;
+    }
+
+    @Override
+    public void setMoveCount(int moveCount) {
+        this.moveCount = moveCount;
     }
 }

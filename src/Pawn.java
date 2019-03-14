@@ -5,6 +5,7 @@ public class Pawn extends Piece {
     private String color;
     private int value = 1;
     private ChessPieceType chessPieceType = ChessPieceType.PAWN;
+    private int moveCount;
 
 
     public Pawn(String c) {
@@ -216,7 +217,7 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public int getvalue() {
+    public int getValue() {
         return value;
     }
 
@@ -228,5 +229,15 @@ public class Pawn extends Piece {
     @Override
     public ChessPieceType getType() {
         return chessPieceType;
+    }
+
+    @Override
+    public int getMoveCount() {
+        return moveCount;
+    }
+
+    @Override
+    public void setMoveCount(int moveCount) {
+        this.moveCount = moveCount;
     }
 }
