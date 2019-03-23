@@ -14,7 +14,6 @@ public class BoardButton extends JButton {
         super();
         xPos=x;
         yPos=y;
-        //setSize(50, 50);
 
         if(0==((xPos+yPos)%2)) {
             setBackground(Color.BLACK);
@@ -24,10 +23,10 @@ public class BoardButton extends JButton {
         }
     }
 
-    public int getX() {
+    public int getXPos() {
         return xPos;
     }
-    public int getY() {
+    public int getYPos() {
         return yPos;
     }
 }
