@@ -17,10 +17,11 @@ public class BoardPanel extends JPanel {
         height=h;
         setPreferredSize(new Dimension(700,700));
         space= new BoardButton[width][height];
+        RandomColorTile color = new RandomColorTile();
 
         for(int i=0; i<height; i++) {
             for(int j=0; j<width; j++) {
-                space[j][i]= new BoardButton(j,i);
+                space[j][i]= new BoardButton(j,i,color);
                 add(space[j][i]);
                 //TODO: Set the icon of the space to whatever piece is on it. Every time a piece is moved make sure to change the icons.
             }
