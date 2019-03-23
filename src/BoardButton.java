@@ -16,10 +16,10 @@ public class BoardButton extends JButton {
         yPos=y;
 
         if(0==((xPos+yPos)%2)) {
-            setBackground(c.getDarkColor());
+            setBackground(c.getLightColor());
         }
         else {
-            setBackground(c.getLightColor());
+            setBackground(c.getDarkColor());
         }
     }
 
