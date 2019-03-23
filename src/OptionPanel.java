@@ -39,4 +39,8 @@ public class OptionPanel extends JPanel {
         c.gridy = 2;
         add(settings, c);
     }
+
+    public MenuButton getStart() {
+        return start;
+    }
 }

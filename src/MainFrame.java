@@ -4,6 +4,8 @@
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class MainFrame extends JFrame {
 
@@ -15,6 +17,16 @@ public class MainFrame extends JFrame {
 
         OptionPanel options = new OptionPanel();
         add(options, new BorderLayout().CENTER);
+        GamePanel gamePanel=new GamePanel(8,8);
+
+        options.getStart().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                options.setVisible(false);
+                add(gamePanel, new BorderLayout().CENTER);
+                validate();
+            }
+        });
     }
 
 }
