@@ -15,6 +15,9 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
 
+        ImageIcon icon = new ImageIcon("assets/pawn_blue.png");
+        setIconImage(icon.getImage());
+
         OptionPanel options = new OptionPanel();
         add(options, new BorderLayout().CENTER);
         GamePanel gamePanel=new GamePanel(8,8);
