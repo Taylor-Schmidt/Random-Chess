@@ -29,4 +29,13 @@ public class BoardButton extends JButton {
     public int getYPos() {
         return yPos;
     }
+
+    public void setNewIcon(Piece p) {
+        if(!(p==null)){
+            if(p.getType()== Piece.ChessPieceType.PAWN) {
+                setIcon(new ImageIcon("assets/pawn_blue.png"));
+            }
+            updateUI();
+        }
+    }
 }

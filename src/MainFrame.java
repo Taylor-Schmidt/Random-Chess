@@ -27,6 +27,7 @@ public class MainFrame extends JFrame {
                 validate();
             }
         });
+
     }
 
 }
