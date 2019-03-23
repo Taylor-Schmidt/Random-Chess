@@ -11,19 +11,20 @@ public class MenuButton extends JButton {
 
     public MenuButton(String s) {
         super();
-        imageName=s;
-        icon=new ImageIcon(imageName+".png");
+        imageName = s;
+        icon = new ImageIcon("assets/" + imageName + "_button.png");
         setIcon(icon);
-        setSize(300,100);
-        Border b = new LineBorder(Color.WHITE,0);
+        setSize(300, 100);
+        Border b = new LineBorder(Color.WHITE, 0);
         setBorder(b);
-        addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                icon=new ImageIcon(imageName +"_push.png");
-                setIcon(icon);
-                updateUI();
-            }
+//        setOpaque(false);
+        setContentAreaFilled(false);
+//        setBorderPainted(false);
+        addActionListener(e -> {
+            icon = new ImageIcon("assets/" + imageName + "_button_push.png");
+            setIcon(icon);
+            setOpaque(false);
+            updateUI();
         });
     }
 }
