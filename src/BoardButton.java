@@ -4,6 +4,8 @@
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class BoardButton extends JButton {
 
@@ -37,5 +39,14 @@ public class BoardButton extends JButton {
             }
             updateUI();
         }
+    }
+    public void addListener(){
+        addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //TODO: Use this to program functionality of buttons.
+                System.out.println(xPos + " " + yPos);
+            }
+        });
     }
 }

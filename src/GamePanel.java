@@ -24,6 +24,8 @@ public class GamePanel extends JPanel {
         setLayout(new GridBagLayout());
         GridBagConstraints gc = new GridBagConstraints();
         add(boardPanel, gc);
+        addListeners();
+
 
         //Testing to see if icons for a piece will be displayed correctly.
         Space space = new Space(new Pawn("black"));
@@ -40,5 +42,12 @@ public class GamePanel extends JPanel {
             }
         }
 
+    }
+    public void addListeners() {
+        for(int i=0; i<width; i++) {
+            for(int j=0; j<height; j++) {
+                boardPanel.getButton(j,i).addListener();
+            }
+        }
     }
 }
