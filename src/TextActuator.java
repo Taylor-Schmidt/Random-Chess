@@ -1,3 +1,4 @@
+import javax.xml.soap.Text;
 import java.util.LinkedList;
 
 /**
@@ -9,6 +10,10 @@ class TextActuator {
     private int numberOfConsoleLines; //Number of lines of consoleQueue to print when printing console
     private int oldSize = 0;
     private boolean useAscii = false;
+
+    TextActuator(){
+        this (0);
+    }
 
     /**
      * Creates an instance of TextActuator

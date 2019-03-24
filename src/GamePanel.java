@@ -17,36 +17,30 @@ public class GamePanel extends JPanel {
     public GamePanel(int w, int h) {
         super();
         //Creates BoardPanel
-        board=new Board();
-        width=w;
-        height=h;
-        boardPanel= new BoardPanel(w,h);
+        board = new Board();
+        width = w;
+        height = h;
+
+        //Testing to see if icons for a piece will be displayed correctly.
+        Space space = new Space(new Pawn("black"));
+        board.setSpace(space, 0, 0);
+
+        boardPanel = new BoardPanel(w, h, board);
         setLayout(new GridBagLayout());
         GridBagConstraints gc = new GridBagConstraints();
         add(boardPanel, gc);
         addListeners();
 
 
-        //Testing to see if icons for a piece will be displayed correctly.
-        Space space = new Space(new Pawn("black"));
-        board.setSpace(space,0,0);
-        setIcons();
+
+//        setIcons();
     }
 
-    public void setIcons() {
-        for(int i = 0; i<width; i++)
-        {
-            for(int j = 0; j<height; j++)
-            {
-                boardPanel.getButton(j,i).setNewIcon(board.getSpace(j,i).getPiece());
-            }
-        }
 
-    }
     public void addListeners() {
-        for(int i=0; i<width; i++) {
-            for(int j=0; j<height; j++) {
-                boardPanel.getButton(j,i).addListener();
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                boardPanel.getButton(j, i).addListener();
             }
         }
     }

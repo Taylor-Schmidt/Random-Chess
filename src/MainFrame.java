@@ -12,6 +12,9 @@ public class MainFrame extends JFrame {
     public MainFrame(String s) {
         super(s);
         setSize(1280, 800);
+        setMinimumSize(new Dimension(700, 700));
+        setLocationRelativeTo(null);//Centers the window in the middle of the main screen
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
 
@@ -19,16 +22,14 @@ public class MainFrame extends JFrame {
         setIconImage(icon.getImage());
 
         OptionPanel options = new OptionPanel();
-        add(options, new BorderLayout().CENTER);
-        GamePanel gamePanel=new GamePanel(8,8);
+//        new BorderLayout(); //Does nothing?
+        add(options, BorderLayout.CENTER);
+        GamePanel gamePanel = new GamePanel(8, 8);
 
-        options.getStart().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                options.setVisible(false);
-                add(gamePanel, new BorderLayout().CENTER);
-                validate();
-            }
+        options.getStart().addActionListener(e -> {
+            options.setVisible(false);
+            add(gamePanel, BorderLayout.CENTER);
+            validate();
         });
 
     }
