@@ -11,11 +11,21 @@ public class BoardButton extends JButton {
     private int xPos;      // x coordinate of the button.
     private int yPos;      // y coordinate of the button.
     private ImageIcon pieceIcon;
+    private double paddingRatio;
 
     public BoardButton(int x, int y, RandomColorTile c) {
+        this(x, y, c, null, 0.1);
+    }
+
+    public BoardButton(int x, int y, RandomColorTile c, Piece p){
+        this(x, y, c, p, 0.1);
+    }
+
+    public BoardButton(int x, int y, RandomColorTile c, Piece p, double paddingRatio){
         super();
         xPos = x;
         yPos = y;
+        this.paddingRatio = paddingRatio;
 
         //Creates checkered effect
         if (0 == ((xPos + yPos) % 2)) {
@@ -23,10 +33,6 @@ public class BoardButton extends JButton {
         } else {
             setBackground(c.getDarkColor());
         }
-    }
-
-    public BoardButton(int x, int y, RandomColorTile c, Piece p){
-        this(x, y, c);
         setNewIcon(p);
     }
 
@@ -74,7 +80,31 @@ public class BoardButton extends JButton {
         super.paintComponent(g);
         if (pieceIcon != null) {
 //            System.out.println(getHeight() + "x" + getWidth());
-            g.drawImage(pieceIcon.getImage(), (int) (getWidth() * 0.1), (int) (getHeight()* 0.1), (int) (getWidth() * 0.8), (int) (getHeight() * 0.8), this);
+            double widthToHeightRatio = pieceIcon.getIconWidth() / (pieceIcon.getIconHeight() * 1.0); //float div with ints
+            int width;
+            int height;
+            int x;
+            int y;
+
+            double internalSize = 1 - (2 * paddingRatio);
+            if (widthToHeightRatio > 1){//width is bigger
+                width = (int) (getWidth() * internalSize);
+                height = (int) (width / widthToHeightRatio);
+                x = (int) (getWidth() * paddingRatio);
+                y = (int) (getHeight() * paddingRatio + (getHeight() * internalSize - height) / 2.0);
+            } else if (widthToHeightRatio < 1){
+                height = (int) (getHeight() * internalSize);
+                width = (int) (height * widthToHeightRatio);
+                x = (int) (getWidth() * paddingRatio + (getWidth() * internalSize - width) / 2.0);
+                y = (int) (getHeight() * paddingRatio);
+            } else {
+                width = (int) (getWidth() * internalSize);
+                height = (int) (getHeight() * internalSize);
+                x = (int) (getWidth() * paddingRatio);
+                y = (int) (getHeight() * paddingRatio);
+            }
+
+            g.drawImage(pieceIcon.getImage(), x, y, width, height, this);
         }
     }
 
