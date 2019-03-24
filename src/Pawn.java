@@ -87,8 +87,7 @@ public class Pawn extends Piece {
     public Status move(Board b, int currentRow, int currentCol, int newRow, int newCol) {
         Space[][] a = b.getBoard();
         Position newPosition = new Position(newRow, newRow);
-
-        if ((legalMove(b, newPosition)) && (chessPieceType == ChessPieceType.PAWN)) {
+        if (legalMove(b, newPosition)){
             if (color.equals("white")) {
                 //white pieces
                 if ((newCol == currentCol) && (hasAPiece(a, newRow, newCol))) {
@@ -98,11 +97,12 @@ public class Pawn extends Piece {
                 } else if ((newRow == currentRow - 1) && (newCol == currentCol)) {
                     //Forward movement
                     //Checks if column is same, and if moving correct distance
+                    System.out.println(b.getRows());
                     a[newRow][newCol].setPiece(this);
                     a[currentRow][currentCol].setPiece(null);
-                } else if ((currentRow == 6) &&
+                } else if ((currentRow == b.getRows()-2) &&
                         ((newRow == currentRow - 2) && (newCol == currentCol)) &&
-                        ((!hasAPiece(a, 4, newCol)) && (!hasAPiece(a, 5, newCol)))
+                        ((!hasAPiece(a, b.getRows()-4, newCol)) && (!hasAPiece(a, b.getRows()-3, newCol)))
                 ) {
                     //Two spaces for first movement
                     //First checks if piece is in original row
@@ -189,7 +189,7 @@ public class Pawn extends Piece {
                 } else if ((newRow == currentRow + 1) &&
                         ((newCol == currentCol + 1) || (newCol == currentCol - 1)) &&
                         (hasAPiece(a, currentRow, newCol) && colorsAreDifferent(a, currentRow, newCol)) &&
-                        (currentRow == 4)
+                        (currentRow == b.getRows()-4)
                 ) {
                     //En passant
                     //checks row is incremented
@@ -206,7 +206,7 @@ public class Pawn extends Piece {
                     return Status.FailedMove();
                 }
                 //promotion logic
-                if (newRow == 7) {
+                if (newRow == b.getRows()-1) {
                     //Promotion logic
                     //Checks if pawn is in last row on board
                     //Then sets a new piece in it's place
