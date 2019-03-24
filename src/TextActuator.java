@@ -1,17 +1,16 @@
-import javax.xml.soap.Text;
 import java.util.LinkedList;
 
 /**
  * Used to output chess board (and a "console" output of text) to System.out
  */
-class TextActuator {
+public class TextActuator {
 
     private LinkedList<String> consoleQueue = new LinkedList<>(); //List of items to be printed in console.
     private int numberOfConsoleLines; //Number of lines of consoleQueue to print when printing console
     private int oldSize = 0;
     private boolean useAscii = false;
 
-    TextActuator(){
+    public TextActuator(){
         this (0);
     }
 
@@ -20,11 +19,11 @@ class TextActuator {
      *
      * @param size Max lines that the "console" can have
      */
-    TextActuator(int size) {
+    public TextActuator(int size) {
         numberOfConsoleLines = size;
     }
 
-    TextActuator(int size, boolean useAscii) {
+    public TextActuator(int size, boolean useAscii) {
         numberOfConsoleLines = size;
         this.useAscii = useAscii;
     }
@@ -36,7 +35,7 @@ class TextActuator {
      *
      * @param board Instance of Board
      */
-    void printBoard(Board board) {
+    public void printBoard(Board board) {
         String s = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 
         s += printSpaceArray(board.getBoard(), board.getRows(), board.getCols(), useAscii);

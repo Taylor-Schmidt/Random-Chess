@@ -8,7 +8,7 @@ import java.util.*;
  * Main Driver for game loop.
  * Initialized the state of the game, and runs the game loop.
  */
-class GameManager {
+class GameManagerText {
     private static String black = "black";
     private static String white = "white";
 

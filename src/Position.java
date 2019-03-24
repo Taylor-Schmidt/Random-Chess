@@ -6,7 +6,7 @@ import java.util.Objects;
  * Primarily used to get both values from a method, since Java can return only one object;
  */
 public class Position {
-    int row, col;
+    public int row, col;
 
 
     /**
@@ -145,19 +145,19 @@ public class Position {
         return Objects.hash(row, col);
     }
 
-    final static Position i = new Position(1, 0);
-    final static Position j = new Position(0, 1);
+    public final static Position i = new Position(1, 0);
+    public final static Position j = new Position(0, 1);
 
-    final static Position N = new Position(-1, 0);
-    final static Position NE = new Position(-1, 1);
-    final static Position E = new Position(0, 1);
-    final static Position SE = new Position(1, 1);
-    final static Position S = new Position(1, 0);
-    final static Position SW = new Position(1, -1);
-    final static Position W = new Position(0, -1);
-    final static Position NW = new Position(-1, -1);
+    public final static Position N = new Position(-1, 0);
+    public final static Position NE = new Position(-1, 1);
+    public final static Position E = new Position(0, 1);
+    public final static Position SE = new Position(1, 1);
+    public final static Position S = new Position(1, 0);
+    public final static Position SW = new Position(1, -1);
+    public final static Position W = new Position(0, -1);
+    public final static Position NW = new Position(-1, -1);
 
-    final static Position[] cardinalDirections = new Position[]{N, NE, E, SE, S, SW, W, NW};
+    public final static Position[] cardinalDirections = new Position[]{N, NE, E, SE, S, SW, W, NW};
 
     public Position scalarMult(int scalar) {
         return new Position(row * scalar, col * scalar);

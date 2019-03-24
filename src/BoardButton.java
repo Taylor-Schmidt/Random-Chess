@@ -1,7 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * These are the buttons for the spaces on the board.
@@ -13,26 +11,33 @@ public class BoardButton extends JButton {
     private ImageIcon pieceIcon;
     private double paddingRatio;
 
-    public BoardButton(int x, int y, RandomColorTile c) {
-        this(x, y, c, null, 0.1);
+    private BoardPanel parent;
+
+    private final Color selectedColor = new Color(0, 0, 100);
+    private Color backgroundColor;
+
+//    public BoardButton(int x, int y, RandomColorTile c) {
+//        this(x, y, c, null, 0.1);
+//    }
+
+    public BoardButton(BoardPanel parent, int x, int y, ColorGenerator c, Piece p){
+        this(parent, x, y, c, p, 0.1);
     }
 
-    public BoardButton(int x, int y, RandomColorTile c, Piece p){
-        this(x, y, c, p, 0.1);
-    }
-
-    public BoardButton(int x, int y, RandomColorTile c, Piece p, double paddingRatio){
+    public BoardButton(BoardPanel parent, int x, int y, ColorGenerator c, Piece p, double paddingRatio){
         super();
+        this.parent = parent;
         xPos = x;
         yPos = y;
         this.paddingRatio = paddingRatio;
 
         //Creates checkered effect
         if (0 == ((xPos + yPos) % 2)) {
-            setBackground(c.getLightColor());
+            backgroundColor = c.getLightColor();
         } else {
-            setBackground(c.getDarkColor());
+            backgroundColor = c.getDarkColor();
         }
+        setBackground(backgroundColor);
         setNewIcon(p);
     }
 
@@ -112,6 +117,16 @@ public class BoardButton extends JButton {
         addActionListener(e -> {
             //TODO: Use this to program functionality of buttons.
             System.out.println("Clicked piece at " + xPos + " " + yPos);
+
+//            parent.highlightSpaces();
         });
+    }
+
+    public void setHighlight(boolean highLighted){
+        if (highLighted){
+            setBackground(selectedColor);
+        } else {
+            setBackground(backgroundColor);
+        }
     }
 }
