@@ -113,8 +113,9 @@ public class Pawn extends Piece {
                     a[currentRow][currentCol].setPiece(null);
 
                 } else if ((newRow == currentRow - 1) &&
-                        ((newCol == currentCol + 1) || (newCol == currentCol - 1)) &&
-                        (hasAPiece(a, newRow, newCol) && colorsAreDifferent(a, newRow, newCol))
+                        /*(hasAPiece(a, newRow, newCol) && colorsAreDifferent(a, newRow, newCol)) && */
+                        //Remove the /**/ to disable diagonal movement without capture
+                        ((newCol == currentCol + 1) || (newCol == currentCol - 1))
                 ) {
                     //Diagonal capture
                     //Checks if the row was still changed
@@ -174,8 +175,9 @@ public class Pawn extends Piece {
                     a[currentRow][currentCol].setPiece(null);
 
                 } else if ((newRow == currentRow + 1) &&
-                        ((newCol == currentCol + 1) || (newCol == currentCol - 1)) &&
-                        (hasAPiece(a, newRow, newCol) && colorsAreDifferent(a, newRow, newCol))
+                        /*(hasAPiece(a, newRow, newCol) && colorsAreDifferent(a, newRow, newCol)) && */
+                        //Remove the /**/ to disable diagonal movement without capture
+                        ((newCol == currentCol + 1) || (newCol == currentCol - 1))
                 ) {
                     //Diagonal capture
                     //Checks if the row was still changed
