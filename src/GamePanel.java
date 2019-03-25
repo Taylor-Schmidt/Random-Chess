@@ -14,6 +14,9 @@ public class GamePanel extends JPanel {
 
     public GamePanel(int w, int h) {
         super();
+
+        setBackground(Color.CYAN);
+
         //Creates BoardPanel
         board = new Board();
         width = w;
@@ -27,19 +30,6 @@ public class GamePanel extends JPanel {
         setLayout(new GridBagLayout());
         GridBagConstraints gc = new GridBagConstraints();
         add(boardPanel, gc);
-//        addListeners();
 
-
-
-//        setIcons();
     }
-
-/*
-    public void addListeners() {
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                boardPanel.getButton(j, i).addListener();
-            }
-        }
-    }*/
 }

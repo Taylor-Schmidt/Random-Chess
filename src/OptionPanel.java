@@ -1,46 +1,47 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import javax.imageio.ImageIO;
-import java.io.IOException;
+import java.util.ArrayList;
 
 public class OptionPanel extends JPanel {
 
-    private MenuButton start;
-    private MenuButton settings;
-    private BufferedImage image;
-    private JLabel pic;
+    protected ArrayList<MenuButton> options;
+    protected GridBagConstraints c;
 
     public OptionPanel() {
-        start = new MenuButton("play");
-        settings = new MenuButton("settings");
-        start.setToolTipText("Start a standard game");
-//        start.setOpaque(false);
-        settings.setToolTipText("Settings");
+        options = new ArrayList<>();
         setBackground(Color.CYAN);
 
-        try {
-            image = ImageIO.read(new File("assets/logo_chess.png"));
-        } catch (IOException ex) {
-
-        }
-
-        pic = new JLabel(new ImageIcon(image));
-//        pic.setToolTipText("This is a tool tip");
-        pic.setOpaque(false);
-
-        GridBagConstraints c = new GridBagConstraints();
-        c.gridy = 0;
+        c = new GridBagConstraints();
         setLayout(new GridBagLayout());
-        add(pic);
-        c.gridy = 1;
-        add(start, c);
-        c.gridy = 2;
-        add(settings, c);
     }
 
-    public MenuButton getStart() {
-        return start;
+
+    void addComponent(int yPos, JComponent jComponent){
+        System.out.println("yPos = " + yPos);
+        c.gridy = yPos;
+        add(jComponent, c);
+    }
+
+    public void addButton(MenuButton button) {
+        options.add(button);
+        addComponent(options.size(), button);
+    }
+
+    public void addButton(int pos, MenuButton button) {
+        options.add(pos, button);
+        addComponent(pos + 1, button);
+    }
+
+    public MenuButton getButton(int i) {
+        return options.get(i);
+    }
+
+    public void removeButton(int pos) {
+        remove(options.remove(pos));
+    }
+
+    public void setMenuButton(int pos, MenuButton button) {
+        remove(options.set(pos, button));
+        addComponent(pos, button);
     }
 }

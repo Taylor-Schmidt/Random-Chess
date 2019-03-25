@@ -14,17 +14,24 @@ public class MainFrame extends JFrame {
         setLocationRelativeTo(null);//Centers the window in the middle of the main screen
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        setExtendedState(JFrame.MAXIMIZED_BOTH);
+//        setUndecorated(true);
         setVisible(true);
 
         ImageIcon icon = new ImageIcon("assets/pawn_blue.png");
         setIconImage(icon.getImage());
 
-        OptionPanel options = new OptionPanel();
+        OptionPanel options = new MainMenuPanel();
 //        new BorderLayout(); //Does nothing?
         add(options, BorderLayout.CENTER);
         GamePanel gamePanel = new GamePanel(8, 8);
 
-        options.getStart().addActionListener(e -> {
+        options.getButton(0).addActionListener(e -> {
+//            try {
+//                Thread.sleep(100);
+//            } catch (InterruptedException e1) {
+//                e1.printStackTrace();
+//            }
             options.setVisible(false);
             add(gamePanel, BorderLayout.CENTER);
             validate();
