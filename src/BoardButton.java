@@ -113,15 +113,6 @@ public class BoardButton extends JButton {
         }
     }
 
-    public void addListener() {
-        addActionListener(e -> {
-            //TODO: Use this to program functionality of buttons.
-            System.out.println("Clicked piece at " + xPos + " " + yPos);
-
-//            parent.highlightSpaces();
-        });
-    }
-
     public void setHighlight(boolean highLighted){
         if (highLighted){
             setBackground(selectedColor);

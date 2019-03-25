@@ -27,19 +27,19 @@ public class GamePanel extends JPanel {
         setLayout(new GridBagLayout());
         GridBagConstraints gc = new GridBagConstraints();
         add(boardPanel, gc);
-        addListeners();
+//        addListeners();
 
 
 
 //        setIcons();
     }
 
-
+/*
     public void addListeners() {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 boardPanel.getButton(j, i).addListener();
             }
         }
-    }
+    }*/
 }
