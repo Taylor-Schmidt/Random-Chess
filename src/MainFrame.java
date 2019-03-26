@@ -40,7 +40,7 @@ public class MainFrame extends JFrame {
         c.weighty = 1;
         add(options, c);
 
-        GamePanel gamePanel = new GamePanel(8, 8);
+        GamePanel gamePanel = new GamePanel(16, 16);
 
         options.getButton(0).addActionListener(e -> {
             CompletableFuture.runAsync(() -> {

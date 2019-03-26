@@ -28,8 +28,17 @@ public class BoardPanel extends JPanel {
 
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                Piece piece = board.getSpace(i, j).getPiece();
-                BoardButton button = new BoardButton(this, i, j, color, piece);
+                Piece piece;
+                Space s;
+                if(board.getSpace(i,j)!=null) {
+                    piece = board.getSpace(i, j).getPiece();
+                    s = board.getSpace(i,j);
+                }
+                else {
+                    piece = null;
+                    s = null;
+                }
+                BoardButton button = new BoardButton(this, i, j, color, s ,piece);
 
                 int finalI = i;
                 int finalJ = j;

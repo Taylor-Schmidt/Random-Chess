@@ -18,7 +18,7 @@ public class GamePanel extends JPanel {
         setBackground(Color.CYAN);
 
         //Creates BoardPanel
-        board = new Board();
+        board = new Board(16,true);
         width = w;
         height = h;
 

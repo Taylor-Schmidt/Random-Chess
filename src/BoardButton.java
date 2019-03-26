@@ -20,11 +20,11 @@ public class BoardButton extends JButton {
 //        this(x, y, c, null, 0.1);
 //    }
 
-    public BoardButton(BoardPanel parent, int x, int y, ColorGenerator c, Piece p){
-        this(parent, x, y, c, p, 0.1);
+    public BoardButton(BoardPanel parent, int x, int y, ColorGenerator c, Space s, Piece p){
+        this(parent, x, y, c, s, p, 0.1);
     }
 
-    public BoardButton(BoardPanel parent, int x, int y, ColorGenerator c, Piece p, double paddingRatio){
+    public BoardButton(BoardPanel parent, int x, int y, ColorGenerator c, Space space, Piece p, double paddingRatio){
         super();
         this.parent = parent;
         xPos = x;
@@ -32,11 +32,16 @@ public class BoardButton extends JButton {
         this.paddingRatio = paddingRatio;
 
         //Creates checkered effect
-        if (0 == ((xPos + yPos) % 2)) {
-            backgroundColor = c.getLightColor();
+        if(space==null) {
+            backgroundColor = Color.BLACK;
         } else {
-            backgroundColor = c.getDarkColor();
+            if (0 == ((xPos + yPos) % 2)) {
+                backgroundColor = c.getLightColor();
+            } else {
+                backgroundColor = c.getDarkColor();
+            }
         }
+
         setBackground(backgroundColor);
         setNewIcon(p);
     }
