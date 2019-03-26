@@ -23,7 +23,7 @@ public class GamePanel extends JPanel {
         height = h;
 
         //Testing to see if icons for a piece will be displayed correctly.
-        Space space = new Space(new Pawn("black"));
+        Space space = new Space(new Queen("black"));
         board.setSpace(space, 0, 0);
 
         boardPanel = new BoardPanel(w, h, board);
