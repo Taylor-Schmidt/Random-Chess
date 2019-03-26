@@ -6,7 +6,6 @@ public class ColorGenerator {
 
     ColorGenerator() {
         Random rand = new Random();
-        boolean notColor = true;
 
 //        float r = rand.nextFloat();
 
@@ -15,9 +14,9 @@ public class ColorGenerator {
 //        float g = 0.7f;
 //        float b = 0.6f;
 
-        int r = rand.nextInt(50) + 100;
-        int g = 0;
-        int b = 0;
+        int r = rand.nextInt(45) + 210;
+        int g = 190 + rand.nextInt(50);
+        int b = 140 + rand.nextInt(40);
 
         randomLightColor = new Color(r, g, b);
 //        g = 0.5f;
