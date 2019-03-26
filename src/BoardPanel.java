@@ -20,7 +20,7 @@ public class BoardPanel extends JPanel {
         width = w;
         height = h;
         setPreferredSize(new Dimension(700, 700));
-        setMinimumSize(new Dimension(500, 500));
+        setMinimumSize(new Dimension(650, 650));
         boardButtons = new BoardButton[height][width];
         ColorGenerator color = new ColorGenerator();
 
