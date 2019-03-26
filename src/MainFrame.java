@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Acts as controller for this test program.
@@ -42,19 +43,22 @@ public class MainFrame extends JFrame {
         GamePanel gamePanel = new GamePanel(8, 8);
 
         options.getButton(0).addActionListener(e -> {
-//            try {
-//                Thread.sleep(100);
-//            } catch (InterruptedException e1) {
-//                e1.printStackTrace();
-//            }
-            options.setVisible(false);
+            CompletableFuture.runAsync(() -> {
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                options.setVisible(false);
 
-            c.gridx = 1;
-            c.gridy = 1;
-            c.weightx = 1;
-            c.weighty = 1;
-            add(gamePanel, c);
-            validate();
+                c.gridx = 1;
+                c.gridy = 1;
+                c.weightx = 1;
+                c.weighty = 1;
+                add(gamePanel, c);
+                validate();
+            });
+
         });
 
 
@@ -116,5 +120,7 @@ public class MainFrame extends JFrame {
 
         return new ImageIcon(fsImage.getScaledInstance(50, 50, 0));
     }
+
+
 
 }
