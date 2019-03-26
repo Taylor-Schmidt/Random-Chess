@@ -51,18 +51,26 @@ public class BoardButton extends JButton {
 
     public void setNewIcon(Piece p) {
         if (p != null) {
+            String color = p.getColor().equals("black") ? "blue" : "red";
+
             switch (p.getType()) {
                 case PAWN:
-                    pieceIcon = new ImageIcon("assets/pawn_blue.png");
+                    pieceIcon = new ImageIcon("assets/pawn_" + color + ".png");
+                    break;
                 case BISHOP:
+                    pieceIcon = new ImageIcon("assets/bishop_" + color + ".png");
                     break;
                 case KING:
+                    pieceIcon = new ImageIcon("assets/king_" + color + ".png");
                     break;
                 case QUEEN:
+                    pieceIcon = new ImageIcon("assets/queen_" + color + ".png");
                     break;
                 case ROOK:
+                    pieceIcon = new ImageIcon("assets/rook_" + color + ".png");
                     break;
                 case KNIGHT:
+                    pieceIcon = new ImageIcon("assets/knight_" + color + ".png");
                     break;
             }
 //
@@ -70,15 +78,17 @@ public class BoardButton extends JButton {
 //                setIcon(getScaledIcon(icon));
 //            }
             updateUI();
+        } else {
+            pieceIcon = null;
         }
     }
-
+/*
     private Icon getScaledIcon(ImageIcon icon) {
         Image image = icon.getImage();
         Image newImage = null;
-//            newImage = image.getScaledInstance((int) (tileHeight * .8), (int) (tileHeight * .8), Image.SCALE_SMOOTH);
+        newImage = image.getScaledInstance((int) (tileHeight * .8), (int) (tileHeight * .8), Image.SCALE_SMOOTH);
         return new ImageIcon(newImage);
-    }
+    }*/
 
     @Override
     protected void paintComponent(Graphics g) {

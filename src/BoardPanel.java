@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
@@ -11,8 +10,9 @@ public class BoardPanel extends JPanel {
 
     private int width;      //Represents the max number of columns.
     private int height;     //Represents the max number of rows.
-    private BoardButton[][] space;
+    private BoardButton[][] boardButtons;
 
+    private Position selectedPosition;
     private HashSet<Position> highlightedSpaces = new HashSet<>();
 
     public BoardPanel(int w, int h, Board board) {
@@ -21,7 +21,7 @@ public class BoardPanel extends JPanel {
         height = h;
         setPreferredSize(new Dimension(700, 700));
         setMinimumSize(new Dimension(500, 500));
-        space = new BoardButton[height][width];
+        boardButtons = new BoardButton[height][width];
         ColorGenerator color = new ColorGenerator();
 
         new TextActuator().printBoard(board); //TextActuator as board debug print
@@ -35,21 +35,38 @@ public class BoardPanel extends JPanel {
                 int finalJ = j;
                 button.addActionListener(e -> {
                     System.out.println("Clicked piece at " + button.getXPos() + " " + button.getYPos());
-                    if (highlightedSpaces.contains(new Position(finalI, finalJ))) {
+                    Position currentPosition = new Position(finalI, finalJ);
+                    if (selectedPosition != null && highlightedSpaces.contains(currentPosition)) {
+                        Piece currentPiece = board.getSpace(selectedPosition.row, selectedPosition.col).getPiece();
                         //TODO: move piece and remove other piece if necessary
+                        currentPiece.move(board, selectedPosition, currentPosition);
+                        BoardButton oldButton = boardButtons[selectedPosition.row][selectedPosition.col];
+                        oldButton.setNewIcon(null);
+//                        oldButton.validate();
+                        oldButton.updateUI();
+                        button.setNewIcon(currentPiece);
 
-                    }
-                    if (!highlightedSpaces.isEmpty()){
                         unhighlightSpaces();
+
+                    } else {
+                        selectedPosition = new Position(finalI, finalJ);
+                        if (board.getSpace(selectedPosition) != null) {
+                            Piece currentPiece = board.getSpace(selectedPosition.row, selectedPosition.col).getPiece();
+                            if (currentPiece != null) {
+                                highlightSpaces(currentPiece.getAvailableMoves(board, finalI, finalJ));
+                            } else {
+                                unhighlightSpaces();
+                            }
+                        } else {
+                            unhighlightSpaces();
+                        }
                     }
-                    if (piece != null){
-                        highlightSpaces(piece.getAvailableMoves(board, finalI, finalJ));
-                    }
+
                 });
 
                 add(button);
-                space[i][j] = button;
-                //TODO: Set the icon of the space to whatever piece is on it. Every time a piece is moved make sure to change the icons.
+                boardButtons[i][j] = button;
+                //TODO: Set the icon of the boardButtons to whatever piece is on it. Every time a piece is moved make sure to change the icons.
             }
         }
     }
@@ -58,18 +75,18 @@ public class BoardPanel extends JPanel {
     public void highlightSpaces(HashSet<Position> spacesToHighlight) {
         highlightedSpaces = spacesToHighlight;
         for (Position p : highlightedSpaces) {
-            space[p.row][p.col].setHighlight(true);
+            boardButtons[p.row][p.col].setHighlight(true);
         }
     }
 
     public void unhighlightSpaces() {
         for (Position p : highlightedSpaces) {
-            space[p.row][p.col].setHighlight(false);
+            boardButtons[p.row][p.col].setHighlight(false);
         }
         highlightedSpaces.clear();
     }
 
     public BoardButton getButton(int x, int y) {
-        return space[x][y];
+        return boardButtons[x][y];
     }
 }
