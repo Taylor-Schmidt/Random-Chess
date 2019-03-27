@@ -1,30 +1,65 @@
+import java.io.*;
 import java.util.HashMap;
 
-public class GameSettings {
+@SuppressWarnings("SameParameterValue")
+class GameSettings {
     private static final GameSettings instance = new GameSettings();
-    private final HashMap<String, Object> settings;
+    private HashMap<String, Object> settings;
+    private final File file = new File("settings.dat");
 
-    public static final String FULLSCREEN = "full_screen";
+    static final String FULLSCREEN = "full_screen";
 
-    private GameSettings(){
-        settings = new HashMap<>();
+    private GameSettings() {
+        try {
+            boolean isNewFile = file.createNewFile();
+            if (isNewFile){
+                settings = new HashMap<>();
+                writeSettings();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        readSettings();
     }
 
-    public static GameSettings getInstance(){
+    static GameSettings getInstance() {
         return instance;
     }
 
-    public void initDefaults(){
-        if (!settings.containsKey(FULLSCREEN)){
+    void initDefaults() {
+        if (!settings.containsKey(FULLSCREEN)) {
             settings.put(FULLSCREEN, false);
         }
     }
 
-    public Object get(String key){
+    Object get(String key) {
         return settings.getOrDefault(key, null);
     }
 
-    public void put(String key, Object value){
+    void put(String key, Object value) {
         settings.put(key, value);
+        writeSettings();
+    }
+
+    @SuppressWarnings("unchecked")
+    private void readSettings() {
+        try {
+            FileInputStream fis = new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            settings = (HashMap<String, Object>) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void writeSettings() {
+        try {
+            FileOutputStream fis = new FileOutputStream(file);
+            ObjectOutputStream oos = new ObjectOutputStream(fis);
+            oos.writeObject(settings);
+            oos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
