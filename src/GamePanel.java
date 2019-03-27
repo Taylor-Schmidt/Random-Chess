@@ -22,7 +22,19 @@ public class GamePanel extends JPanel {
         width = w;
         height = h;
 
-        //Testing to see if icons for a piece will be displayed correctly.
+        //Sets pieces on board.
+        setPieces();
+
+
+
+        boardPanel = new BoardPanel(w, h, board);
+        setLayout(new GridBagLayout());
+        GridBagConstraints gc = new GridBagConstraints();
+        add(boardPanel, gc);
+
+    }
+
+    public void setPieces() {
         Space space;
         space= new Space(new Rook("black"));
         board.setSpace(space, 4, 4);
@@ -65,11 +77,5 @@ public class GamePanel extends JPanel {
             space= new Space(new Pawn("white"));
             board.setSpace(space, 10, i);
         }
-
-        boardPanel = new BoardPanel(w, h, board);
-        setLayout(new GridBagLayout());
-        GridBagConstraints gc = new GridBagConstraints();
-        add(boardPanel, gc);
-
     }
 }
