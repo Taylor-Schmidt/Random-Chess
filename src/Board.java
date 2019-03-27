@@ -89,15 +89,22 @@ public class Board {
         }
     }
 
-    public Board(int size, boolean isRandom) {
+    public Board(boolean isRandom){
+        this(16, isRandom);
+    }
+
+    //WARNING! DOES NOT WORK WITH SIZES OTHER THAN 16x16!
+    //TODO: Make this solution more general and then make it public
+    //TODO: Make this constructor fall through to a default when isRandom = false
+    private Board(int size, boolean isRandom) {
         if (isRandom) {
 //            spaceNulls = new boolean[size][size];
             b = new Space[size][size];
             rows = size;
             cols = size;
             Random randomNum = new Random();
-            int row = 0;
-            int column = 0;
+            int row;
+            int column;
 
             for (row = 4; row < 7; row++) {
                 for (column = 4; column <= 11; column++) {
