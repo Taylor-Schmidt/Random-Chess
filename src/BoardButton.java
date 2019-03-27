@@ -13,7 +13,7 @@ public class BoardButton extends JButton {
 
     private BoardPanel parent;
 
-    private final Color selectedColor = new Color(0, 0, 100);
+    private final Color selectedColor = new Color(0, 255, 0);
     private Color backgroundColor;
 
 //    public BoardButton(int x, int y, RandomColorTile c) {
