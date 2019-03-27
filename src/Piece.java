@@ -116,6 +116,9 @@ public abstract class Piece {
          if (getAvailableMoves(board, currentRow, currentCol).contains(new Position(newRow, newCol))) {
              board.getSpace(newRow, newCol).setPiece(this);
              board.getSpace(currentRow, currentCol).setPiece(null);
+             if(getType()==ChessPieceType.PAWN) {
+                 setMoveCount(getMoveCount()+1);
+             }
              return Status.SuccessfulMove(getType(), currentRow, currentCol, newRow, newCol);
          } else {
              return Status.FailedMove();
