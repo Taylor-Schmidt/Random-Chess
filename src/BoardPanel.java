@@ -14,6 +14,7 @@ public class BoardPanel extends JPanel {
 
     private Position selectedPosition;
     private HashSet<Position> highlightedSpaces = new HashSet<>();
+    private GameState gameState = new GameState();
 
     public BoardPanel(int w, int h, Board board) {
         super(new GridLayout(w, h));
@@ -45,6 +46,12 @@ public class BoardPanel extends JPanel {
                 button.addActionListener(e -> {
                     System.out.println("Clicked piece at " + button.getXPos() + " " + button.getYPos());
                     Position currentPosition = new Position(finalI, finalJ);
+                    if (selectedPosition != null && !(highlightedSpaces.contains(currentPosition))) {
+                        unhighlightSpaces();
+                    }
+                    if(highlightedSpaces.contains(currentPosition) && board.getSpace(currentPosition).getPiece().getColor()==gameState.getTurnColor()) {
+                        unhighlightSpaces();
+                    }
                     if (selectedPosition != null && highlightedSpaces.contains(currentPosition)) {
                         Piece currentPiece = board.getSpace(selectedPosition.row, selectedPosition.col).getPiece();
                         //TODO: move piece and remove other piece if necessary
@@ -56,6 +63,7 @@ public class BoardPanel extends JPanel {
                         button.setNewIcon(currentPiece);
 
                         unhighlightSpaces();
+                        gameState.changeTurn();
 
                     } else {
                         selectedPosition = new Position(finalI, finalJ);
@@ -70,7 +78,6 @@ public class BoardPanel extends JPanel {
                             unhighlightSpaces();
                         }
                     }
-
                 });
 
                 add(button);
