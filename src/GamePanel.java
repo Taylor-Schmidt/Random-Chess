@@ -35,6 +35,7 @@ public class GamePanel extends JPanel {
     }
 
     public void setPieces() {
+        //Specifically made for a 16x16 board.
         Space space;
         space= new Space(new Rook("black"));
         board.setSpace(space, 4, 4);
