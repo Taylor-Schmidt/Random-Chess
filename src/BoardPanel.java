@@ -75,16 +75,14 @@ public class BoardPanel extends JPanel {
 
                             } else {
                                 selectedPosition = new Position(finalI, finalJ);
-                                if (board.getSpace(selectedPosition) != null) {
+
                                     Piece currentPiece = board.getSpace(selectedPosition.row, selectedPosition.col).getPiece();
                                     if (currentPiece != null && currentPiece.getColor().equals(gameState.getTurnColor())) {
                                         highlightSpaces(currentPiece.getAvailableMoves(board, finalI, finalJ));
                                     } else {
                                         unhighlightSpaces();
                                     }
-                                } else {
-                                    unhighlightSpaces();
-                                }
+
                             }
                         }
                         else{
