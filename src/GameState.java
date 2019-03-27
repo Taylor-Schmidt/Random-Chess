@@ -40,7 +40,7 @@ public class GameState {
     public GameState(GameState gameState) {
         turnColor = gameState.turnColor;
         board = new Board(gameState.board);
-        lastMove = gameState.lastMove != null? new Position(gameState.lastMove) : null;
+        lastMove = gameState.lastMove != null ? new Position(gameState.lastMove) : null;
         takenPieces = gameState.takenPieces;
         fiftyMoveDrawCounter = gameState.fiftyMoveDrawCounter;
     }
@@ -78,21 +78,21 @@ public class GameState {
     }
 
     public void addTakenPiece(Piece piece) {
-        if (!takenPieces.containsKey(piece.getColor())){
+        if (!takenPieces.containsKey(piece.getColor())) {
             takenPieces.put(piece.getColor(), new ArrayList<>());
         }
         takenPieces.get(piece.getColor()).add(piece);
     }
 
-    public void incrementFiftyMoveDrawCounter(){
+    public void incrementFiftyMoveDrawCounter() {
         fiftyMoveDrawCounter++;
     }
 
-    public void resetFiftyMoveDrawCounter(){
+    public void resetFiftyMoveDrawCounter() {
         fiftyMoveDrawCounter = 0;
     }
 
-    public boolean fiftyMoveDraw(){
+    public boolean fiftyMoveDraw() {
         return fiftyMoveDrawCounter == 50;
     }
 
@@ -116,5 +116,48 @@ public class GameState {
     @Override
     public int hashCode() {
         return Objects.hash(turnColor, board);
+    }
+
+
+    /**
+     * Returns true if the player has a possible move that doesn't put the king in check
+     *
+     * @param board
+     * @return
+     */
+    public boolean hasAvailableMove(Board board) {
+        boolean hasAvailableMove = false;
+
+        //iterate through every space on the board
+        for (int i = 0; i < board.getRows() && !hasAvailableMove; i++) {
+            for (int j = 0; j < board.getCols() && !hasAvailableMove; j++) {
+                Position position = new Position(i, j);
+                Space space = board.getSpace(position);
+
+                //Check for a piece at that location
+                if (space != null) {
+                    Piece piece = space.getPiece();
+                    if (piece != null) {
+                        if (piece.getColor().equals(turnColor)) {
+                            HashSet<Position> moves = piece.getAvailableMoves(board, position);
+
+                            Iterator<Position> movesIterator = moves.iterator();
+                            while (movesIterator.hasNext() && !hasAvailableMove) {
+                                Position move = movesIterator.next();
+                                if (piece.legalMove(board, move)) {
+                                    Board tempBoard = new Board(board);
+                                    Status status = tempBoard.getSpace(position).getPiece().move(tempBoard, position, move);
+
+                                    hasAvailableMove = !status.status.equals(Status.STATUS_BAD) && !tempBoard.kingInCheck(turnColor);
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return hasAvailableMove;
     }
 }
