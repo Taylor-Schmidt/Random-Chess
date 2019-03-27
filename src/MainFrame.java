@@ -45,7 +45,7 @@ public class MainFrame extends JFrame {
         options.getButton(0).addActionListener(e -> {
             CompletableFuture.runAsync(() -> {
                 try {
-                    Thread.sleep(200);
+                    Thread.sleep(115);
                 } catch (InterruptedException e1) {
                     e1.printStackTrace();
                 }

@@ -5,20 +5,11 @@ import java.io.File;
 import java.io.IOException;
 
 public class MainMenuPanel extends OptionPanel {
-    private BufferedImage image;
-    private JLabel logo;
 
     public MainMenuPanel(){
         super();
 
-        try {
-            image = ImageIO.read(new File("assets/logo_chess.png"));
-        } catch (IOException ex) {
-            System.err.println("Could not find logo file.");
-        }
-
-        logo = new JLabel(new ImageIcon(image));
-
+        JLabel logo = new JLabel(new ImageIcon("assets/logo_chess.png"));
         logo.setOpaque(false);
 
         addComponent(0, logo);

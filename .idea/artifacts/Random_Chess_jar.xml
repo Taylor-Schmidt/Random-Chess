@@ -2,9 +2,6 @@
   <artifact type="jar" name="Random-Chess:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/Random_Chess_jar</output-path>
     <root id="archive" name="Random-Chess.jar">
-      <element id="directory" name="META-INF">
-        <element id="file-copy" path="$USER_HOME$/Desktop/META-INF/MANIFEST.MF" />
-      </element>
       <element id="module-output" name="Random-Chess" />
     </root>
   </artifact>
