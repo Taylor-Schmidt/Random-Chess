@@ -100,9 +100,9 @@ public class Pawn extends Piece {
                     System.out.println(b.getRows());
                     a[newRow][newCol].setPiece(this);
                     a[currentRow][currentCol].setPiece(null);
-                } else if ((currentRow == b.getRows()-2) &&
+                } else if((getMoveCount()==0) &&
                         ((newRow == currentRow - 2) && (newCol == currentCol)) &&
-                        ((!hasAPiece(a, b.getRows()-4, newCol)) && (!hasAPiece(a, b.getRows()-3, newCol)))
+                        ((!hasAPiece(a, newRow, newCol)) && (!hasAPiece(a, newRow+1, newCol)))
                 ) {
                     //Two spaces for first movement
                     //First checks if piece is in original row
@@ -111,6 +111,7 @@ public class Pawn extends Piece {
                     //Make sure still in same column
                     a[newRow][newCol].setPiece(this);
                     a[currentRow][currentCol].setPiece(null);
+                    moveCount++;
 
                 } else if ((newRow == currentRow - 1) &&
                         /*(hasAPiece(a, newRow, newCol) && colorsAreDifferent(a, newRow, newCol)) && */
@@ -162,9 +163,10 @@ public class Pawn extends Piece {
                     a[newRow][newCol].setPiece(this);
                     a[currentRow][currentCol].setPiece(null);
 
-                } else if ((currentRow == 1) &&
+                }
+                else if ((getMoveCount()==0) &&
                         ((newRow == currentRow + 2) && (newCol == currentCol)) &&
-                        ((!hasAPiece(a, 2, newCol)) && (!hasAPiece(a, 3, newCol)))
+                        ((!hasAPiece(a, newRow, newCol)) && (!hasAPiece(a, newRow-1, newCol)))
                 ) {
                     //Two spaces for first movement
                     //First checks if piece is in original row
