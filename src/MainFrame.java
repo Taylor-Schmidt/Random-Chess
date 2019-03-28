@@ -111,16 +111,62 @@ public class MainFrame extends JFrame {
         c.ipady = 10;
         add(fullScreenButton, c);
 
+        //TODO: replace icon with ? button
+        JButton helpButton = new JButton();
+        ImageIcon helpIcon = getScaledIcon(new ImageIcon("assets/pause_icon.png"));
+        ImageIcon helpIconPressed = getScaledIcon(new ImageIcon("assets/pause_icon_push.png"));
+        helpButton.setIcon(helpIcon);
+        helpButton.setPressedIcon(helpIconPressed);
+        helpButton.setBorderPainted(false);
+        helpButton.setFocusPainted(false);
+        helpButton.setContentAreaFilled(false);
+        helpButton.setPreferredSize(new Dimension(75, 75));
+        helpButton.setToolTipText("Info");
+        helpButton.addActionListener(e -> {
+            JOptionPane.showMessageDialog(this, "Random Chess is made by:\nJack Xiao\nTaylor" +
+                    " Schmidt\nBrandon Cecchini\nRyan Byrnes\nMackenzie Dahlem\nBenjamin Phillips" +
+                    "\nand \nChristopher DeLuca.", "About this game",
+                    JOptionPane.INFORMATION_MESSAGE, getScaledIcon(icon, 35, 35, 0));
+        });
+
+        c.gridx = 0;
+        c.gridy = 0;
+        c.weightx = 0;
+        c.weighty = 0;
+        c.ipadx = 10;
+        c.ipady = 10;
+        add(helpButton, c);
+
         setVisible(true);
 
     }
 
-    private ImageIcon getScaledIcon(ImageIcon imageIcon) {
-        Image fsImage = imageIcon.getImage();
-
-        return new ImageIcon(fsImage.getScaledInstance(50, 50, 0));
+    private ImageIcon getScaledIcon(ImageIcon imageIcon){
+        return getScaledIcon(imageIcon, 50, 50, 0);
     }
 
+    private ImageIcon getScaledIcon(ImageIcon imageIcon, int w, int h, double paddingRatio) {
+        Image fsImage = imageIcon.getImage();
+
+        int width;
+        int height;
+
+        double widthToHeightRatio = imageIcon.getIconWidth() / (imageIcon.getIconHeight() * 1.0); //float div with int
+
+        double internalSize = 1 - (2 * paddingRatio);
+        if (widthToHeightRatio > 1){//width is bigger
+            width = (int) (w * internalSize);
+            height = (int) (w / widthToHeightRatio);
+        } else if (widthToHeightRatio < 1){
+            height = (int) (h * internalSize);
+            width = (int) (h * widthToHeightRatio);
+        } else {
+            width = (int) (w * internalSize);
+            height = (int) (h * internalSize);
+        }
+
+        return new ImageIcon(fsImage.getScaledInstance(width, height, 0));
+    }
 
 
 }
