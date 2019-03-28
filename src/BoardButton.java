@@ -41,9 +41,10 @@ public class BoardButton extends JButton {
                 backgroundColor = c.getDarkColor();
             }
         }
-
         setBackground(backgroundColor);
         setNewIcon(p);
+        setOpaque(true);
+        setBorderPainted(false);
     }
 
     public int getXPos() {
