@@ -55,7 +55,7 @@ class GameManagerText {
         }
         Scanner kb = new Scanner(System.in);
 
-        currentState.setFiftyMoveDrawCounter(49);
+//        currentState.setFiftyMoveDrawCounter(49);
 
         boolean gameIsRunning = true;
         //actuator.addLine("White goes first.");
@@ -67,7 +67,7 @@ class GameManagerText {
             boolean hasAvailableMove = hasAvailableMove(board, currentState.getTurnColor());
 
             //Game over checks and notifies if king is in check
-            actuator.addLine(currentState.getFiftyMoveDrawCounter());
+//            actuator.addLine(currentState.getFiftyMoveDrawCounter());
             if (isThreeFoldDraw()) {
                 actuator.addLine("It's a threefold repetition; the same position occurred three times, with the same player to move.");
                 actuator.addLine("The game has ended in a draw.");

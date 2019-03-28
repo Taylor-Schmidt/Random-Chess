@@ -144,7 +144,7 @@ public class TextActuator {
         if (piece.getColor().equals("black"))
             c += 6;
 
-        return " " + c;
+        return "" + c;
     }
 
     /**

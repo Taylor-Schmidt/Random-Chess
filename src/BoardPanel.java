@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
@@ -15,6 +16,7 @@ public class BoardPanel extends JPanel {
     private Position selectedPosition;
     private HashSet<Position> highlightedSpaces = new HashSet<>();
     private GameState gameState;
+    private ArrayList<GameState> gameStates = new ArrayList<>();
 
     public BoardPanel(int w, int h, GamePanel gamePanel) {
         super(new GridLayout(w, h));
@@ -27,6 +29,7 @@ public class BoardPanel extends JPanel {
 
         Board board = gamePanel.getBoard();
         gameState = new GameState("white", board, null);
+        gameStates.add(gameState);
 
         new TextActuator().printBoard(board); //TextActuator as board debug print
         System.out.println("It is " + gameState.getTurnColor() + "'s turn.");
@@ -50,21 +53,13 @@ public class BoardPanel extends JPanel {
                     System.out.println("Clicked piece at " + button.getXPos() + " " + button.getYPos());
                     Position currentPosition = new Position(finalI, finalJ);
 
-                    if(board.kingInCheck(gameState.getTurnColor()) && !gameState.hasAvailableMove(board)) {
-                        System.out.println("Checkmate " + gameState.getTurnColor() + " loses.");
-                    }
-                    else{
-                        //Checks if the space you clicked on is null
-                        if (board.getSpace(currentPosition) != null) {
-                            //Checks if you have already selected a space, if you haven't checks if there is a piece on that space.
-                            if (selectedPosition != null || board.getSpace(currentPosition).getPiece() != null) {
+                    //Checks if the space you clicked on is null
+                    if (board.getSpace(currentPosition) != null) {
+                        //Checks if you have already selected a space, if you haven't checks if there is a piece on that space.
+                        if (selectedPosition != null || board.getSpace(currentPosition).getPiece() != null) {
 
-                                //Unhighlights spaces if you click on 2 pieces in a row.
-                                if (selectedPosition != null && !(highlightedSpaces.contains(currentPosition))) {
-                                    unhighlightSpaces();
-                                }
-
-                                if (selectedPosition != null && highlightedSpaces.contains(currentPosition)) {
+                            if (selectedPosition != null) {
+                                if (highlightedSpaces.contains(currentPosition)) {
 
                                     Piece currentPiece = board.getSpace(selectedPosition.row, selectedPosition.col).getPiece();
                                     currentPiece.move(board, selectedPosition, currentPosition);
@@ -75,33 +70,42 @@ public class BoardPanel extends JPanel {
 
                                     unhighlightSpaces();
                                     gameState.changeTurn();
-                                    if(board.kingInCheck(gameState.getTurnColor())){
-                                        System.out.println("You in check " + gameState.getTurnColor());
+                                    if (board.kingInCheck(gameState.getTurnColor())) {
+                                        if (!gameState.hasAvailableMove(board)) {
+                                            System.out.println("Checkmate; " + gameState.getTurnColor() + " loses.");
+                                        }
+                                        System.out.println(gameState.getTurnColor() + " is in check.");
                                     }
                                     System.out.println("It is " + gameState.getTurnColor() + "'s turn.");
-
-
                                 } else {
-                                    selectedPosition = new Position(finalI, finalJ);
+                                    unhighlightSpaces();
 
+                                    selectedPosition = currentPosition;
                                     Piece currentPiece = board.getSpace(selectedPosition.row, selectedPosition.col).getPiece();
                                     if (currentPiece != null && currentPiece.getColor().equals(gameState.getTurnColor())) {
                                         highlightSpaces(currentPiece.getAvailableMoves(board, finalI, finalJ));
                                     } else {
                                         unhighlightSpaces();
                                     }
-
                                 }
+
                             } else {
-                                unhighlightSpaces();
+                                selectedPosition = currentPosition;
+
+                                Piece currentPiece = board.getSpace(selectedPosition.row, selectedPosition.col).getPiece();
+                                if (currentPiece != null && currentPiece.getColor().equals(gameState.getTurnColor())) {
+                                    highlightSpaces(currentPiece.getAvailableMoves(board, finalI, finalJ));
+                                } else {
+                                    unhighlightSpaces();
+                                }
+
                             }
                         } else {
-                            System.out.println("That is not a usable space.");
+                            unhighlightSpaces();
                         }
+                    } else {
+                        System.out.println("That is not a usable space.");
                     }
-
-
-
 
 
                 });
@@ -126,6 +130,7 @@ public class BoardPanel extends JPanel {
             boardButtons[p.row][p.col].setHighlight(false);
         }
         highlightedSpaces.clear();
+        selectedPosition = null;
     }
 
     public BoardButton getButton(int x, int y) {

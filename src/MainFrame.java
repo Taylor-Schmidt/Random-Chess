@@ -17,7 +17,7 @@ public class MainFrame extends JFrame {
         Dimension dimension = new Dimension(1280, 800);
 
         setSize(dimension);
-        setMinimumSize(new Dimension(700, 700));
+        setMinimumSize(new Dimension(1000, 800));
         setLocationRelativeTo(null);//Centers the window in the middle of the main screen
         getContentPane().setBackground(Color.CYAN);
 
@@ -113,8 +113,8 @@ public class MainFrame extends JFrame {
 
         //TODO: replace icon with ? button
         JButton helpButton = new JButton();
-        ImageIcon helpIcon = getScaledIcon(new ImageIcon("assets/pause_icon.png"));
-        ImageIcon helpIconPressed = getScaledIcon(new ImageIcon("assets/pause_icon_push.png"));
+        ImageIcon helpIcon = getScaledIcon(new ImageIcon("assets/question_mark_icon.png"));
+        ImageIcon helpIconPressed = getScaledIcon(new ImageIcon("assets/question_mark_icon_push.png"));
         helpButton.setIcon(helpIcon);
         helpButton.setPressedIcon(helpIconPressed);
         helpButton.setBorderPainted(false);
