@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class GamePanel extends JPanel {
     private BoardPanel boardPanel;
-
+    FeedBackPanel feedBackPanel;
     private Board board;
     private ArrayList<GameState> gameStates = new ArrayList<>();
 
@@ -28,10 +28,13 @@ public class GamePanel extends JPanel {
 
         GameState currentState = new GameState(white, board, null);
         gameStates.add(new GameState(currentState));
+        feedBackPanel = new FeedBackPanel();
         boardPanel = new BoardPanel(w, h, this);
+
         setLayout(new GridBagLayout());
         GridBagConstraints gc = new GridBagConstraints();
         add(boardPanel, gc);
+        add(feedBackPanel,gc);
     }
 
     private void setPieces() {

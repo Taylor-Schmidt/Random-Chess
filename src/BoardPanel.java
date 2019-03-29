@@ -33,6 +33,7 @@ public class BoardPanel extends JPanel {
 
         new TextActuator().printBoard(board); //TextActuator as board debug print
         System.out.println("It is " + gameState.getTurnColor() + "'s turn.");
+        gamePanel.feedBackPanel.addlabel("It is " + gameState.getTurnColor() + "'s turn.");
 
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
@@ -51,6 +52,7 @@ public class BoardPanel extends JPanel {
                 int finalJ = j;
                 button.addActionListener(e -> {
                     System.out.println("Clicked piece at " + button.getXPos() + " " + button.getYPos());
+
                     Position currentPosition = new Position(finalI, finalJ);
 
                     //Checks if the space you clicked on is null
@@ -77,6 +79,7 @@ public class BoardPanel extends JPanel {
                                         System.out.println(gameState.getTurnColor() + " is in check.");
                                     }
                                     System.out.println("It is " + gameState.getTurnColor() + "'s turn.");
+                                    gamePanel.feedBackPanel.addlabel("It is " + gameState.getTurnColor() + "'s turn.");
                                 } else {
                                     unhighlightSpaces();
 
