@@ -62,6 +62,31 @@ public class MainFrame extends JFrame {
         });
 
 
+        JButton fullScreenButton = getFullScreenButton(gameSettings, dimension);
+
+        c.gridx = 2;
+        c.gridy = 0;
+        c.weightx = 0;
+        c.weighty = 0;
+        c.ipadx = 10;
+        c.ipady = 10;
+        add(fullScreenButton, c);
+
+        JButton helpButton = getHelpButton(icon);
+
+        c.gridx = 0;
+        c.gridy = 0;
+        c.weightx = 0;
+        c.weighty = 0;
+        c.ipadx = 10;
+        c.ipady = 10;
+        add(helpButton, c);
+
+        setVisible(true);
+
+    }
+
+    private JButton getFullScreenButton(GameSettings gameSettings, Dimension dimension) {
         JButton fullScreenButton = new JButton();
 
         ImageIcon fsIcon = getScaledIcon(new ImageIcon("assets/full_screen_icon.png"));
@@ -69,12 +94,7 @@ public class MainFrame extends JFrame {
         ImageIcon exitFsIcon = getScaledIcon(new ImageIcon("assets/exit_full_screen_icon.png"));
         ImageIcon exitFsPush = getScaledIcon(new ImageIcon("assets/exit_full_screen_icon_push.png"));
 
-        fullScreenButton.setIcon(fsIcon);
-        fullScreenButton.setPressedIcon(fsPush);
-        fullScreenButton.setBorderPainted(false);
-        fullScreenButton.setFocusPainted(false);
-        fullScreenButton.setContentAreaFilled(false);
-        fullScreenButton.setPreferredSize(new Dimension(75, 75));
+        applyIcons(fullScreenButton, fsIcon, fsPush);
         fullScreenButton.setToolTipText("Full screen");
 
         fullScreenButton.addActionListener(e -> {
@@ -103,24 +123,23 @@ public class MainFrame extends JFrame {
             }
             validate();
         });
-        c.gridx = 2;
-        c.gridy = 0;
-        c.weightx = 0;
-        c.weighty = 0;
-        c.ipadx = 10;
-        c.ipady = 10;
-        add(fullScreenButton, c);
+        return fullScreenButton;
+    }
 
-        //TODO: replace icon with ? button
+    private void applyIcons(JButton fullScreenButton, ImageIcon fsIcon, ImageIcon fsPush) {
+        fullScreenButton.setIcon(fsIcon);
+        fullScreenButton.setPressedIcon(fsPush);
+        fullScreenButton.setBorderPainted(false);
+        fullScreenButton.setFocusPainted(false);
+        fullScreenButton.setContentAreaFilled(false);
+        fullScreenButton.setPreferredSize(new Dimension(75, 75));
+    }
+
+    private JButton getHelpButton(ImageIcon icon) {
         JButton helpButton = new JButton();
         ImageIcon helpIcon = getScaledIcon(new ImageIcon("assets/question_mark_icon.png"));
         ImageIcon helpIconPressed = getScaledIcon(new ImageIcon("assets/question_mark_icon_push.png"));
-        helpButton.setIcon(helpIcon);
-        helpButton.setPressedIcon(helpIconPressed);
-        helpButton.setBorderPainted(false);
-        helpButton.setFocusPainted(false);
-        helpButton.setContentAreaFilled(false);
-        helpButton.setPreferredSize(new Dimension(75, 75));
+        applyIcons(helpButton, helpIcon, helpIconPressed);
         helpButton.setToolTipText("Info");
         helpButton.addActionListener(e -> {
             JOptionPane.showMessageDialog(this, "Random Chess is made by:\nJack Xiao\nTaylor" +
@@ -128,17 +147,7 @@ public class MainFrame extends JFrame {
                     "\nand \nChristopher DeLuca.", "About this game",
                     JOptionPane.INFORMATION_MESSAGE, getScaledIcon(icon, 35, 35, 0));
         });
-
-        c.gridx = 0;
-        c.gridy = 0;
-        c.weightx = 0;
-        c.weighty = 0;
-        c.ipadx = 10;
-        c.ipady = 10;
-        add(helpButton, c);
-
-        setVisible(true);
-
+        return helpButton;
     }
 
     private ImageIcon getScaledIcon(ImageIcon imageIcon){

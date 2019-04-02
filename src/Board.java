@@ -189,17 +189,6 @@ public class Board {
                 createTile(4, 3, 7, 1);
                 createTile(4, 12, 7, 1);
             }
-
-//            b = new Space[size][size];
-//            for (int a = 0; a < size; a++) {
-//                for (int c = 0; c < size; c++) {
-//                    if (spaceNulls[a][c]) {
-//                        b[a][c] = new Space();
-//                    } else {
-//                        b[a][c] = null;
-//                    }
-//                }
-//            }
         }
     }
 
