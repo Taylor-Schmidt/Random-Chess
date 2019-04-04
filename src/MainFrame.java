@@ -1,18 +1,14 @@
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 import java.util.concurrent.CompletableFuture;
 
 /**
  * Acts as controller for this test program.
  */
-public class MainFrame extends JFrame {
+class MainFrame extends JFrame {
 
 
-    public MainFrame() {
+    MainFrame() {
         super("Random Chess");
 
         GameSettings gameSettings = GameSettings.getInstance();
@@ -47,24 +43,21 @@ public class MainFrame extends JFrame {
 
         GamePanel gamePanel = new GamePanel(16, 16);
 
-        options.getButton(0).addActionListener(e -> {
-            CompletableFuture.runAsync(() -> {
-                try {
-                    Thread.sleep(115);
-                } catch (InterruptedException e1) {
-                    e1.printStackTrace();
-                }
-                options.setVisible(false);
+        options.getButton(0).addActionListener(e -> CompletableFuture.runAsync(() -> {
+            try {
+                Thread.sleep(115);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+            options.setVisible(false);
 
-                c.gridx = 1;
-                c.gridy = 1;
-                c.weightx = 1;
-                c.weighty = 1;
-                add(gamePanel, c);
-                validate();
-            });
-
-        });
+            c.gridx = 1;
+            c.gridy = 1;
+            c.weightx = 1;
+            c.weighty = 1;
+            add(gamePanel, c);
+            validate();
+        }));
 
 
         JButton fullScreenButton = getFullScreenButton(gameSettings, dimension);
@@ -103,15 +96,7 @@ public class MainFrame extends JFrame {
         fullScreenButton.setToolTipText("Full screen");
 
         fullScreenButton.addActionListener(e -> {
-            try {
-                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("assets/219069__annabloom__click1.wav").getAbsoluteFile());
-                Clip clip = AudioSystem.getClip();
-                clip.open(audioInputStream);
-                clip.start();
-            } catch (Exception ex) {
-                System.out.println("Error with playing sound.");
-                ex.printStackTrace();
-            }
+            AudioManager.getInstance().playClick();
             if (gameSettings.get(GameSettings.FULLSCREEN) != null) {
                 dispose();
                 if ((boolean) gameSettings.get(GameSettings.FULLSCREEN)) {
@@ -156,15 +141,7 @@ public class MainFrame extends JFrame {
         applyIcons(helpButton, helpIcon, helpIconPressed);
         helpButton.setToolTipText("Info");
         helpButton.addActionListener(e -> {
-            try {
-                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("assets/219069__annabloom__click1.wav").getAbsoluteFile());
-                Clip clip = AudioSystem.getClip();
-                clip.open(audioInputStream);
-                clip.start();
-            } catch (Exception ex) {
-                System.out.println("Error with playing sound.");
-                ex.printStackTrace();
-            }
+            AudioManager.getInstance().playClick();
             JOptionPane.showMessageDialog(this, "Random Chess is made by:\nJack Xiao\nTaylor" +
                     " Schmidt\nBrandon Cecchini\nRyan Byrnes\nMackenzie Dahlem\nBenjamin Phillips" +
                     "\nand \nChristopher DeLuca.", "About this game",
@@ -177,6 +154,7 @@ public class MainFrame extends JFrame {
         return getScaledIcon(imageIcon, 50, 50, 0);
     }
 
+    @SuppressWarnings("SameParameterValue")
     private ImageIcon getScaledIcon(ImageIcon imageIcon, int w, int h, double paddingRatio) {
         Image fsImage = imageIcon.getImage();
 

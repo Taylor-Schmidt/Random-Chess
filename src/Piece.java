@@ -1,11 +1,5 @@
 import java.util.HashSet;
 
-import java.io.File;
-import javax.sound.sampled.*;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import java.io.IOException;
-
 /**
  * All chess pieces implement this interface.
  * Provides methods to make their usage more consistent across the board.
@@ -33,7 +27,7 @@ public abstract class Piece {
         return getAvailableMoves(board, position.row, position.col);
     }
 
-    public HashSet<Position> getAvailableDiagonalMoves(Board board, int row, int col) {
+    HashSet<Position> getAvailableDiagonalMoves(Board board, int row, int col) {
         HashSet<Position> availablePositions = new HashSet<>();
 
         probeByDirectionVector(board, row, col, new Position(1, 1), availablePositions);
@@ -47,7 +41,7 @@ public abstract class Piece {
         return availablePositions;
     }
 
-    public HashSet<Position> getAvailableHorizontalVerticalMoves(Board board, int row, int col){
+    HashSet<Position> getAvailableHorizontalVerticalMoves(Board board, int row, int col){
         HashSet<Position> availablePositions = new HashSet<>();
 
         probeByDirectionVector(board, row, col, Position.i, availablePositions);
@@ -70,13 +64,8 @@ public abstract class Piece {
     /**
      * Uses a 2x1 direction vector (an instance of Position class) and probes in that direction by scaling in that
      * direction by scalar multiples of the vector.
-     * @param board
-     * @param row
-     * @param col
-     * @param directionVector
-     * @param availablePositions
      */
-     void probeByDirectionVector(Board board, int row, int col, Position directionVector, HashSet<Position> availablePositions){
+    private void probeByDirectionVector(Board board, int row, int col, Position directionVector, HashSet<Position> availablePositions){
         probeByDirectionVector(board, row, col, directionVector, availablePositions, board.getRows(), board.getCols());
     }
 
@@ -118,7 +107,7 @@ public abstract class Piece {
      * @param newCol     column where the piece is attempting to move to.
      * @return A Status indicating whether the move was successful, or not.
      */
-     public Status move(Board board, int currentRow, int currentCol, int newRow, int newCol){
+    Status move(Board board, int currentRow, int currentCol, int newRow, int newCol){
          if (getAvailableMoves(board, currentRow, currentCol).contains(new Position(newRow, newCol))) {
              board.getSpace(newRow, newCol).setPiece(this);
              board.getSpace(currentRow, currentCol).setPiece(null);
@@ -126,22 +115,14 @@ public abstract class Piece {
                  setMoveCount(getMoveCount()+1);
              }
 
-             try {
-                 AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("assets/219069__annabloom__click1.wav").getAbsoluteFile());
-                 Clip clip = AudioSystem.getClip();
-                 clip.open(audioInputStream);
-                 clip.start();
-             } catch (Exception ex) {
-                 System.out.println("Error with playing sound.");
-                 ex.printStackTrace();
-             }
+             AudioManager.getInstance().playClick();
              return Status.SuccessfulMove(getType(), currentRow, currentCol, newRow, newCol);
          } else {
              return Status.FailedMove();
          }
      }
 
-     public Status move(Board board, Position pBefore, Position pAfter){
+     Status move(Board board, Position pBefore, Position pAfter){
          return move(board, pBefore.row, pBefore.col, pAfter.row, pAfter.col);
      }
 
@@ -149,6 +130,7 @@ public abstract class Piece {
      * The AI is expected to make decisions based on the idea that different pieces are of different worth.
      * The value that this method returns determines the Piece's worth to the AI.
      */
+    @SuppressWarnings("unused")
     public abstract int getValue();
 
     /**
@@ -181,7 +163,7 @@ public abstract class Piece {
      * @param position Position of the space upon which to perform this check
      * @return true if this (Piece) is able to be moved to this location. Else false.
      */
-    public boolean legalMove(Board board, Position position){
+    boolean legalMove(Board board, Position position){
         if (board.positionIsWithinBounds(position) && isASpace(board, position)){
             return (!hasAPiece(board, position) || colorsAreDifferent(board, position));
         }
@@ -189,23 +171,15 @@ public abstract class Piece {
         return false;
     }
 
-    public static boolean isASpace(Board b, Position p){
+    static boolean isASpace(Board b, Position p){
         return b.getSpace(p) != null;
     }
 
-    public static boolean hasAPiece(Space[][] a, int row, int col) {
-        return a[row][col].getPiece() != null;
-    }
-
-    public static boolean hasAPiece(Board b, Position p){
+    static boolean hasAPiece(Board b, Position p){
         return b.getSpace(p).getPiece() != null;
     }
 
-    public boolean colorsAreDifferent(Space[][] a, int row, int col) {
-        return !getColor().equals(a[row][col].getPiece().getColor());
-    }
-
-    public boolean colorsAreDifferent(Board board, Position position){
+    private boolean colorsAreDifferent(Board board, Position position){
         return !getColor().equals(board.getSpace(position).getPiece().getColor());
     }
 
