@@ -1,5 +1,11 @@
 import java.util.HashSet;
 
+import java.io.File;
+import javax.sound.sampled.*;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import java.io.IOException;
+
 /**
  * All chess pieces implement this interface.
  * Provides methods to make their usage more consistent across the board.
@@ -118,6 +124,16 @@ public abstract class Piece {
              board.getSpace(currentRow, currentCol).setPiece(null);
              if(getType()==ChessPieceType.PAWN) {
                  setMoveCount(getMoveCount()+1);
+             }
+
+             try {
+                 AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("assets/219069__annabloom__click1.wav").getAbsoluteFile());
+                 Clip clip = AudioSystem.getClip();
+                 clip.open(audioInputStream);
+                 clip.start();
+             } catch (Exception ex) {
+                 System.out.println("Error with playing sound.");
+                 ex.printStackTrace();
              }
              return Status.SuccessfulMove(getType(), currentRow, currentCol, newRow, newCol);
          } else {

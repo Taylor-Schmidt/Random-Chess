@@ -1,5 +1,9 @@
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -99,6 +103,15 @@ public class MainFrame extends JFrame {
         fullScreenButton.setToolTipText("Full screen");
 
         fullScreenButton.addActionListener(e -> {
+            try {
+                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("assets/219069__annabloom__click1.wav").getAbsoluteFile());
+                Clip clip = AudioSystem.getClip();
+                clip.open(audioInputStream);
+                clip.start();
+            } catch (Exception ex) {
+                System.out.println("Error with playing sound.");
+                ex.printStackTrace();
+            }
             if (gameSettings.get(GameSettings.FULLSCREEN) != null) {
                 dispose();
                 if ((boolean) gameSettings.get(GameSettings.FULLSCREEN)) {
@@ -143,6 +156,15 @@ public class MainFrame extends JFrame {
         applyIcons(helpButton, helpIcon, helpIconPressed);
         helpButton.setToolTipText("Info");
         helpButton.addActionListener(e -> {
+            try {
+                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("assets/219069__annabloom__click1.wav").getAbsoluteFile());
+                Clip clip = AudioSystem.getClip();
+                clip.open(audioInputStream);
+                clip.start();
+            } catch (Exception ex) {
+                System.out.println("Error with playing sound.");
+                ex.printStackTrace();
+            }
             JOptionPane.showMessageDialog(this, "Random Chess is made by:\nJack Xiao\nTaylor" +
                     " Schmidt\nBrandon Cecchini\nRyan Byrnes\nMackenzie Dahlem\nBenjamin Phillips" +
                     "\nand \nChristopher DeLuca.", "About this game",
