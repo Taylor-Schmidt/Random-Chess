@@ -16,25 +16,44 @@ public class BoardButton extends JButton {
     private ImageIcon pieceIcon;
     private double paddingRatio;
 
-    private BufferedImage lGrass1;
-    private BufferedImage lGrass2;
-    private BufferedImage lGrass3;
-    private BufferedImage lGrass4;
+    private static BufferedImage lGrass1;
+    private static BufferedImage lGrass2;
+    private static BufferedImage lGrass3;
+    private static BufferedImage lGrass4;
 
-    private BufferedImage dGrass1;
-    private BufferedImage dGrass2;
-    private BufferedImage dGrass3;
-    private BufferedImage dGrass4;
-    private BufferedImage dGrass5;
-    private BufferedImage Boarder1;
+    private static BufferedImage dGrass1;
+    private static BufferedImage dGrass2;
+    private static BufferedImage dGrass3;
+    private static BufferedImage dGrass4;
+    private static BufferedImage dGrass5;
+    private static BufferedImage Boarder1;
+
+    static {
+        try {
+            lGrass1 = ImageIO.read(new File("assets/Layer 2.png"));
+            lGrass2 = ImageIO.read(new File("assets/Layer 4.png"));
+            lGrass3 = ImageIO.read(new File("assets/Layer 6.png"));
+            lGrass4 = ImageIO.read(new File("assets/Layer 8.png"));
+            dGrass1 = ImageIO.read(new File("assets/Layer 1.png"));
+            dGrass2 = ImageIO.read(new File("assets/Layer 3.png"));
+            dGrass3 = ImageIO.read(new File("assets/Layer 5.png"));
+            dGrass4 = ImageIO.read(new File("assets/Layer 7.png"));
+            dGrass5 = ImageIO.read(new File("assets/Layer 9.png"));
+            Boarder1 = ImageIO.read(new File("assets/Boarder1.png"));
+        } catch (IOException ex) {
+            // handle exception...
+        }
+    }
 
     private BoardPanel parent;
     Space space;
     private final Color selectedColor = new Color(0, 255, 0);
     private Color backgroundColor;
-    Random rand = new Random();
-    int random = rand.nextInt(4);
-    int random2 = rand.nextInt(5);
+    private Random rand = new Random();
+    private int random = rand.nextInt(Integer.MAX_VALUE);
+
+
+    private boolean highlighted = false;
 
 //    public BoardButton(int x, int y, RandomColorTile c) {
 //        this(x, y, c, null, 0.1);
@@ -114,44 +133,51 @@ public class BoardButton extends JButton {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        try {
-            lGrass1 = ImageIO.read(new File("assets/Layer 2.png"));
-            lGrass2 = ImageIO.read(new File("assets/Layer 4.png"));
-            lGrass3 = ImageIO.read(new File("assets/Layer 6.png"));
-            lGrass4 = ImageIO.read(new File("assets/Layer 8.png"));
-            dGrass1 = ImageIO.read(new File("assets/Layer 1.png"));
-            dGrass2 = ImageIO.read(new File("assets/Layer 3.png"));
-            dGrass3 = ImageIO.read(new File("assets/Layer 5.png"));
-            dGrass4 = ImageIO.read(new File("assets/Layer 7.png"));
-            dGrass5 = ImageIO.read(new File("assets/Layer 9.png"));
-            Boarder1 = ImageIO.read(new File("assets/Boarder1.png"));
-        } catch (IOException ex) {
-            // handle exception...
-        }
+
         if (space != null) {
-            if (0 == ((xPos + yPos) % 2)) {
-                if (random == 0) {
-                    g.drawImage(lGrass1, 0, 0, 40, 40, this);
-                } else if (random == 1) {
-                    g.drawImage(lGrass2, 0, 0, 40, 40, this);
-                } else if (random == 2) {
-                    g.drawImage(lGrass3, 0, 0, 40, 40, this);
+            if (!highlighted) {
+
+                if (0 == ((xPos + yPos) % 2)) {
+                    System.out.println("light= "  + random % 4);
+                    switch (random % 4) {
+                        case 0:
+                            drawBackground(g, lGrass1);
+                            break;
+                        case 1:
+                            drawBackground(g, lGrass2);
+                            break;
+                        case 2:
+                            drawBackground(g, lGrass3);
+                            break;
+                        case 3:
+                            drawBackground(g, lGrass4);
+                            break;
+                    }
                 } else {
-                    g.drawImage(lGrass4, 0, 0, 40, 40, this);
+                    System.out.println("Dark= "  + random % 5);
+                    switch (random % 5) {
+                        case 0:
+                            drawBackground(g, dGrass1);
+                            break;
+                        case 1:
+                            drawBackground(g, dGrass2);
+                            break;
+                        case 2:
+                            drawBackground(g, dGrass3);
+                            break;
+                        case 3:
+                            drawBackground(g, dGrass4);
+                            break;
+                        case 4:
+                            drawBackground(g, dGrass5);
+                            break;
+                    }
                 }
             } else {
-                if (random2 == 0) {
-                    g.drawImage(dGrass1, 0, 0, 40, 40, this);
-                } else if (random2 == 1) {
-                    g.drawImage(dGrass2, 0, 0, 40, 40, this);
-                } else if (random2 == 2) {
-                    g.drawImage(dGrass3, 0, 0, 40, 40, this);
-                } else if (random2 == 3) {
-                    g.drawImage(dGrass4, 0, 0, 40, 40, this);
-                }else
-                    g.drawImage(dGrass5, 0, 0, 40, 40, this);
+                setBackground(selectedColor);
             }
         }
+
         if (pieceIcon != null) {
 //            System.out.println(getHeight() + "x" + getWidth());
             double widthToHeightRatio = pieceIcon.getIconWidth() / (pieceIcon.getIconHeight() * 1.0); //float div with ints
@@ -161,12 +187,12 @@ public class BoardButton extends JButton {
             int y;
 
             double internalSize = 1 - (2 * paddingRatio);
-            if (widthToHeightRatio > 1){//width is bigger
+            if (widthToHeightRatio > 1) {//width is bigger
                 width = (int) (getWidth() * internalSize);
                 height = (int) (width / widthToHeightRatio);
                 x = (int) (getWidth() * paddingRatio);
                 y = (int) (getHeight() * paddingRatio + (getHeight() * internalSize - height) / 2.0);
-            } else if (widthToHeightRatio < 1){
+            } else if (widthToHeightRatio < 1) {
                 height = (int) (getHeight() * internalSize);
                 width = (int) (height * widthToHeightRatio);
                 x = (int) (getWidth() * paddingRatio + (getWidth() * internalSize - width) / 2.0);
@@ -183,9 +209,14 @@ public class BoardButton extends JButton {
 
     }
 
+    private void drawBackground(Graphics g, BufferedImage image) {
+        g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+    }
 
-    public void setHighlight(boolean highLighted){
-        if (highLighted){
+
+    public void setHighlight(boolean highLighted) {
+        this.highlighted = highLighted;
+        if (highLighted) {
             setBackground(selectedColor);
 
         } else {

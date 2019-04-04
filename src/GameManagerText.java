@@ -64,7 +64,7 @@ class GameManagerText {
 
             //Checks if the current player is in check and alerts them if they are at the start of their turn.
             boolean isInCheck = board.kingInCheck(currentState.getTurnColor());
-            boolean hasAvailableMove = hasAvailableMove(board, currentState.getTurnColor());
+            boolean hasAvailableMove = currentState.hasAvailableMove(board);
 
             //Game over checks and notifies if king is in check
 //            actuator.addLine(currentState.getFiftyMoveDrawCounter());
@@ -172,8 +172,10 @@ class GameManagerText {
 
                     //updates references to refer to the last legal state.
                     currentState = new GameState(gameStates.get(gameStates.size() - 1));
+
+                    //Remove state to prevent duplicates; it is added again at the beginning of the loop
                     gameStates.remove(gameStates.size() - 1);
-//                    board = currentState.getBoard();
+
                 } else {
                     actuator.addLine(status.message);
 
@@ -203,50 +205,6 @@ class GameManagerText {
         }
 
         return currentState;
-    }
-
-
-    /**
-     * Returns true if the player has a possible move that doesn't put the king in check
-     *
-     * @param board
-     * @param turnColor color of the current playerco
-     * @return
-     */
-    private boolean hasAvailableMove(Board board, String turnColor) {
-        boolean hasAvailableMove = false;
-
-        //iterate through every space on the board
-        for (int i = 0; i < board.getRows() && !hasAvailableMove; i++) {
-            for (int j = 0; j < board.getCols() && !hasAvailableMove; j++) {
-                Position position = new Position(i, j);
-                Space space = board.getSpace(position);
-
-                //Check for a piece at that location
-                if (space != null) {
-                    Piece piece = space.getPiece();
-                    if (piece != null) {
-                        if (piece.getColor().equals(turnColor)) {
-                            HashSet<Position> moves = piece.getAvailableMoves(board, position);
-
-                            Iterator<Position> movesIterator = moves.iterator();
-                            while (movesIterator.hasNext() && !hasAvailableMove) {
-                                Position move = movesIterator.next();
-                                if (piece.legalMove(board, move)) {
-                                    Board tempBoard = new Board(board);
-                                    Status status = tempBoard.getSpace(position).getPiece().move(tempBoard, position, move);
-
-                                    hasAvailableMove = !status.status.equals(Status.STATUS_BAD) && !tempBoard.kingInCheck(turnColor);
-
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return hasAvailableMove;
     }
 
     /**

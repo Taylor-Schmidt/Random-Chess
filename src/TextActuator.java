@@ -103,18 +103,13 @@ public class TextActuator {
                 name = 'B';
                 break;
             case KNIGHT:
-                name = 'K';
+                name = 'N';
                 break;
             case PAWN:
                 name = 'P';
                 break;
         }
-        char color = ' ';
-        if (piece.getColor().equals("black")) {
-            color = 'b';
-        } else {
-            color = 'w';
-        }
+        char color = piece.getColor().equals("black") ? 'b' : 'w';
 
         return name + "" + color;
     }

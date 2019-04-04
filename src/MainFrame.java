@@ -17,7 +17,8 @@ public class MainFrame extends JFrame {
         Dimension dimension = new Dimension(1280, 800);
 
         setSize(dimension);
-        setMinimumSize(new Dimension(1000, 800));
+//        setMinimumSize(new Dimension(1000, 800));
+        setResizable(false);
         setLocationRelativeTo(null);//Centers the window in the middle of the main screen
         getContentPane().setBackground(Color.CYAN);
 
