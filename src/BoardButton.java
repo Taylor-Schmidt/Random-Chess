@@ -138,7 +138,6 @@ public class BoardButton extends JButton {
             if (!highlighted) {
 
                 if (0 == ((xPos + yPos) % 2)) {
-                    System.out.println("light= "  + random % 4);
                     switch (random % 4) {
                         case 0:
                             drawBackground(g, lGrass1);
@@ -154,7 +153,6 @@ public class BoardButton extends JButton {
                             break;
                     }
                 } else {
-                    System.out.println("Dark= "  + random % 5);
                     switch (random % 5) {
                         case 0:
                             drawBackground(g, dGrass1);
