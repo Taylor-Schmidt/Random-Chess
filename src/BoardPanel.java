@@ -84,6 +84,7 @@ public class BoardPanel extends JPanel {
                                         if (!gameState.hasAvailableMove(board)) {
                                             System.out.println("Checkmate; " + gameState.getTurnColor() + " loses.");
                                             gamePanel.feedBackPanel.addlabel(gameState.getTurnColor() + " is in checkmate.");
+                                            gamePanel.add(new JButton("Main Menu"));
                                         }
                                         System.out.println(gameState.getTurnColor() + " is in check.");
                                     }
