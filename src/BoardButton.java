@@ -178,6 +178,18 @@ public class BoardButton extends JButton {
             }
         }
 
+        if (space != null && space.getEffect() != null && space.getEffect().getType() == Effect.EffectType.Bomb) {
+            BufferedImage bomb;
+            try {
+                bomb = ImageIO.read(new File("assets/board_tile_full.png"));
+                drawBackground(g, bomb);
+                setNewIcon(space.getPiece());
+                //System.out.println("Drew a boardButton with a bomb on it.");
+            } catch (IOException e) {
+
+            }
+        }
+
         if (pieceIcon != null) {
 //            System.out.println(getHeight() + "x" + getWidth());
             double widthToHeightRatio = pieceIcon.getIconWidth() / (pieceIcon.getIconHeight() * 1.0); //float div with ints
@@ -204,19 +216,6 @@ public class BoardButton extends JButton {
                 y = (int) (getHeight() * paddingRatio);
             }
             g.drawImage(pieceIcon.getImage(), x, y, width, height, this);
-        }
-
-        if(space!=null && space.getEffect()!=null && space.getEffect().getType()== Effect.EffectType.Bomb ){
-            BufferedImage bomb;
-            try{
-                bomb= ImageIO.read(new File("assets/board_tile_full.png"));
-                drawBackground(g, bomb);
-                setNewIcon(space.getPiece());
-                //System.out.println("Drew a boardButton with a bomb on it.");
-            }catch (IOException e){
-
-            }
-
         }
 
 
