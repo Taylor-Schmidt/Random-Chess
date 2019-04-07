@@ -72,9 +72,11 @@ public class BoardButton extends JButton {
 
         //Creates checkered effect
 
-        if (space == null)
+        if (space == null) {
             backgroundColor = Color.decode("#78d5e1");
+        }
         this.space = space;
+
         setBackground(backgroundColor);
         setNewIcon(p);
         setOpaque(true);
@@ -202,6 +204,18 @@ public class BoardButton extends JButton {
                 y = (int) (getHeight() * paddingRatio);
             }
             g.drawImage(pieceIcon.getImage(), x, y, width, height, this);
+        }
+
+        if(space!=null && space.getEffect()!=null && space.getEffect().getType()== Effect.EffectType.Bomb){
+            BufferedImage bomb;
+            try{
+                bomb= ImageIO.read(new File("assets/board_tile_full.png"));
+                drawBackground(g, bomb);
+                //System.out.println("Created a boardButton with a bomb on it.");
+            }catch (IOException e){
+
+            }
+
         }
 
 

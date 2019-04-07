@@ -66,6 +66,14 @@ public class BoardPanel extends JPanel {
                                     Piece currentPiece = board.getSpace(selectedPosition.row, selectedPosition.col).getPiece();
                                     currentPiece.move(board, selectedPosition, currentPosition);
                                     BoardButton oldButton = boardButtons[selectedPosition.row][selectedPosition.col];
+
+                                    //If a piece lands on an effect tile, the effect is done.
+                                    if(board.getSpace(currentPosition).getEffect()!=null){
+                                        board.getSpace(currentPosition).doEffect(board.getSpace(currentPosition));
+                                        gamePanel.feedBackPanel.addlabel(gameState.getTurnColor() + " landed on a " + board.getSpace(currentPosition).getEffect().getType());
+                                        currentPiece = board.getSpace(selectedPosition.row, selectedPosition.col).getPiece();
+                                    }
+
                                     oldButton.setNewIcon(null);
                                     oldButton.updateUI();
                                     button.setNewIcon(currentPiece);

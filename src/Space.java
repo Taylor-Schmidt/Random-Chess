@@ -1,4 +1,5 @@
 import java.util.Objects;
+import java.util.Random;
 
 /**
  * Represents on tile on a Board instance.
@@ -6,6 +7,7 @@ import java.util.Objects;
 public class Space {
 
     private Piece p; //Piece that is on this Space. If it is empty, then there is no piece on this Space.
+    private Effect effect; //Effect on the space.
 
     /**
      * Default constructor.
@@ -13,7 +15,19 @@ public class Space {
      * In the logic of the engine, returns a Space with no Piece on it.
      */
     public Space() {
+
         p = null;
+        Random randomNum = new Random();
+        int randInt = randomNum.nextInt(20); //20 makes it so that each effect has a 5% chance of generating.
+
+        //5% chance of generating a bomb space.
+        if(randInt==1){
+            effect = new BombEffect();
+            System.out.println("Created bomb tile.");
+        }
+        else{
+            effect=null;
+        }
     }
 
     /**
@@ -43,6 +57,13 @@ public class Space {
         p = P;
     }
 
+    public Effect getEffect(){
+        return effect;
+    }
+    public void setEffect(Effect e){
+        effect = e;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -54,5 +75,9 @@ public class Space {
     @Override
     public int hashCode() {
         return Objects.hash(p);
+    }
+
+    public void doEffect(Space s){
+        s.getEffect().doEffect(s);
     }
 }
