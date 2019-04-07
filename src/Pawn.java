@@ -32,6 +32,15 @@ public class Pawn extends Piece {
                 availablePositions.add(position);
             }
         }
+        else{
+            for(int i=-1; i<=1; i+=2){
+                position = new Position(row,col+i);
+                if(legalMove(board, position) && board.getSpace(position).getPiece()==null) {
+                        availablePositions.add(position);
+                }
+            }
+
+        }
 
 
         for(int i=-1; i<=1; i+=2) {
