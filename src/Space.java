@@ -37,6 +37,7 @@ public class Space {
      */
     public Space(Piece P) {
         p = P;
+        effect=null;
     }
 
     /**
