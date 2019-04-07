@@ -206,12 +206,13 @@ public class BoardButton extends JButton {
             g.drawImage(pieceIcon.getImage(), x, y, width, height, this);
         }
 
-        if(space!=null && space.getEffect()!=null && space.getEffect().getType()== Effect.EffectType.Bomb){
+        if(space!=null && space.getEffect()!=null && space.getEffect().getType()== Effect.EffectType.Bomb ){
             BufferedImage bomb;
             try{
                 bomb= ImageIO.read(new File("assets/board_tile_full.png"));
                 drawBackground(g, bomb);
-                //System.out.println("Created a boardButton with a bomb on it.");
+                setNewIcon(space.getPiece());
+                //System.out.println("Drew a boardButton with a bomb on it.");
             }catch (IOException e){
 
             }
