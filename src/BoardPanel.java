@@ -17,6 +17,9 @@ public class BoardPanel extends JPanel {
     private HashSet<Position> highlightedSpaces = new HashSet<>();
     private GameState gameState;
     private ArrayList<GameState> gameStates = new ArrayList<>();
+    private boolean canPlay=true;
+    private GamePanel gamePanel;
+    private Board board;
 
     public BoardPanel(int w, int h, GamePanel gamePanel) {
         super(new GridLayout(w, h));
@@ -27,7 +30,8 @@ public class BoardPanel extends JPanel {
         boardButtons = new BoardButton[height][width];
         ColorGenerator color = new ColorGenerator();
 
-        Board board = gamePanel.getBoard();
+        this.board = gamePanel.getBoard();
+        this.gamePanel=gamePanel;
         gameState = new GameState("white", board, null);
         gameStates.add(gameState);
 
@@ -56,7 +60,7 @@ public class BoardPanel extends JPanel {
                     Position currentPosition = new Position(finalI, finalJ);
 
                     //Checks if the space you clicked on is null
-                    if (board.getSpace(currentPosition) != null) {
+                    if (board.getSpace(currentPosition) != null && canPlay) {
                         //Checks if you have already selected a space, if you haven't checks if there is a piece on that space.
                         if (selectedPosition != null || board.getSpace(currentPosition).getPiece() != null) {
 
@@ -84,7 +88,11 @@ public class BoardPanel extends JPanel {
                                         if (!gameState.hasAvailableMove(board)) {
                                             System.out.println("Checkmate; " + gameState.getTurnColor() + " loses.");
                                             gamePanel.feedBackPanel.addlabel(gameState.getTurnColor() + " is in checkmate.");
-                                            gamePanel.add(new JButton("Main Menu"));
+                                            canPlay=false;
+
+                                            //TODO::Create a button that does the following function to restart the game.
+                                            resetGame();
+
                                         }
                                         System.out.println(gameState.getTurnColor() + " is in check.");
                                     }
@@ -116,8 +124,11 @@ public class BoardPanel extends JPanel {
                         } else {
                             unhighlightSpaces();
                         }
-                    } else {
+                    } else if(board.getSpace(currentPosition) == null){
                         System.out.println("That is not a usable space.");
+                    }
+                    else{
+                        System.out.println("Game over");
                     }
 
 
@@ -125,7 +136,6 @@ public class BoardPanel extends JPanel {
 
                 add(button);
                 boardButtons[i][j] = button;
-                //TODO: Set the icon of the boardButtons to whatever piece is on it. Every time a piece is moved make sure to change the icons.
             }
         }
     }
@@ -148,5 +158,73 @@ public class BoardPanel extends JPanel {
 
     public BoardButton getButton(int x, int y) {
         return boardButtons[x][y];
+    }
+
+    public void resetGame(){
+        for(int i = 0; i<16; i++){
+            for(int j = 0; j<16; j++){
+                if(board.getSpace(i,j)!=null){
+                    board.getSpace(i,j).setPiece(null);
+                    boardButtons[i][j].setNewIcon(null);
+                }
+            }
+        }
+
+        canPlay=true;
+        Space space;
+        space = new Space(new Rook("black"));
+        board.setSpace(space, 4, 4);
+        space = new Space(new Knight("black"));
+        board.setSpace(space, 4, 5);
+        space = new Space(new Bishop("black"));
+        board.setSpace(space, 4, 6);
+        space = new Space(new Queen("black"));
+        board.setSpace(space, 4, 7);
+        space = new Space(new King("black"));
+        board.setSpace(space, 4, 8);
+        space = new Space(new Bishop("black"));
+        board.setSpace(space, 4, 9);
+        space = new Space(new Knight("black"));
+        board.setSpace(space, 4, 10);
+        space = new Space(new Rook("black"));
+        board.setSpace(space, 4, 11);
+        for (int i = 4; i < 12; i++) {
+            space = new Space(new Pawn("black"));
+            board.setSpace(space, 5, i);
+        }
+
+        space = new Space(new Rook("white"));
+        board.setSpace(space, 11, 4);
+        space = new Space(new Knight("white"));
+        board.setSpace(space, 11, 5);
+        space = new Space(new Bishop("white"));
+        board.setSpace(space, 11, 6);
+        space = new Space(new King("white"));
+        board.setSpace(space, 11, 7);
+        space = new Space(new Queen("white"));
+        board.setSpace(space, 11, 8);
+        space = new Space(new Bishop("white"));
+        board.setSpace(space, 11, 9);
+        space = new Space(new Knight("white"));
+        board.setSpace(space, 11, 10);
+        space = new Space(new Rook("white"));
+        board.setSpace(space, 11, 11);
+        for (int i = 4; i < 12; i++) {
+            space = new Space(new Pawn("white"));
+            board.setSpace(space, 10, i);
+        }
+
+        for(int i = 0; i<16; i++){
+            for(int j = 0; j<16; j++) {
+                if(board.getSpace(i,j)!=null) {
+                    boardButtons[i][j].setNewIcon(board.getSpace(i, j).getPiece());
+                    boardButtons[i][j].updateUI();
+                }
+            }
+        }
+
+        if(gameState.getTurnColor().equals("black"))
+            gameState.changeTurn();
+
     }
 }

@@ -90,4 +90,8 @@ public class GamePanel extends JPanel {
     Board getBoard(){
         return getCurrentState().getBoard();
     }
+
+    public void setBoardPanel(BoardPanel b){
+        boardPanel=b;
+    }
 }
