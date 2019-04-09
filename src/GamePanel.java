@@ -25,7 +25,7 @@ class GamePanel extends JPanel {
 
 
         feedBackPanel = new FeedBackPanel();
-        add(feedBackPanel,gc);
+        add(feedBackPanel, gc);
 
         newGame();
 
@@ -43,7 +43,7 @@ class GamePanel extends JPanel {
         GameState currentState = new GameState(white, board, null);
         gameStates.add(new GameState(currentState));
 
-        if (boardPanel != null){
+        if (boardPanel != null) {
             remove(boardPanel);
         }
 
@@ -52,10 +52,10 @@ class GamePanel extends JPanel {
     }
 
     @SuppressWarnings({"ConstantConditions", "unused"})
-    private void setPiecesTest(){
+    private void setPiecesTest() {
 
         board.getSpace(new Position(Position.parsePosition("H8"))).setPiece(new King(black));
-            board.getSpace(new Position(Position.parsePosition("F7"))).setPiece(new King(white));
+        board.getSpace(new Position(Position.parsePosition("F7"))).setPiece(new King(white));
         board.getSpace(new Position(Position.parsePosition("f6"))).setPiece(new Queen(white));
     }
 
@@ -105,11 +105,11 @@ class GamePanel extends JPanel {
         }
     }
 
-    private GameState getCurrentState(){
+    private GameState getCurrentState() {
         return gameStates.get(gameStates.size() - 1);
     }
 
-    Board getBoard(){
+    Board getBoard() {
         return getCurrentState().getBoard();
     }
 

@@ -41,15 +41,14 @@ public class BoardPanel extends JPanel {
 
         for (int i = 0; i < h; i++) {
             for (int j = 0; j < w; j++) {
+                Space s = board.getSpace(i,j);
                 Piece piece;
-                Space s;
-                if (board.getSpace(i, j) != null) {
-                    piece = board.getSpace(i, j).getPiece();
-                    s = board.getSpace(i, j);
+                if (s != null) {
+                    piece = s.getPiece();
                 } else {
                     piece = null;
-                    s = null;
                 }
+
                 BoardButton button = new BoardButton(this, i, j, color, s, piece);
 
                 int finalI = i;
@@ -178,7 +177,7 @@ public class BoardPanel extends JPanel {
                                 selectedPosition = currentPosition;
                                 Piece currentPiece = board.getSpace(selectedPosition.row, selectedPosition.col).getPiece();
                                 if (currentPiece != null && currentPiece.getColor().equals(currentState.getTurnColor())) {
-                                    highlightSpaces(currentPiece.getAvailableMoves(board, finalI, finalJ));
+                                    highlightSpaces(currentState.availableMoves(board, currentPiece, currentPosition));
                                 } else {
                                     unhighlightSpaces();
                                 }
@@ -189,7 +188,7 @@ public class BoardPanel extends JPanel {
 
                             Piece currentPiece = board.getSpace(selectedPosition.row, selectedPosition.col).getPiece();
                             if (currentPiece != null && currentPiece.getColor().equals(currentState.getTurnColor())) {
-                                highlightSpaces(currentPiece.getAvailableMoves(board, finalI, finalJ));
+                                highlightSpaces(currentState.availableMoves(board, currentPiece, currentPosition));
                             } else {
                                 unhighlightSpaces();
                             }
@@ -228,7 +227,7 @@ public class BoardPanel extends JPanel {
     private void gameOver(String winnerColor) {
         String os = System.getProperty("os.name");
         String[] options = {"New game", "Exit to main menu", "Exit to " + os};
-        String statusMessage = (winnerColor != null) ? winnerColor.equals("white") ? "Red" : "Blue" + " wins!" : "It's a draw!";
+        String statusMessage = (winnerColor != null) ? (winnerColor.equals("white") ? "Blue" : "Red") + " wins!" : "It's a draw!";
         JOptionPane.showOptionDialog(this, statusMessage, "Game over", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
         //TODO: make the options do what they say they do
     }
