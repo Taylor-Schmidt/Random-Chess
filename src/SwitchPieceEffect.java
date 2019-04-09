@@ -31,6 +31,7 @@ public class SwitchPieceEffect extends Effect {
                     break;
             }
             s.setPiece(newPiece);
+            System.out.println("Landed on switch piece");
         }
 
     }

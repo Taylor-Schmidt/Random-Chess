@@ -68,6 +68,9 @@ public class GameState {
     public Board getBoard() {
         return board;
     }
+    public void setBoard(Board b){
+        board=b;
+    }
 
     public HashMap<String, ArrayList<Piece>> getTakenPieces() {
         return takenPieces;

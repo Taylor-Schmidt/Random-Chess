@@ -67,16 +67,30 @@ public class BoardPanel extends JPanel {
                         if (selectedPosition != null) {
                             //If the move is valid, then
                             if (highlightedSpaces.contains(currentPosition)) {
+                                currentState.setBoard(board);
                                 gameStates.add(new GameState(currentState));
 
                                 //De-links currentState reference
                                 currentState = new GameState(currentState);
-                                board = currentState.getBoard();
+                                //board = currentState.getBoard();
 
                                 Piece currentPiece = board.getSpace(selectedPosition.row, selectedPosition.col).getPiece();
+                                Piece previousPiece;
+                                if(board.getSpace(currentPosition).getPiece()!=null){
+                                    previousPiece = board.getSpace(currentPosition).getPiece();
+                                }
+                                else{
+                                    previousPiece =null;
+                                }
+
                                 currentPiece.move(board, selectedPosition, currentPosition);
 
-
+                                //If a piece lands on an effect tile, the effect is done.
+                                if (board.getSpace(currentPosition).getEffect() != null) {
+                                    board.getSpace(currentPosition).doEffect(board.getSpace(currentPosition));
+                                    gamePanel.feedBackPanel.addlabel(currentState.getTurnColor() + " landed on a " + board.getSpace(currentPosition).getEffect().getType());
+                                    currentPiece = board.getSpace(currentPosition).getPiece();
+                                }
 
                                 //TODO: this logic should be incorporated into highlightSpaces()
                                 if (board.kingInCheck(currentState.getTurnColor())) {
@@ -84,35 +98,34 @@ public class BoardPanel extends JPanel {
 
                                     //updates references to refer to the last legal state.
                                     currentState = new GameState(gameStates.get(gameStates.size() - 1));
+                                    board = currentState.getBoard();
 
                                     //Remove state to prevent duplicates; it is added again at the beginning of the loop
                                     gameStates.remove(gameStates.size() - 1);
                                 } else {
 
-                                    //If a piece lands on an effect tile, the effect is done.
-                                    if (board.getSpace(currentPosition).getEffect() != null) {
-                                        board.getSpace(currentPosition).doEffect(board.getSpace(currentPosition));
-                                        gamePanel.feedBackPanel.addlabel(currentState.getTurnColor() + " landed on a " + board.getSpace(currentPosition).getEffect().getType());
-                                        currentPiece = board.getSpace(selectedPosition.row, selectedPosition.col).getPiece();
-                                    }
+                                    //Updates board in currentState.
+                                    currentState = new GameState(currentState.getTurnColor(), board, currentPosition);
 
                                     BoardButton oldButton = boardButtons[selectedPosition.row][selectedPosition.col];
 
                                     oldButton.setNewIcon(null);
                                     oldButton.updateUI();
-                                    if(currentPiece.getType()==Piece.ChessPieceType.PAWN){
+                                    //In case pawn gets turned into a a queen.
+                                    if(currentPiece!=null && currentPiece.getType()==Piece.ChessPieceType.PAWN){
                                         currentPiece= board.getSpace(currentPosition).getPiece();
                                     }
-                                    button.setNewIcon(currentPiece);
+                                    boardButtons[currentPosition.row][currentPosition.col].setNewIcon(currentPiece);
+                                    boardButtons[currentPosition.row][currentPosition.col].updateUI();
 
                                     //If a piece was captured, adds that piece to the list of captured pieces in the state.
-                                    Piece previousPiece = gameStates.get(gameStates.size() - 1).getBoard().getSpace(currentPosition).getPiece();
+                                    //Piece previousPiece = gameStates.get(gameStates.size() - 1).getBoard().getSpace(currentPosition).getPiece();
 
                                     if (previousPiece != null) {
                                         currentState.addTakenPiece(previousPiece);
                                         currentState.resetFiftyMoveDrawCounter();
-                                    } else if (currentPiece.getType() == Piece.ChessPieceType.PAWN) {
-                                        currentState.resetFiftyMoveDrawCounter();
+                                    /*} else if (currentPiece.getType() == Piece.ChessPieceType.PAWN) {
+                                        currentState.resetFiftyMoveDrawCounter(); */
                                     } else {
                                         currentState.incrementFiftyMoveDrawCounter();
                                     }
