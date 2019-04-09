@@ -17,17 +17,28 @@ public class Space {
     public Space() {
 
         p = null;
-        Random randomNum = new Random();
-        int randInt = randomNum.nextInt(20); //20 makes it so that each effect has a 5% chance of generating.
+        effect=null;
+    }
 
-        //5% chance of generating a bomb space.
-        if(randInt==1){
-            effect = new BombEffect();
-            //System.out.println("Created bomb tile.");
-        }
-        else if(randInt==2){
-            effect = new SwitchPieceEffect();
-            //System.out.println("Created SwitchPiece tile.");
+    public Space(boolean isRandom) {
+
+        p = null;
+        if(isRandom){
+            Random randomNum = new Random();
+            int randInt = randomNum.nextInt(20); //20 makes it so that each effect has a 5% chance of generating.
+
+            //5% chance of generating a bomb space.
+            if(randInt==1){
+                effect = new BombEffect();
+                //System.out.println("Created bomb tile.");
+            }
+            else if(randInt==2){
+                effect = new SwitchPieceEffect();
+                //System.out.println("Created SwitchPiece tile.");
+            }
+            else{
+                effect=null;
+            }
         }
         else{
             effect=null;

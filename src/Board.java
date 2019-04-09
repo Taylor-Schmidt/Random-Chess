@@ -66,7 +66,7 @@ public class Board {
                 Space oldSpace = other.getBoard()[i][j];
                 Space newSpace = null;
                 if (oldSpace != null) {
-                    newSpace = new Space();
+                    newSpace = new Space(true);
 
                     Piece oldPiece = oldSpace.getPiece();
                     Piece newPiece = null;
