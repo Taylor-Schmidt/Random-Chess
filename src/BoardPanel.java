@@ -13,11 +13,11 @@ public class BoardPanel extends JPanel {
     private int height;     //Represents the max number of rows.
     private BoardButton[][] boardButtons;
 
-    private Position selectedPosition;
+    private Position selectedPosition; //Piece that corresponds to the highlighted spaces
     private HashSet<Position> highlightedSpaces = new HashSet<>();
-    private GameState gameState;
+    private GameState currentState;
     private ArrayList<GameState> gameStates = new ArrayList<>();
-    private boolean canPlay=true;
+    private boolean canPlay = true;
     private GamePanel gamePanel;
     private Board board;
 
@@ -31,13 +31,13 @@ public class BoardPanel extends JPanel {
         ColorGenerator color = new ColorGenerator();
 
         this.board = gamePanel.getBoard();
-        this.gamePanel=gamePanel;
-        gameState = new GameState("white", board, null);
-        gameStates.add(gameState);
+        this.gamePanel = gamePanel;
+        currentState = new GameState("white", board, null);
+        gameStates.add(currentState);
 
         new TextActuator().printBoard(board); //TextActuator as board debug print
-        System.out.println("It is " + gameState.getTurnColor() + "'s turn.");
-        gamePanel.feedBackPanel.addlabel("It is " + gameState.getTurnColor() + "'s turn.");
+        System.out.println("It is " + currentState.getTurnColor() + "'s turn.");
+        gamePanel.feedBackPanel.addlabel("It is " + currentState.getTurnColor() + "'s turn.");
 
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
@@ -62,76 +62,97 @@ public class BoardPanel extends JPanel {
                     //Checks if the space you clicked on is null
                     if (board.getSpace(currentPosition) != null && canPlay) {
                         //Checks if you have already selected a space, if you haven't checks if there is a piece on that space.
-                        if (selectedPosition != null || board.getSpace(currentPosition).getPiece() != null) {
 
-                            if (selectedPosition != null) {
-                                if (highlightedSpaces.contains(currentPosition)) {
+                        if (selectedPosition != null) {
+                            //If the move is valid, then
+                            if (highlightedSpaces.contains(currentPosition)) {
+                                gameStates.add(new GameState(currentState));
 
-                                    Piece currentPiece = board.getSpace(selectedPosition.row, selectedPosition.col).getPiece();
-                                    currentPiece.move(board, selectedPosition, currentPosition);
-                                    BoardButton oldButton = boardButtons[selectedPosition.row][selectedPosition.col];
+                                //De-links currentState reference
+                                currentState = new GameState(currentState);
+                                board = currentState.getBoard();
+
+                                Piece currentPiece = board.getSpace(selectedPosition.row, selectedPosition.col).getPiece();
+                                currentPiece.move(board, selectedPosition, currentPosition);
+
+                                //TODO: this logic should be incorporated into highlightSpaces()
+                                if (board.kingInCheck(currentState.getTurnColor())) {
+                                    gamePanel.feedBackPanel.addlabel("You cannot move there! You cannot put your king in check.");
+
+                                    //updates references to refer to the last legal state.
+                                    currentState = new GameState(gameStates.get(gameStates.size() - 1));
+
+                                    //Remove state to prevent duplicates; it is added again at the beginning of the loop
+                                    gameStates.remove(gameStates.size() - 1);
+                                } else {
 
                                     //If a piece lands on an effect tile, the effect is done.
-                                    if(board.getSpace(currentPosition).getEffect()!=null){
+                                    if (board.getSpace(currentPosition).getEffect() != null) {
                                         board.getSpace(currentPosition).doEffect(board.getSpace(currentPosition));
-                                        gamePanel.feedBackPanel.addlabel(gameState.getTurnColor() + " landed on a " + board.getSpace(currentPosition).getEffect().getType());
+                                        gamePanel.feedBackPanel.addlabel(currentState.getTurnColor() + " landed on a " + board.getSpace(currentPosition).getEffect().getType());
                                         currentPiece = board.getSpace(selectedPosition.row, selectedPosition.col).getPiece();
                                     }
+
+                                    BoardButton oldButton = boardButtons[selectedPosition.row][selectedPosition.col];
 
                                     oldButton.setNewIcon(null);
                                     oldButton.updateUI();
                                     button.setNewIcon(currentPiece);
 
                                     unhighlightSpaces();
-                                    gameState.changeTurn();
-                                    if (board.kingInCheck(gameState.getTurnColor())) {
-                                        if (!gameState.hasAvailableMove(board)) {
-                                            System.out.println("Checkmate; " + gameState.getTurnColor() + " loses.");
-                                            gamePanel.feedBackPanel.addlabel(gameState.getTurnColor() + " is in checkmate.");
-                                            canPlay=false;
+                                    currentState.changeTurn();
+
+                                    if (board.kingInCheck(currentState.getTurnColor())) {
+                                        if (!currentState.hasAvailableMove(board)) {
+                                            System.out.println("Checkmate; " + currentState.getTurnColor() + " loses.");
+                                            gamePanel.feedBackPanel.addlabel(currentState.getTurnColor() + " is in checkmate.");
+                                            canPlay = false;
+
+                                            //TODO: might have to add turn switch
+                                            gameOver(currentState.getTurnColor());
 
                                             //TODO::Create a button that does the following function to restart the game.
                                             resetGame();
-
                                         }
-                                        System.out.println(gameState.getTurnColor() + " is in check.");
-                                    }
-                                    System.out.println("It is " + gameState.getTurnColor() + "'s turn.");
-                                    gamePanel.feedBackPanel.addlabel("It is " + gameState.getTurnColor() + "'s turn.");
-                                } else {
-                                    unhighlightSpaces();
+                                        System.out.println(currentState.getTurnColor() + " is in check.");
+                                        gamePanel.feedBackPanel.addlabel(currentState.getTurnColor() + " is in check.");
 
-                                    selectedPosition = currentPosition;
-                                    Piece currentPiece = board.getSpace(selectedPosition.row, selectedPosition.col).getPiece();
-                                    if (currentPiece != null && currentPiece.getColor().equals(gameState.getTurnColor())) {
-                                        highlightSpaces(currentPiece.getAvailableMoves(board, finalI, finalJ));
                                     } else {
-                                        unhighlightSpaces();
+
+                                        System.out.println("It is " + currentState.getTurnColor() + "'s turn.");
+                                        gamePanel.feedBackPanel.addlabel("It is " + currentState.getTurnColor() + "'s turn.");
                                     }
                                 }
-
                             } else {
-                                selectedPosition = currentPosition;
+                                unhighlightSpaces();
 
+                                selectedPosition = currentPosition;
                                 Piece currentPiece = board.getSpace(selectedPosition.row, selectedPosition.col).getPiece();
-                                if (currentPiece != null && currentPiece.getColor().equals(gameState.getTurnColor())) {
+                                if (currentPiece != null && currentPiece.getColor().equals(currentState.getTurnColor())) {
                                     highlightSpaces(currentPiece.getAvailableMoves(board, finalI, finalJ));
                                 } else {
                                     unhighlightSpaces();
                                 }
-
                             }
+
+                        } else if (board.getSpace(currentPosition).getPiece() != null) {
+                            selectedPosition = currentPosition;
+
+                            Piece currentPiece = board.getSpace(selectedPosition.row, selectedPosition.col).getPiece();
+                            if (currentPiece != null && currentPiece.getColor().equals(currentState.getTurnColor())) {
+                                highlightSpaces(currentPiece.getAvailableMoves(board, finalI, finalJ));
+                            } else {
+                                unhighlightSpaces();
+                            }
+
                         } else {
                             unhighlightSpaces();
                         }
-                    } else if(board.getSpace(currentPosition) == null){
+                    } else if (board.getSpace(currentPosition) == null) {
                         System.out.println("That is not a usable space.");
-                    }
-                    else{
+                    } else {
                         System.out.println("Game over");
                     }
-
-
                 });
 
                 add(button);
@@ -156,21 +177,32 @@ public class BoardPanel extends JPanel {
         selectedPosition = null;
     }
 
+    public void gameOver(String winnerColor) {
+        String os = System.getProperty("os.name");
+        String[] options = {"New game", "Exit to main menu", "Exit to " + os};
+        JOptionPane.showOptionDialog(this, "Game over", capitalize(winnerColor) + " wins!", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+        //TODO: make the options do what they say they do
+    }
+
+    public static String capitalize(String str) {
+        return str.substring(0, 1).toUpperCase() + str.substring(1);
+    }
+
     public BoardButton getButton(int x, int y) {
         return boardButtons[x][y];
     }
 
-    public void resetGame(){
-        for(int i = 0; i<16; i++){
-            for(int j = 0; j<16; j++){
-                if(board.getSpace(i,j)!=null){
-                    board.getSpace(i,j).setPiece(null);
+    public void resetGame() {
+        for (int i = 0; i < 16; i++) {
+            for (int j = 0; j < 16; j++) {
+                if (board.getSpace(i, j) != null) {
+                    board.getSpace(i, j).setPiece(null);
                     boardButtons[i][j].setNewIcon(null);
                 }
             }
         }
 
-        canPlay=true;
+        canPlay = true;
         Space space;
         space = new Space(new Rook("black"));
         board.setSpace(space, 4, 4);
@@ -214,17 +246,17 @@ public class BoardPanel extends JPanel {
             board.setSpace(space, 10, i);
         }
 
-        for(int i = 0; i<16; i++){
-            for(int j = 0; j<16; j++) {
-                if(board.getSpace(i,j)!=null) {
+        for (int i = 0; i < 16; i++) {
+            for (int j = 0; j < 16; j++) {
+                if (board.getSpace(i, j) != null) {
                     boardButtons[i][j].setNewIcon(board.getSpace(i, j).getPiece());
                     boardButtons[i][j].updateUI();
                 }
             }
         }
 
-        if(gameState.getTurnColor().equals("black"))
-            gameState.changeTurn();
+        if (currentState.getTurnColor().equals("black"))
+            currentState.changeTurn();
 
     }
 }

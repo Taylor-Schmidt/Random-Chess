@@ -11,6 +11,7 @@ import java.awt.*;
         public void addlabel(String feedback){
             this.feedback = feedback;
             add(new JLabel(feedback));
+            updateUI();
         }
     }
 

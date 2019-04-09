@@ -15,26 +15,35 @@ public class GamePanel extends JPanel {
     private static String black = "black";
     private static String white = "white";
 
-    public GamePanel(int w, int h) {
+    public GamePanel() {
         super();
 
         setBackground(Color.CYAN);
 
         //Creates BoardPanel
-        board = new Board(true);
+        board = new Board();
+
+        setPiecesTest();
 
         //Sets pieces on board.
-        setPieces();
+//        setPieces();
 
         GameState currentState = new GameState(white, board, null);
         gameStates.add(new GameState(currentState));
         feedBackPanel = new FeedBackPanel();
-        boardPanel = new BoardPanel(w, h, this);
+        boardPanel = new BoardPanel(board.getRows(), board.getCols(), this);
 
         setLayout(new GridBagLayout());
         GridBagConstraints gc = new GridBagConstraints();
         add(boardPanel, gc);
         add(feedBackPanel,gc);
+    }
+
+    private void setPiecesTest(){
+
+        board.getSpace(new Position(Position.parsePosition("H8"))).setPiece(new King(black));
+            board.getSpace(new Position(Position.parsePosition("F7"))).setPiece(new King(white));
+        board.getSpace(new Position(Position.parsePosition("f6"))).setPiece(new Queen(white));
     }
 
     private void setPieces() {
