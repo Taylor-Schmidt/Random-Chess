@@ -163,7 +163,7 @@ class GameManagerText {
 
                 //Add a check to make sure entered move works.
                 Piece currentPiece = board.getSpace(pBefore).getPiece();
-                Status status = currentPiece.move(board, pBefore.row, pBefore.col, pAfter.row, pAfter.col);
+                Status status = currentPiece.move(board, pBefore, pAfter);
 
                 if (status.status.equals(Status.STATUS_BAD)) {
                     actuator.addLine(status.message);

@@ -21,6 +21,7 @@ public class BoardPanel extends JPanel {
     private GamePanel gamePanel;
     private Board board;
 
+    @SuppressWarnings("Duplicates")
     public BoardPanel(int w, int h, GamePanel gamePanel) {
         super(new GridLayout(w, h));
         width = w;
@@ -75,6 +76,8 @@ public class BoardPanel extends JPanel {
                                 Piece currentPiece = board.getSpace(selectedPosition.row, selectedPosition.col).getPiece();
                                 currentPiece.move(board, selectedPosition, currentPosition);
 
+
+
                                 //TODO: this logic should be incorporated into highlightSpaces()
                                 if (board.kingInCheck(currentState.getTurnColor())) {
                                     gamePanel.feedBackPanel.addlabel("You cannot move there! You cannot put your king in check.");
@@ -99,11 +102,27 @@ public class BoardPanel extends JPanel {
                                     oldButton.updateUI();
                                     button.setNewIcon(currentPiece);
 
+                                    //If a piece was captured, adds that piece to the list of captured pieces in the state.
+                                    Piece previousPiece = gameStates.get(gameStates.size() - 1).getBoard().getSpace(currentPosition).getPiece();
+
+                                    if (previousPiece != null) {
+                                        currentState.addTakenPiece(previousPiece);
+                                        currentState.resetFiftyMoveDrawCounter();
+                                    } else if (currentPiece.getType() == Piece.ChessPieceType.PAWN) {
+                                        currentState.resetFiftyMoveDrawCounter();
+                                    } else {
+                                        currentState.incrementFiftyMoveDrawCounter();
+                                    }
+
                                     unhighlightSpaces();
                                     currentState.changeTurn();
 
-                                    if (board.kingInCheck(currentState.getTurnColor())) {
-                                        if (!currentState.hasAvailableMove(board)) {
+                                    //Checks if the current player is in check and alerts them if they are at the start of their turn.
+                                    boolean isInCheck = board.kingInCheck(currentState.getTurnColor());
+                                    boolean hasAvailableMove = currentState.hasAvailableMove(board);
+
+                                    if (isInCheck) {
+                                        if (!hasAvailableMove) {
                                             System.out.println("Checkmate; " + currentState.getTurnColor() + " loses.");
                                             gamePanel.feedBackPanel.addlabel(currentState.getTurnColor() + " is in checkmate.");
                                             canPlay = false;
@@ -111,14 +130,30 @@ public class BoardPanel extends JPanel {
                                             //TODO: might have to add turn switch
                                             gameOver(currentState.getTurnColor());
 
-                                            //TODO::Create a button that does the following function to restart the game.
-                                            resetGame();
+                                            gamePanel.newGame();
+                                        } else {
+                                            System.out.println(currentState.getTurnColor() + " is in check.");
+                                            gamePanel.feedBackPanel.addlabel(currentState.getTurnColor() + " is in check.");
                                         }
-                                        System.out.println(currentState.getTurnColor() + " is in check.");
-                                        gamePanel.feedBackPanel.addlabel(currentState.getTurnColor() + " is in check.");
 
+                                    } else if (!hasAvailableMove){
+                                        gamePanel.feedBackPanel.addlabel("It's a stalemate.");
+                                        gamePanel.feedBackPanel.addlabel("The game has ended in a draw.");
+
+                                        gameOver(null);
+                                    } else if (isThreeFoldDraw()) {
+                                        gamePanel.feedBackPanel.addlabel("It's a threefold repetition; the same " +
+                                                "position occurred three times, with the same player to move.");
+                                        gamePanel.feedBackPanel.addlabel("The game has ended in a draw.");
+
+                                        gameOver(null);
+
+                                    } else if (currentState.fiftyMoveDraw()) {
+                                        gamePanel.feedBackPanel.addlabel("There has been fifty moves without a capture or a pawn moving.");
+                                        gamePanel.feedBackPanel.addlabel("The game has ended in a draw.");
+
+                                        gameOver(null);
                                     } else {
-
                                         System.out.println("It is " + currentState.getTurnColor() + "'s turn.");
                                         gamePanel.feedBackPanel.addlabel("It is " + currentState.getTurnColor() + "'s turn.");
                                     }
@@ -161,7 +196,6 @@ public class BoardPanel extends JPanel {
         }
     }
 
-
     public void highlightSpaces(HashSet<Position> spacesToHighlight) {
         highlightedSpaces = spacesToHighlight;
         for (Position p : highlightedSpaces) {
@@ -178,9 +212,11 @@ public class BoardPanel extends JPanel {
     }
 
     public void gameOver(String winnerColor) {
+        //TODO: change colors to red/blue
         String os = System.getProperty("os.name");
         String[] options = {"New game", "Exit to main menu", "Exit to " + os};
-        JOptionPane.showOptionDialog(this, "Game over", capitalize(winnerColor) + " wins!", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+        String statusMessage = (winnerColor != null)? capitalize(winnerColor) + " wins!" : "It's a draw!";
+        JOptionPane.showOptionDialog(this, "Game over", statusMessage, JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
         //TODO: make the options do what they say they do
     }
 
@@ -193,8 +229,8 @@ public class BoardPanel extends JPanel {
     }
 
     public void resetGame() {
-        for (int i = 0; i < 16; i++) {
-            for (int j = 0; j < 16; j++) {
+        for (int i = 0; i < board.getRows(); i++) {
+            for (int j = 0; j < board.getCols(); j++) {
                 if (board.getSpace(i, j) != null) {
                     board.getSpace(i, j).setPiece(null);
                     boardButtons[i][j].setNewIcon(null);
@@ -246,8 +282,8 @@ public class BoardPanel extends JPanel {
             board.setSpace(space, 10, i);
         }
 
-        for (int i = 0; i < 16; i++) {
-            for (int j = 0; j < 16; j++) {
+        for (int i = 0; i < board.getRows(); i++) {
+            for (int j = 0; j < board.getCols(); j++) {
                 if (board.getSpace(i, j) != null) {
                     boardButtons[i][j].setNewIcon(board.getSpace(i, j).getPiece());
                     boardButtons[i][j].updateUI();
@@ -258,5 +294,29 @@ public class BoardPanel extends JPanel {
         if (currentState.getTurnColor().equals("black"))
             currentState.changeTurn();
 
+    }
+
+    /**
+     * Indicates whether a Three-Fold Repetition Draw has occurred.
+     * A Three-Fold Repetition is when the same position occurs three times, with the same player to move.
+     *
+     * @return true if the repetition has occurred.
+     */
+    private boolean isThreeFoldDraw() {
+        if (gameStates.size() > 8) {
+            GameState currentState = gameStates.get(gameStates.size() - 1);
+
+            int repetitions = 0;
+            for (int i = 0; i < gameStates.size() - 2; i++) {
+                if (gameStates.get(i).equals(currentState)) {
+                    repetitions++;
+                    if (repetitions == 3) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 }
