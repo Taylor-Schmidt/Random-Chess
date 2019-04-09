@@ -6,18 +6,19 @@ import java.util.ArrayList;
  * This is the panel that the game will take place on.
  */
 
-public class GamePanel extends JPanel {
+class GamePanel extends JPanel {
     private BoardPanel boardPanel;
     FeedBackPanel feedBackPanel;
     private Board board;
     private ArrayList<GameState> gameStates = new ArrayList<>();
 
+    @SuppressWarnings("FieldCanBeLocal")
     private static String black = "black";
     private static String white = "white";
 
-    GridBagConstraints gc = new GridBagConstraints();
+    private GridBagConstraints gc = new GridBagConstraints();
 
-    public GamePanel() {
+    GamePanel() {
         super();
         setBackground(Color.CYAN);
         setLayout(new GridBagLayout());
@@ -50,6 +51,7 @@ public class GamePanel extends JPanel {
         add(boardPanel, gc);
     }
 
+    @SuppressWarnings({"ConstantConditions", "unused"})
     private void setPiecesTest(){
 
         board.getSpace(new Position(Position.parsePosition("H8"))).setPiece(new King(black));
@@ -103,7 +105,7 @@ public class GamePanel extends JPanel {
         }
     }
 
-    GameState getCurrentState(){
+    private GameState getCurrentState(){
         return gameStates.get(gameStates.size() - 1);
     }
 
@@ -111,7 +113,4 @@ public class GamePanel extends JPanel {
         return getCurrentState().getBoard();
     }
 
-    public void setBoardPanel(BoardPanel b){
-        boardPanel=b;
-    }
 }

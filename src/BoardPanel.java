@@ -9,8 +9,6 @@ import java.util.HashSet;
 
 public class BoardPanel extends JPanel {
 
-    private int width;      //Represents the max number of columns.
-    private int height;     //Represents the max number of rows.
     private BoardButton[][] boardButtons;
 
     private Position selectedPosition; //Piece that corresponds to the highlighted spaces
@@ -18,24 +16,22 @@ public class BoardPanel extends JPanel {
     private GameState currentState;
     private ArrayList<GameState> gameStates = new ArrayList<>();
     private boolean canPlay = true;
-    private GamePanel gamePanel;
     private Board board;
 
     @SuppressWarnings("Duplicates")
-    public BoardPanel(int w, int h, GamePanel gamePanel) {
+    BoardPanel(int w, int h, GamePanel gamePanel) {
         super(new GridLayout(w, h));
-        width = w;
-        height = h;
+        //Represents the max number of columns.
+        //Represents the max number of rows.
         setPreferredSize(new Dimension(700, 700));
         setMinimumSize(new Dimension(650, 650));
         setBackground(Color.CYAN);
 
 
-        boardButtons = new BoardButton[height][width];
+        boardButtons = new BoardButton[h][w];
         ColorGenerator color = new ColorGenerator();
 
         this.board = gamePanel.getBoard();
-        this.gamePanel = gamePanel;
         currentState = new GameState("white", board, null);
         gameStates.add(currentState);
 
@@ -43,8 +39,8 @@ public class BoardPanel extends JPanel {
         System.out.println("It is " + currentState.getTurnColor() + "'s turn.");
         gamePanel.feedBackPanel.addlabel("It is " + currentState.getTurnColor() + "'s turn.");
 
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
+        for (int i = 0; i < h; i++) {
+            for (int j = 0; j < w; j++) {
                 Piece piece;
                 Space s;
                 if (board.getSpace(i, j) != null) {
@@ -79,11 +75,10 @@ public class BoardPanel extends JPanel {
 
                                 Piece currentPiece = board.getSpace(selectedPosition.row, selectedPosition.col).getPiece();
                                 Piece previousPiece;
-                                if(board.getSpace(currentPosition).getPiece()!=null){
+                                if (board.getSpace(currentPosition).getPiece() != null) {
                                     previousPiece = board.getSpace(currentPosition).getPiece();
-                                }
-                                else{
-                                    previousPiece =null;
+                                } else {
+                                    previousPiece = null;
                                 }
 
                                 currentPiece.move(board, selectedPosition, currentPosition);
@@ -115,8 +110,8 @@ public class BoardPanel extends JPanel {
                                     oldButton.setNewIcon(null);
                                     oldButton.updateUI();
                                     //In case pawn gets turned into a a queen.
-                                    if(currentPiece!=null && currentPiece.getType()==Piece.ChessPieceType.PAWN){
-                                        currentPiece= board.getSpace(currentPosition).getPiece();
+                                    if (currentPiece != null && currentPiece.getType() == Piece.ChessPieceType.PAWN) {
+                                        currentPiece = board.getSpace(currentPosition).getPiece();
                                     }
                                     boardButtons[currentPosition.row][currentPosition.col].setNewIcon(currentPiece);
                                     boardButtons[currentPosition.row][currentPosition.col].updateUI();
@@ -155,7 +150,7 @@ public class BoardPanel extends JPanel {
                                             gamePanel.feedBackPanel.addlabel(currentState.getTurnColor() + " is in check.");
                                         }
 
-                                    } else if (!hasAvailableMove){
+                                    } else if (!hasAvailableMove) {
                                         gamePanel.feedBackPanel.addlabel("It's a stalemate.");
                                         gamePanel.feedBackPanel.addlabel("The game has ended in a draw.");
 
@@ -215,14 +210,14 @@ public class BoardPanel extends JPanel {
         }
     }
 
-    public void highlightSpaces(HashSet<Position> spacesToHighlight) {
+    private void highlightSpaces(HashSet<Position> spacesToHighlight) {
         highlightedSpaces = spacesToHighlight;
         for (Position p : highlightedSpaces) {
             boardButtons[p.row][p.col].setHighlight(true);
         }
     }
 
-    public void unhighlightSpaces() {
+    private void unhighlightSpaces() {
         for (Position p : highlightedSpaces) {
             boardButtons[p.row][p.col].setHighlight(false);
         }
@@ -230,17 +225,12 @@ public class BoardPanel extends JPanel {
         selectedPosition = null;
     }
 
-    public void gameOver(String winnerColor) {
-        //TODO: change colors to red/blue
+    private void gameOver(String winnerColor) {
         String os = System.getProperty("os.name");
         String[] options = {"New game", "Exit to main menu", "Exit to " + os};
-        String statusMessage = (winnerColor != null)? capitalize(winnerColor) + " wins!" : "It's a draw!";
-        JOptionPane.showOptionDialog(this, "Game over", statusMessage, JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+        String statusMessage = (winnerColor != null) ? winnerColor.equals("white") ? "Red" : "Blue" + " wins!" : "It's a draw!";
+        JOptionPane.showOptionDialog(this, statusMessage, "Game over", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
         //TODO: make the options do what they say they do
-    }
-
-    public static String capitalize(String str) {
-        return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 
     public BoardButton getButton(int x, int y) {
