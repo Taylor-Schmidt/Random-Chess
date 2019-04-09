@@ -100,6 +100,9 @@ public class BoardPanel extends JPanel {
 
                                     oldButton.setNewIcon(null);
                                     oldButton.updateUI();
+                                    if(currentPiece.getType()==Piece.ChessPieceType.PAWN){
+                                        currentPiece= board.getSpace(currentPosition).getPiece();
+                                    }
                                     button.setNewIcon(currentPiece);
 
                                     //If a piece was captured, adds that piece to the list of captured pieces in the state.

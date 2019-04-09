@@ -113,6 +113,7 @@ public abstract class Piece {
              board.getSpace(currentRow, currentCol).setPiece(null);
              if(getType()==ChessPieceType.PAWN) {
                  setMoveCount(getMoveCount()+1);
+                 board.pawnToQueen(getColor(), newRow, newCol);
              }
 
              AudioManager.getInstance().playClick();

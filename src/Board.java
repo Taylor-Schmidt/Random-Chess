@@ -300,4 +300,27 @@ public class Board {
         result = 31 * result + Arrays.hashCode(b);
         return result;
     }
+
+    public void pawnToQueen(String color, int row, int col){
+        Position position;
+        boolean topOrBottom = true;
+        for(int i = 1; i<getRows(); i++){
+            if(color.equals("white")){
+                position = new Position(row-i,col);
+                if(positionIsWithinBounds(position) && getSpace(position)!=null) {
+                    topOrBottom = false;
+                }
+            }
+            else{
+                position = new Position(row+i,col);
+                if(positionIsWithinBounds(position) && getSpace(position)!=null) {
+                    topOrBottom = false;
+                }
+            }
+
+        }
+        if(topOrBottom){
+            setSpace(new Space(new Queen(color)), row, col);
+        }
+    }
 }

@@ -23,7 +23,11 @@ public class Space {
         //5% chance of generating a bomb space.
         if(randInt==1){
             effect = new BombEffect();
-            System.out.println("Created bomb tile.");
+            //System.out.println("Created bomb tile.");
+        }
+        else if(randInt==2){
+            effect = new SwitchPieceEffect();
+            //System.out.println("Created SwitchPiece tile.");
         }
         else{
             effect=null;

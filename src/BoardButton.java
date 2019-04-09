@@ -178,16 +178,25 @@ public class BoardButton extends JButton {
             }
         }
 
-        if (space != null && space.getEffect() != null && space.getEffect().getType() == Effect.EffectType.Bomb) {
-            BufferedImage bomb;
-            try {
-                bomb = ImageIO.read(new File("assets/board_tile_full.png"));
-                drawBackground(g, bomb);
-                setNewIcon(space.getPiece());
-                //System.out.println("Drew a boardButton with a bomb on it.");
-            } catch (IOException e) {
+        if (space != null && space.getEffect() != null) {
+            BufferedImage effectImage;
+            if(space.getEffect().getType() == Effect.EffectType.Bomb) {
 
+                try {
+                    effectImage = ImageIO.read(new File("assets/board_tile_full.png"));
+                    drawBackground(g, effectImage);
+                    //System.out.println("Drew a boardButton with a bomb on it.");
+                } catch (IOException e) { }
             }
+            else if(space.getEffect().getType() == Effect.EffectType.SwitchPiece) {
+                try {
+                    effectImage = ImageIO.read(new File("assets/board_tile_full_rough.png"));
+                    drawBackground(g, effectImage);
+                    //System.out.println("Drew a boardButton with a bomb on it.");
+                } catch (IOException e) { }
+            }
+            setNewIcon(space.getPiece());
+
         }
 
         if (pieceIcon != null) {

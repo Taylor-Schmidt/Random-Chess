@@ -1,7 +1,7 @@
 public abstract class Effect {
 
     public enum EffectType{
-        Bomb
+        Bomb, SwitchPiece
     }
 
     public abstract void doEffect(Space s);
