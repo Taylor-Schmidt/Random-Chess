@@ -16,6 +16,7 @@ class AudioManager {
         return audioManager;
     }
 
+    //TODO: plays twice sometimes
     void playClick() {
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(clickFile);

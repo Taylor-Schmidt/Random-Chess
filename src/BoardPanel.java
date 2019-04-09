@@ -28,6 +28,9 @@ public class BoardPanel extends JPanel {
         height = h;
         setPreferredSize(new Dimension(700, 700));
         setMinimumSize(new Dimension(650, 650));
+        setBackground(Color.CYAN);
+
+
         boardButtons = new BoardButton[height][width];
         ColorGenerator color = new ColorGenerator();
 
@@ -244,80 +247,13 @@ public class BoardPanel extends JPanel {
         return boardButtons[x][y];
     }
 
-    public void resetGame() {
-        for (int i = 0; i < board.getRows(); i++) {
-            for (int j = 0; j < board.getCols(); j++) {
-                if (board.getSpace(i, j) != null) {
-                    board.getSpace(i, j).setPiece(null);
-                    boardButtons[i][j].setNewIcon(null);
-                }
-            }
-        }
-
-        canPlay = true;
-        Space space;
-        space = new Space(new Rook("black"));
-        board.setSpace(space, 4, 4);
-        space = new Space(new Knight("black"));
-        board.setSpace(space, 4, 5);
-        space = new Space(new Bishop("black"));
-        board.setSpace(space, 4, 6);
-        space = new Space(new Queen("black"));
-        board.setSpace(space, 4, 7);
-        space = new Space(new King("black"));
-        board.setSpace(space, 4, 8);
-        space = new Space(new Bishop("black"));
-        board.setSpace(space, 4, 9);
-        space = new Space(new Knight("black"));
-        board.setSpace(space, 4, 10);
-        space = new Space(new Rook("black"));
-        board.setSpace(space, 4, 11);
-        for (int i = 4; i < 12; i++) {
-            space = new Space(new Pawn("black"));
-            board.setSpace(space, 5, i);
-        }
-
-        space = new Space(new Rook("white"));
-        board.setSpace(space, 11, 4);
-        space = new Space(new Knight("white"));
-        board.setSpace(space, 11, 5);
-        space = new Space(new Bishop("white"));
-        board.setSpace(space, 11, 6);
-        space = new Space(new King("white"));
-        board.setSpace(space, 11, 7);
-        space = new Space(new Queen("white"));
-        board.setSpace(space, 11, 8);
-        space = new Space(new Bishop("white"));
-        board.setSpace(space, 11, 9);
-        space = new Space(new Knight("white"));
-        board.setSpace(space, 11, 10);
-        space = new Space(new Rook("white"));
-        board.setSpace(space, 11, 11);
-        for (int i = 4; i < 12; i++) {
-            space = new Space(new Pawn("white"));
-            board.setSpace(space, 10, i);
-        }
-
-        for (int i = 0; i < board.getRows(); i++) {
-            for (int j = 0; j < board.getCols(); j++) {
-                if (board.getSpace(i, j) != null) {
-                    boardButtons[i][j].setNewIcon(board.getSpace(i, j).getPiece());
-                    boardButtons[i][j].updateUI();
-                }
-            }
-        }
-
-        if (currentState.getTurnColor().equals("black"))
-            currentState.changeTurn();
-
-    }
-
     /**
      * Indicates whether a Three-Fold Repetition Draw has occurred.
      * A Three-Fold Repetition is when the same position occurs three times, with the same player to move.
      *
      * @return true if the repetition has occurred.
      */
+    @SuppressWarnings("Duplicates")
     private boolean isThreeFoldDraw() {
         if (gameStates.size() > 8) {
             GameState currentState = gameStates.get(gameStates.size() - 1);

@@ -16,30 +16,29 @@ public class BoardButton extends JButton {
     private ImageIcon pieceIcon;
     private double paddingRatio;
 
-    private static BufferedImage lGrass1;
-    private static BufferedImage lGrass2;
-    private static BufferedImage lGrass3;
-    private static BufferedImage lGrass4;
-
-    private static BufferedImage dGrass1;
-    private static BufferedImage dGrass2;
-    private static BufferedImage dGrass3;
-    private static BufferedImage dGrass4;
-    private static BufferedImage dGrass5;
-    private static BufferedImage Boarder1;
+    private static BufferedImage[] lights;
+    private static BufferedImage[] darks;
+    private static BufferedImage[] dirts;
+    private static BufferedImage bombSprite;
+    private static BufferedImage morphSprite;
 
     static {
         try {
-            lGrass1 = ImageIO.read(new File("assets/Layer 2.png"));
-            lGrass2 = ImageIO.read(new File("assets/Layer 4.png"));
-            lGrass3 = ImageIO.read(new File("assets/Layer 6.png"));
-            lGrass4 = ImageIO.read(new File("assets/Layer 8.png"));
-            dGrass1 = ImageIO.read(new File("assets/Layer 1.png"));
-            dGrass2 = ImageIO.read(new File("assets/Layer 3.png"));
-            dGrass3 = ImageIO.read(new File("assets/Layer 5.png"));
-            dGrass4 = ImageIO.read(new File("assets/Layer 7.png"));
-            dGrass5 = ImageIO.read(new File("assets/Layer 9.png"));
-            Boarder1 = ImageIO.read(new File("assets/Boarder1.png"));
+            lights = new BufferedImage[]{
+                    ImageIO.read(new File("assets/board_tile_full.png")),
+                    ImageIO.read(new File("assets/board_tile_full.png"))
+            };
+            darks = new BufferedImage[] {
+                    ImageIO.read(new File("assets/board_tile_empty.png"))
+            };
+            dirts = new BufferedImage[]{
+//                    ImageIO.read(new File("assets/board_tile_empty_dirt1.png")),
+//                    ImageIO.read(new File("assets/board_tile_empty_dirt2.png")),
+                    ImageIO.read(new File("assets/board_tile_empty_dirt3.png")),
+                    ImageIO.read(new File("assets/board_tile_empty_dirt4.png")),
+            };
+            bombSprite = ImageIO.read(new File("assets/board_tile_bomb.png"));
+            morphSprite = ImageIO.read(new File("assets/board_tile_morph.png"));
         } catch (IOException ex) {
             // handle exception...
         }
@@ -137,66 +136,29 @@ public class BoardButton extends JButton {
         super.paintComponent(g);
 
         if (space != null) {
-            if (!highlighted) {
-
-                if (0 == ((xPos + yPos) % 2)) {
-                    switch (random % 4) {
-                        case 0:
-                            drawBackground(g, lGrass1);
-                            break;
-                        case 1:
-                            drawBackground(g, lGrass2);
-                            break;
-                        case 2:
-                            drawBackground(g, lGrass3);
-                            break;
-                        case 3:
-                            drawBackground(g, lGrass4);
-                            break;
-                    }
-                } else {
-                    switch (random % 5) {
-                        case 0:
-                            drawBackground(g, dGrass1);
-                            break;
-                        case 1:
-                            drawBackground(g, dGrass2);
-                            break;
-                        case 2:
-                            drawBackground(g, dGrass3);
-                            break;
-                        case 3:
-                            drawBackground(g, dGrass4);
-                            break;
-                        case 4:
-                            drawBackground(g, dGrass5);
-                            break;
-                    }
+            if (space.getEffect() != null){
+                switch (space.getEffect().getType()){
+                    case Bomb:
+                        drawBackground(g, bombSprite);
+                        break;
+                    case SwitchPiece:
+                        drawBackground(g, morphSprite);
+                        break;
                 }
             } else {
-                setBackground(selectedColor);
-            }
-        }
+                if (!highlighted) {
 
-        if (space != null && space.getEffect() != null) {
-            BufferedImage effectImage;
-            if(space.getEffect().getType() == Effect.EffectType.Bomb) {
-
-                try {
-                    effectImage = ImageIO.read(new File("assets/board_tile_bomb.png"));
-                    drawBackground(g, effectImage);
-                    //System.out.println("Drew a boardButton with a bomb on it.");
-                } catch (IOException e) { }
+                    if (0 == ((xPos + yPos) % 2)) {
+                        drawBackground(g, lights[random % lights.length]);
+                    } else {
+                        drawBackground(g, darks[random % darks.length]);
+                    }
+                } else {
+                    setBackground(selectedColor);
+                }
             }
-            else if(space.getEffect().getType() == Effect.EffectType.SwitchPiece) {
-                try {
-                    effectImage = ImageIO.read(new File("assets/board_tile_morph.png"));
-                    drawBackground(g, effectImage);
-                    //System.out.println("Drew a boardButton with a bomb on it.");
-                } catch (IOException e) { }
-            }
-            setNewIcon(space.getPiece());
-
+        } else {
+            drawBackground(g, dirts[random % dirts.length]);
         }
 
         if (pieceIcon != null) {
