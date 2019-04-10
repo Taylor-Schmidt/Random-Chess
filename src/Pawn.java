@@ -55,7 +55,8 @@ public class Pawn extends Piece {
         if(moveCount==0){
             position= new Position(row+(direction*2), col);
             if(legalMove(board, position) && board.getSpace(position).getPiece()==null) {
-                availablePositions.add(position);
+                if(board.getSpace(position.row-direction,position.col).getPiece()==null)
+                    availablePositions.add(position);
             }
         }
 
