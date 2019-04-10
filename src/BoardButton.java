@@ -16,25 +16,29 @@ public class BoardButton extends JButton {
     private ImageIcon pieceIcon;
     private double paddingRatio;
 
-    private static BufferedImage[] lights;
-    private static BufferedImage[] darks;
-    private static BufferedImage[] dirts;
+    private static BufferedImage[] lightGrassTiles;
+    private static BufferedImage[] darkGrassTiles;
+    private static BufferedImage[] lightDirtTiles;
+    private static BufferedImage[] darkDirtTiles;
     private static BufferedImage bombSprite;
     private static BufferedImage morphSprite;
 
     static {
         try {
-            lights = new BufferedImage[]{
+            lightGrassTiles = new BufferedImage[]{
                     ImageIO.read(new File("assets/board_tile_full.png")),
-                    ImageIO.read(new File("assets/board_tile_full.png"))
+                    ImageIO.read(new File("assets/board_tile_full3.png"))
             };
-            darks = new BufferedImage[] {
-                    ImageIO.read(new File("assets/board_tile_empty.png"))
+            darkGrassTiles = new BufferedImage[]{
+                    ImageIO.read(new File("assets/board_tile_full2.png")),
+                    ImageIO.read(new File("assets/board_tile_full4.png"))
             };
-            dirts = new BufferedImage[]{
-//                    ImageIO.read(new File("assets/board_tile_empty_dirt1.png")),
-//                    ImageIO.read(new File("assets/board_tile_empty_dirt2.png")),
+            lightDirtTiles = new BufferedImage[]{
+                    ImageIO.read(new File("assets/board_tile_empty_dirt1.png")),
                     ImageIO.read(new File("assets/board_tile_empty_dirt3.png")),
+            };
+            darkDirtTiles = new BufferedImage[]{
+                    ImageIO.read(new File("assets/board_tile_empty_dirt2.png")),
                     ImageIO.read(new File("assets/board_tile_empty_dirt4.png")),
             };
             bombSprite = ImageIO.read(new File("assets/board_tile_bomb.png"));
@@ -136,30 +140,71 @@ public class BoardButton extends JButton {
         super.paintComponent(g);
 
         if (space != null) {
-            if (space.getEffect() != null){
-                switch (space.getEffect().getType()){
-                    case Bomb:
-                        drawBackground(g, bombSprite);
-                        break;
-                    case SwitchPiece:
-                        drawBackground(g, morphSprite);
-                        break;
+
+
+
+            if (!highlighted) {
+
+                if (((xPos + yPos) % 2) == 0) {
+                    drawBackground(g, lightGrassTiles[random % lightGrassTiles.length]);
+                } else {
+                    drawBackground(g, darkGrassTiles[random % darkGrassTiles.length]);
+                }
+
+                if (space.getEffect() != null) {
+                    BufferedImage effectIcon;
+                    switch (space.getEffect().getType()) {
+                        default:
+                        case Bomb:
+                            effectIcon = bombSprite;
+                            break;
+                        case SwitchPiece:
+                            effectIcon =  morphSprite;
+                            break;
+                    }
+
+                    double widthToHeightRatio = effectIcon.getWidth() / (effectIcon.getHeight() * 1.0); //float div with ints
+                    int width;
+                    int height;
+                    int x;
+                    int y;
+
+                    double effectPaddingRatio = 0.2;
+
+                    double internalSize = 1 - (2 * effectPaddingRatio);
+                    if (widthToHeightRatio > 1) {//width is bigger
+                        width = (int) (getWidth() * internalSize);
+                        height = (int) (width / widthToHeightRatio);
+                        x = (int) (getWidth() * effectPaddingRatio);
+                        y = (int) (getHeight() * effectPaddingRatio + (getHeight() * internalSize - height) / 2.0);
+                    } else if (widthToHeightRatio < 1) {
+                        height = (int) (getHeight() * internalSize);
+                        width = (int) (height * widthToHeightRatio);
+                        x = (int) (getWidth() * effectPaddingRatio + (getWidth() * internalSize - width) / 2.0);
+                        y = (int) (getHeight() * effectPaddingRatio);
+                    } else {
+                        width = (int) (getWidth() * internalSize);
+                        height = (int) (getHeight() * internalSize);
+                        x = (int) (getWidth() * effectPaddingRatio);
+                        y = (int) (getHeight() * effectPaddingRatio);
+                    }
+                    g.drawImage(effectIcon, x, y, width, height, this);
                 }
             } else {
-                if (!highlighted) {
-
-                    if (0 == ((xPos + yPos) % 2)) {
-                        drawBackground(g, lights[random % lights.length]);
-                    } else {
-                        drawBackground(g, darks[random % darks.length]);
-                    }
-                } else {
-                    setBackground(selectedColor);
-                }
+                setBackground(selectedColor);
             }
+
+
+
         } else {
-            drawBackground(g, dirts[random % dirts.length]);
+            if (((xPos + yPos) % 2) == 0) {
+                drawBackground(g, lightDirtTiles[random % lightDirtTiles.length]);
+            } else {
+                drawBackground(g, darkDirtTiles[random % darkDirtTiles.length]);
+            }
         }
+
+
 
         if (pieceIcon != null) {
 //            System.out.println(getHeight() + "x" + getWidth());
