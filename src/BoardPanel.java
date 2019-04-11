@@ -41,7 +41,7 @@ public class BoardPanel extends JPanel {
 
         for (int i = 0; i < h; i++) {
             for (int j = 0; j < w; j++) {
-                Space s = board.getSpace(i,j);
+                Space s = board.getSpace(i, j);
                 Piece piece;
                 if (s != null) {
                     piece = s.getPiece();
@@ -55,6 +55,7 @@ public class BoardPanel extends JPanel {
                 int finalJ = j;
                 button.addActionListener(e -> {
                     System.out.println("Clicked piece at " + button.getXPos() + " " + button.getYPos());
+                    AudioManager.getInstance().playClick();
 
                     Position currentPosition = new Position(finalI, finalJ);
 
