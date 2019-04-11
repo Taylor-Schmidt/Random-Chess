@@ -50,7 +50,6 @@ public class Pawn extends Piece {
             }
         }
 
-        System.out.println("moveCount = " + moveCount);
         if (moveCount == 0) {
             position = new Position(row + (direction * 2), col);
             if (legalMove(board, position) && board.getSpace(position).getPiece() == null) {
@@ -64,13 +63,11 @@ public class Pawn extends Piece {
 
     @Override
     Status move(Board board, Position pBefore, Position pAfter) {
-        System.out.println("moving");
 
         boolean legalMove = getAvailableMoves(board, pBefore).contains(pAfter);
         Status status = super.move(board, pBefore, pAfter);
 
         if (legalMove) {
-            System.out.println("incrementing move Count");
             moveCount++;
             board.pawnToQueen(getColor(), pAfter.row, pAfter.col);
         }

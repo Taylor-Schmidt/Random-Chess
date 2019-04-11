@@ -90,88 +90,75 @@ public class BoardPanel extends JPanel {
                                     currentPiece = board.getSpace(currentPosition).getPiece();
                                 }
 
-                                //TODO: this logic should be incorporated into highlightSpaces()
-                                if (board.kingInCheck(currentState.getTurnColor())) {
-                                    gamePanel.feedBackPanel.addlabel("You cannot move there! You cannot put your king in check.");
+                                //Updates board in currentState.
+                                currentState = new GameState(currentState.getTurnColor(), board, currentPosition);
 
-                                    //updates references to refer to the last legal state.
-                                    currentState = new GameState(gameStates.get(gameStates.size() - 1));
-                                    board = currentState.getBoard();
+                                BoardButton oldButton = boardButtons[selectedPosition.row][selectedPosition.col];
 
-                                    //Remove state to prevent duplicates; it is added again at the beginning of the loop
-                                    gameStates.remove(gameStates.size() - 1);
-                                } else {
+                                oldButton.setNewIcon(null);
+                                oldButton.updateUI();
+                                //In case pawn gets turned into a a queen.
+                                if (currentPiece != null && currentPiece.getType() == Piece.ChessPieceType.PAWN) {
+                                    currentPiece = board.getSpace(currentPosition).getPiece();
+                                }
+                                boardButtons[currentPosition.row][currentPosition.col].setNewIcon(currentPiece);
+                                boardButtons[currentPosition.row][currentPosition.col].updateUI();
 
-                                    //Updates board in currentState.
-                                    currentState = new GameState(currentState.getTurnColor(), board, currentPosition);
+                                //If a piece was captured, adds that piece to the list of captured pieces in the state.
+                                //Piece previousPiece = gameStates.get(gameStates.size() - 1).getBoard().getSpace(currentPosition).getPiece();
 
-                                    BoardButton oldButton = boardButtons[selectedPosition.row][selectedPosition.col];
-
-                                    oldButton.setNewIcon(null);
-                                    oldButton.updateUI();
-                                    //In case pawn gets turned into a a queen.
-                                    if (currentPiece != null && currentPiece.getType() == Piece.ChessPieceType.PAWN) {
-                                        currentPiece = board.getSpace(currentPosition).getPiece();
-                                    }
-                                    boardButtons[currentPosition.row][currentPosition.col].setNewIcon(currentPiece);
-                                    boardButtons[currentPosition.row][currentPosition.col].updateUI();
-
-                                    //If a piece was captured, adds that piece to the list of captured pieces in the state.
-                                    //Piece previousPiece = gameStates.get(gameStates.size() - 1).getBoard().getSpace(currentPosition).getPiece();
-
-                                    if (previousPiece != null) {
-                                        currentState.addTakenPiece(previousPiece);
-                                        currentState.resetFiftyMoveDrawCounter();
+                                if (previousPiece != null) {
+                                    currentState.addTakenPiece(previousPiece);
+                                    currentState.resetFiftyMoveDrawCounter();
                                     /*} else if (currentPiece.getType() == Piece.ChessPieceType.PAWN) {
                                         currentState.resetFiftyMoveDrawCounter(); */
-                                    } else {
-                                        currentState.incrementFiftyMoveDrawCounter();
-                                    }
-
-                                    unhighlightSpaces();
-                                    currentState.changeTurn();
-
-                                    //Checks if the current player is in check and alerts them if they are at the start of their turn.
-                                    boolean isInCheck = board.kingInCheck(currentState.getTurnColor());
-                                    boolean hasAvailableMove = currentState.hasAvailableMove(board);
-
-                                    if (isInCheck) {
-                                        if (!hasAvailableMove) {
-                                            System.out.println("Checkmate; " + currentState.getTurnColor() + " loses.");
-                                            gamePanel.feedBackPanel.addlabel(currentState.getTurnColor() + " is in checkmate.");
-                                            canPlay = false;
-
-                                            //TODO: might have to add turn switch
-                                            gameOver(currentState.getTurnColor());
-
-                                            gamePanel.newGame();
-                                        } else {
-                                            System.out.println(currentState.getTurnColor() + " is in check.");
-                                            gamePanel.feedBackPanel.addlabel(currentState.getTurnColor() + " is in check.");
-                                        }
-
-                                    } else if (!hasAvailableMove) {
-                                        gamePanel.feedBackPanel.addlabel("It's a stalemate.");
-                                        gamePanel.feedBackPanel.addlabel("The game has ended in a draw.");
-
-                                        gameOver(null);
-                                    } else if (isThreeFoldDraw()) {
-                                        gamePanel.feedBackPanel.addlabel("It's a threefold repetition; the same " +
-                                                "position occurred three times, with the same player to move.");
-                                        gamePanel.feedBackPanel.addlabel("The game has ended in a draw.");
-
-                                        gameOver(null);
-
-                                    } else if (currentState.fiftyMoveDraw()) {
-                                        gamePanel.feedBackPanel.addlabel("There has been fifty moves without a capture or a pawn moving.");
-                                        gamePanel.feedBackPanel.addlabel("The game has ended in a draw.");
-
-                                        gameOver(null);
-                                    } else {
-                                        System.out.println("It is " + currentState.getTurnColor() + "'s turn.");
-                                        gamePanel.feedBackPanel.addlabel("It is " + currentState.getTurnColor() + "'s turn.");
-                                    }
+                                } else {
+                                    currentState.incrementFiftyMoveDrawCounter();
                                 }
+
+                                unhighlightSpaces();
+                                currentState.changeTurn();
+
+                                //Checks if the current player is in check and alerts them if they are at the start of their turn.
+                                boolean isInCheck = board.kingInCheck(currentState.getTurnColor());
+                                boolean hasAvailableMove = currentState.hasAvailableMove(board);
+
+                                if (isInCheck) {
+                                    if (!hasAvailableMove) {
+                                        System.out.println("Checkmate; " + currentState.getTurnColor() + " loses.");
+                                        gamePanel.feedBackPanel.addlabel(currentState.getTurnColor() + " is in checkmate.");
+                                        canPlay = false;
+
+                                        gameOver(currentState.getTurnColor());
+
+                                        gamePanel.newGame();
+                                    } else {
+                                        System.out.println(currentState.getTurnColor() + " is in check.");
+                                        gamePanel.feedBackPanel.addlabel(currentState.getTurnColor() + " is in check.");
+                                    }
+
+                                } else if (!hasAvailableMove) {
+                                    gamePanel.feedBackPanel.addlabel("It's a stalemate.");
+                                    gamePanel.feedBackPanel.addlabel("The game has ended in a draw.");
+
+                                    gameOver(null);
+                                } else if (isThreeFoldDraw()) {
+                                    gamePanel.feedBackPanel.addlabel("It's a threefold repetition; the same " +
+                                            "position occurred three times, with the same player to move.");
+                                    gamePanel.feedBackPanel.addlabel("The game has ended in a draw.");
+
+                                    gameOver(null);
+
+                                } else if (currentState.fiftyMoveDraw()) {
+                                    gamePanel.feedBackPanel.addlabel("There has been fifty moves without a capture or a pawn moving.");
+                                    gamePanel.feedBackPanel.addlabel("The game has ended in a draw.");
+
+                                    gameOver(null);
+                                } else {
+                                    System.out.println("It is " + currentState.getTurnColor() + "'s turn.");
+                                    gamePanel.feedBackPanel.addlabel("It is " + currentState.getTurnColor() + "'s turn.");
+                                }
+
                             } else {
                                 unhighlightSpaces();
 
@@ -245,7 +232,11 @@ public class BoardPanel extends JPanel {
      */
     @SuppressWarnings("Duplicates")
     private boolean isThreeFoldDraw() {
+        System.out.println(currentState);
+        System.out.println(gameStates);
+
         if (gameStates.size() > 8) {
+
             GameState currentState = gameStates.get(gameStates.size() - 1);
 
             int repetitions = 0;

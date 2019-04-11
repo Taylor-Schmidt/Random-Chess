@@ -291,7 +291,7 @@ public class Board {
         Board board = (Board) o;
         return rows == board.rows &&
                 cols == board.cols &&
-                Arrays.equals(b, board.b);
+                Arrays.deepEquals(b, board.b);
     }
 
     @Override
