@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -130,8 +131,6 @@ public class BoardPanel extends JPanel {
                                         canPlay = false;
 
                                         gameOver(currentState.getTurnColor());
-
-                                        gamePanel.newGame();
                                     } else {
                                         System.out.println(currentState.getTurnColor() + " is in check.");
                                         gamePanel.feedBackPanel.addlabel(currentState.getTurnColor() + " is in check.");
@@ -212,12 +211,33 @@ public class BoardPanel extends JPanel {
         selectedPosition = null;
     }
 
+    private ArrayList<ActionListener> newGameListeners = new ArrayList<>();
+
+    void addNewGameListener(ActionListener e){
+        newGameListeners.add(e);
+    }
+
     private void gameOver(String winnerColor) {
         String os = System.getProperty("os.name");
         String[] options = {"New game", "Exit to main menu", "Exit to " + os};
         String statusMessage = (winnerColor != null) ? (winnerColor.equals("white") ? "Blue" : "Red") + " wins!" : "It's a draw!";
-        JOptionPane.showOptionDialog(this, statusMessage, "Game over", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+        int choice = JOptionPane.showOptionDialog(this, statusMessage, "Game over", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
         //TODO: make the options do what they say they do
+        switch(choice) {
+            case 0:
+                callNewGameListeners();
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+        }
+    }
+
+    private void callNewGameListeners(){
+        for (ActionListener listener: newGameListeners) {
+            listener.actionPerformed(null);
+        }
     }
 
     public BoardButton getButton(int x, int y) {

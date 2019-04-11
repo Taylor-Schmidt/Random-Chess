@@ -48,6 +48,7 @@ class GamePanel extends JPanel {
         }
 
         boardPanel = new BoardPanel(board.getRows(), board.getCols(), this);
+        boardPanel.addNewGameListener(e -> newGame());
         add(boardPanel, gc);
     }
 
@@ -89,9 +90,9 @@ class GamePanel extends JPanel {
         board.setSpace(space, 11, 5);
         space = new Space(new Bishop("white"));
         board.setSpace(space, 11, 6);
-        space = new Space(new King("white"));
-        board.setSpace(space, 11, 7);
         space = new Space(new Queen("white"));
+        board.setSpace(space, 11, 7);
+        space = new Space(new King("white"));
         board.setSpace(space, 11, 8);
         space = new Space(new Bishop("white"));
         board.setSpace(space, 11, 9);
