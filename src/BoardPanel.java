@@ -19,6 +19,7 @@ public class BoardPanel extends JPanel {
     private boolean canPlay = true;
     private Board board;
 
+    private ArrayList<ActionListener> changeTurnListeners = new ArrayList<>();
     private ArrayList<ActionListener> newGameListeners = new ArrayList<>();
 
 
@@ -122,6 +123,7 @@ public class BoardPanel extends JPanel {
 
                                 unhighlightSpaces();
                                 currentState.changeTurn();
+                                callListeners(changeTurnListeners);
 
                                 //Checks if the current player is in check and alerts them if they are at the start of their turn.
                                 boolean isInCheck = board.kingInCheck(currentState.getTurnColor());
@@ -219,6 +221,10 @@ public class BoardPanel extends JPanel {
         newGameListeners.add(e);
     }
 
+    void addChangeTurnListener(ActionListener e) {
+        changeTurnListeners.add(e);
+    }
+
     private void gameOver(String winnerColor) {
         String os = System.getProperty("os.name");
         String[] options = {"New game", "Exit to main menu", "Exit to " + os};
@@ -227,7 +233,7 @@ public class BoardPanel extends JPanel {
         //TODO: make the options do what they say they do
         switch(choice) {
             case 0: //New game
-                callNewGameListeners();
+                callListeners(newGameListeners);
                 break;
             case 2: //Exit to menu
                 break;
@@ -236,8 +242,8 @@ public class BoardPanel extends JPanel {
         }
     }
 
-    private void callNewGameListeners(){
-        for (ActionListener listener: newGameListeners) {
+    private void callListeners(ArrayList<ActionListener> listeners){
+        for (ActionListener listener: listeners) {
             listener.actionPerformed(null);
         }
     }

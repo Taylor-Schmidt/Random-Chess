@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 /**
@@ -18,6 +19,8 @@ class GamePanel extends JPanel {
 
     private GridBagConstraints gc = new GridBagConstraints();
 
+    private ArrayList<ActionListener> turnChangeListeners = new ArrayList<>();
+
     GamePanel() {
         super();
         setBackground(Color.CYAN);
@@ -31,7 +34,7 @@ class GamePanel extends JPanel {
 
     }
 
-    void newGame() {
+    private void newGame() {
         //Creates BoardPanel
         board = new Board(true);
 
@@ -49,7 +52,23 @@ class GamePanel extends JPanel {
 
         boardPanel = new BoardPanel(board.getRows(), board.getCols(), this);
         boardPanel.addNewGameListener(e -> newGame());
+
+        boardPanel.addChangeTurnListener(e -> changeTurn());
         add(boardPanel, gc);
+    }
+
+    private void changeTurn() {
+        callListeners(turnChangeListeners);
+    }
+
+    private void callListeners(ArrayList<ActionListener> listeners) {
+        for (ActionListener listener : listeners) {
+            listener.actionPerformed(null);
+        }
+    }
+
+    void addTurnChangeListener(ActionListener e) {
+        turnChangeListeners.add(e);
     }
 
     @SuppressWarnings({"ConstantConditions", "unused"})
