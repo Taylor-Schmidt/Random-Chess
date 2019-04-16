@@ -6,6 +6,7 @@ public class SwitchPieceEffect extends Effect {
 
     public void doEffect(Space s){
         if(s.getPiece().getType()!=Piece.ChessPieceType.KING){
+            AudioManager.getInstance().playTele();
             String color = s.getPiece().getColor();
             Random randomNum = new Random();
             Piece newPiece;
