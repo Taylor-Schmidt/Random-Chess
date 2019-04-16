@@ -138,11 +138,7 @@ public class BoardButton extends JButton {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-
         if (space != null) {
-
-
-
             if (!highlighted) {
 
                 if (((xPos + yPos) % 2) == 0) {
@@ -193,9 +189,6 @@ public class BoardButton extends JButton {
             } else {
                 setBackground(selectedColor);
             }
-
-
-
         } else {
             if (((xPos + yPos) % 2) == 0) {
                 drawBackground(g, lightDirtTiles[random % lightDirtTiles.length]);
@@ -203,9 +196,6 @@ public class BoardButton extends JButton {
                 drawBackground(g, darkDirtTiles[random % darkDirtTiles.length]);
             }
         }
-
-
-
         if (pieceIcon != null) {
 //            System.out.println(getHeight() + "x" + getWidth());
             double widthToHeightRatio = pieceIcon.getIconWidth() / (pieceIcon.getIconHeight() * 1.0); //float div with ints
