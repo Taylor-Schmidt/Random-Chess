@@ -6,7 +6,8 @@ import java.io.File;
 
 class AudioManager {
     private static File clickFile = new File("assets/219069__annabloom__click1.wav");
-
+    private static File Boom = new File("assets/250712__aiwha__explosion.wav");
+    private static File Teleport = new File("assets/448226__inspectorj__explosion-8-bit-01.wav");
     private static final AudioManager audioManager = new AudioManager();
 
     private AudioManager() {
@@ -20,6 +21,30 @@ class AudioManager {
     void playClick() {
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(clickFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (Exception ex) {
+            System.out.println("Error with playing sound.");
+            ex.printStackTrace();
+        }
+    }
+
+    void playBoom() {
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(Boom);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (Exception ex) {
+            System.out.println("Error with playing sound.");
+            ex.printStackTrace();
+        }
+    }
+
+    void playTele() {
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(Teleport);
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             clip.start();

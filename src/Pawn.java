@@ -57,6 +57,13 @@ public class Pawn extends Piece {
                     availablePositions.add(position);
             }
         }
+    /*
+        if(legalMove(board, position) && board.getSpace(position).getPiece()==null){
+            if(board.getSpace(position.row,position.col+1).getPiece()!=null ||
+               board.getSpace(position.row,position.col-1).getPiece()!= null)
+                availablePositions.add(position);
+        }
+    */
 
         return availablePositions;
     }
