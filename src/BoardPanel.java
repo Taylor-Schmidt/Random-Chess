@@ -19,6 +19,9 @@ public class BoardPanel extends JPanel {
     private boolean canPlay = true;
     private Board board;
 
+    private ArrayList<ActionListener> newGameListeners = new ArrayList<>();
+
+
     @SuppressWarnings("Duplicates")
     BoardPanel(int w, int h, GamePanel gamePanel) {
         super(new GridLayout(w, h));
@@ -211,7 +214,6 @@ public class BoardPanel extends JPanel {
         selectedPosition = null;
     }
 
-    private ArrayList<ActionListener> newGameListeners = new ArrayList<>();
 
     void addNewGameListener(ActionListener e){
         newGameListeners.add(e);
@@ -224,12 +226,12 @@ public class BoardPanel extends JPanel {
         int choice = JOptionPane.showOptionDialog(this, statusMessage, "Game over", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
         //TODO: make the options do what they say they do
         switch(choice) {
-            case 0:
+            case 0: //New game
                 callNewGameListeners();
                 break;
-            case 2:
+            case 2: //Exit to menu
                 break;
-            case 3:
+            case 3: //Exit to OS
                 break;
         }
     }
