@@ -27,8 +27,8 @@ class GamePanel extends JPanel {
         setLayout(new GridBagLayout());
 
 
-        feedBackPanel = new FeedBackPanel();
-        add(feedBackPanel, gc);
+//        feedBackPanel = new FeedBackPanel();
+//        add(feedBackPanel, gc);
 
         newGame();
 
@@ -50,7 +50,7 @@ class GamePanel extends JPanel {
             remove(boardPanel);
         }
 
-        boardPanel = new BoardPanel(board.getRows(), board.getCols(), this);
+        boardPanel = new BoardPanel(board.getRows(), board.getCols(), board);
         boardPanel.addNewGameListener(e -> newGame());
 
         boardPanel.addChangeTurnListener(e -> changeTurn());

@@ -3,9 +3,12 @@ import java.awt.*;
 
 public class InfoPanel extends JPanel {
     private JLabel icon = new JLabel();
-    private static final ImageIcon black = new ImageIcon("assets/pawn_blue.png");
-    private static final ImageIcon white = new ImageIcon("assets/pawn_red.png");
-    private static final ImageIcon turnIcon = new ImageIcon("assets/turn_word.png");
+    private static ImageManager imageManager = ImageManager.getInstance();
+    private static final ImageIcon black = imageManager.getScaledImage("pawn_blue", 50, 50, 0);
+    private static final ImageIcon white = imageManager.getScaledImage("pawn_red", 50, 50, 0);
+    private static final ImageIcon turnIcon = imageManager.getImage("turn_word");
+
+    private String color;
 
     InfoPanel(String color) {
         super();
@@ -21,6 +24,8 @@ public class InfoPanel extends JPanel {
         gc.weightx = 1;
         gc.ipadx = 10;
 
+        this.color = color;
+
         setColor(color);
         add(icon, gc);
 
@@ -34,5 +39,15 @@ public class InfoPanel extends JPanel {
             icon.setIcon(white);
         }
         icon.updateUI();
+    }
+
+    void toggleColor(){
+        if (color.equals("black")) {
+            color = "white";
+        } else {
+            color = "black";
+        }
+
+        setColor(color);
     }
 }

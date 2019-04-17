@@ -17,14 +17,15 @@ public class BoardPanel extends JPanel {
     private GameState currentState;
     private ArrayList<GameState> gameStates = new ArrayList<>();
     private boolean canPlay = true;
-    private Board board;
 
     private ArrayList<ActionListener> changeTurnListeners = new ArrayList<>();
     private ArrayList<ActionListener> newGameListeners = new ArrayList<>();
 
+    private enum EndGameStates {CHECKMATE, STALEMATE, THREEFOLD_REPETITION, FIFTY_MOVE_DRAW}
+
 
     @SuppressWarnings("Duplicates")
-    BoardPanel(int w, int h, GamePanel gamePanel) {
+    BoardPanel(int w, int h, Board board) {
         super(new GridLayout(w, h));
         //Represents the max number of columns.
         //Represents the max number of rows.
@@ -36,13 +37,12 @@ public class BoardPanel extends JPanel {
         boardButtons = new BoardButton[h][w];
         ColorGenerator color = new ColorGenerator();
 
-        this.board = gamePanel.getBoard();
         currentState = new GameState("white", board, null);
         gameStates.add(currentState);
 
         new TextActuator().printBoard(board); //TextActuator as board debug print
         System.out.println("It is " + currentState.getTurnColor() + "'s turn.");
-        gamePanel.feedBackPanel.addlabel("It is " + currentState.getTurnColor() + "'s turn.");
+//        gamePanel.feedBackPanel.addlabel("It is " + currentState.getTurnColor() + "'s turn.");
 
         for (int i = 0; i < h; i++) {
             for (int j = 0; j < w; j++) {
@@ -91,7 +91,7 @@ public class BoardPanel extends JPanel {
                                 //If a piece lands on an effect tile, the effect is done.
                                 if (board.getSpace(currentPosition).getEffect() != null) {
                                     board.getSpace(currentPosition).doEffect(board.getSpace(currentPosition));
-                                    gamePanel.feedBackPanel.addlabel(currentState.getTurnColor() + " landed on a " + board.getSpace(currentPosition).getEffect().getType());
+//                                    gamePanel.feedBackPanel.addlabel(currentState.getTurnColor() + " landed on a " + board.getSpace(currentPosition).getEffect().getType());
                                     currentPiece = board.getSpace(currentPosition).getPiece();
                                 }
 
@@ -132,35 +132,35 @@ public class BoardPanel extends JPanel {
                                 if (isInCheck) {
                                     if (!hasAvailableMove) {
                                         System.out.println("Checkmate; " + currentState.getTurnColor() + " loses.");
-                                        gamePanel.feedBackPanel.addlabel(currentState.getTurnColor() + " is in checkmate.");
+//                                        gamePanel.feedBackPanel.addlabel(currentState.getTurnColor() + " is in checkmate.");
                                         canPlay = false;
 
-                                        gameOver(currentState.getTurnColor());
+                                        gameOver(currentState.getTurnColor(), EndGameStates.CHECKMATE);
                                     } else {
                                         System.out.println(currentState.getTurnColor() + " is in check.");
-                                        gamePanel.feedBackPanel.addlabel(currentState.getTurnColor() + " is in check.");
+//                                        gamePanel.feedBackPanel.addlabel(currentState.getTurnColor() + " is in check.");
                                     }
 
                                 } else if (!hasAvailableMove) {
-                                    gamePanel.feedBackPanel.addlabel("It's a stalemate.");
-                                    gamePanel.feedBackPanel.addlabel("The game has ended in a draw.");
+//                                    gamePanel.feedBackPanel.addlabel("It's a stalemate.");
+//                                    gamePanel.feedBackPanel.addlabel("The game has ended in a draw.");
 
-                                    gameOver(null);
+                                    gameOver(null, EndGameStates.STALEMATE);
                                 } else if (isThreeFoldDraw()) {
-                                    gamePanel.feedBackPanel.addlabel("It's a threefold repetition; the same " +
-                                            "position occurred three times, with the same player to move.");
-                                    gamePanel.feedBackPanel.addlabel("The game has ended in a draw.");
+//                                    gamePanel.feedBackPanel.addlabel("It's a threefold repetition; the same " +
+//                                            "position occurred three times, with the same player to move.");
+//                                    gamePanel.feedBackPanel.addlabel("The game has ended in a draw.");
 
-                                    gameOver(null);
+                                    gameOver(null, EndGameStates.THREEFOLD_REPETITION);
 
                                 } else if (currentState.fiftyMoveDraw()) {
-                                    gamePanel.feedBackPanel.addlabel("There has been fifty moves without a capture or a pawn moving.");
-                                    gamePanel.feedBackPanel.addlabel("The game has ended in a draw.");
+//                                    gamePanel.feedBackPanel.addlabel("There has been fifty moves without a capture or a pawn moving.");
+//                                    gamePanel.feedBackPanel.addlabel("The game has ended in a draw.");
 
-                                    gameOver(null);
+                                    gameOver(null, EndGameStates.FIFTY_MOVE_DRAW);
                                 } else {
                                     System.out.println("It is " + currentState.getTurnColor() + "'s turn.");
-                                    gamePanel.feedBackPanel.addlabel("It is " + currentState.getTurnColor() + "'s turn.");
+//                                    gamePanel.feedBackPanel.addlabel("It is " + currentState.getTurnColor() + "'s turn.");
                                 }
 
                             } else {
@@ -217,7 +217,7 @@ public class BoardPanel extends JPanel {
     }
 
 
-    void addNewGameListener(ActionListener e){
+    void addNewGameListener(ActionListener e) {
         newGameListeners.add(e);
     }
 
@@ -225,14 +225,30 @@ public class BoardPanel extends JPanel {
         changeTurnListeners.add(e);
     }
 
-    private void gameOver(String winnerColor) {
+    private void gameOver(String winnerColor, EndGameStates state) {
         String os = System.getProperty("os.name");
         String[] options = {"New game", "Exit to main menu", "Exit to " + os};
-        String statusMessage = (winnerColor != null) ? (winnerColor.equals("white") ? "Blue" : "Red") + " wins!" : "It's a draw!";
+        String statusMessage = "";
+        switch (state) {
+            case CHECKMATE:
+                statusMessage = "Checkmate. " + (winnerColor.equals("white") ? "Blue" : "Red") + " wins!";
+                break;
+            case STALEMATE:
+                statusMessage = "Stalemate. It's a draw!";
+                break;
+            case THREEFOLD_REPETITION:
+                statusMessage = "Threefold Repetition. It's a draw!";
+                break;
+            case FIFTY_MOVE_DRAW:
+                statusMessage = "Fifty move draw reached. It's a draw!";
+                break;
+        }
         int choice = JOptionPane.showOptionDialog(this, statusMessage, "Game over", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-        //TODO: make the options do what they say they do
-        switch(choice) {
+        switch (choice) {
             case 0: //New game
+                if (currentState.getTurnColor().equals("black")) {
+                    callListeners(changeTurnListeners);
+                }
                 callListeners(newGameListeners);
                 break;
             case 2: //Exit to menu
@@ -242,8 +258,8 @@ public class BoardPanel extends JPanel {
         }
     }
 
-    private void callListeners(ArrayList<ActionListener> listeners){
-        for (ActionListener listener: listeners) {
+    private void callListeners(ArrayList<ActionListener> listeners) {
+        for (ActionListener listener : listeners) {
             listener.actionPerformed(null);
         }
     }

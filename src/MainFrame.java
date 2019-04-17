@@ -46,11 +46,6 @@ class MainFrame extends JFrame {
         c.anchor = GridBagConstraints.CENTER;
         add(options, c);
 
-        GamePanel gamePanel = new GamePanel();
-        gamePanel.addTurnChangeListener(e -> {
-        });
-
-
 
 
         ImageButton fullScreenButton = new FullScreenButton(e -> toggleFullScreen());
@@ -108,6 +103,12 @@ class MainFrame extends JFrame {
         c.ipady = 10;
         c.anchor = GridBagConstraints.NORTHWEST;
         add(infoPanel, c);
+
+        GamePanel gamePanel = new GamePanel();
+        gamePanel.addTurnChangeListener(e -> {
+            infoPanel.toggleColor();
+        });
+
 
         options.getButton(0).addActionListener(e -> CompletableFuture.runAsync(() -> {
             try {
