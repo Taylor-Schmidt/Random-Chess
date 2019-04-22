@@ -195,7 +195,7 @@ public class Board {
     private void createTile(int startColumn, int startRow, int width, int height) {
         for (int m_startRow = startRow; m_startRow < height + startRow; m_startRow++)
             for (int m_startColumn = startColumn; m_startColumn < width + startColumn; m_startColumn++) {
-                b[m_startRow][m_startColumn] = new Space();
+                b[m_startRow][m_startColumn] = new Space(true);
             }
     }
 
