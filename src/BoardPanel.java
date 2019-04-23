@@ -40,8 +40,8 @@ public class BoardPanel extends JPanel {
         currentState = new GameState("white", board, null);
         gameStates.add(currentState);
 
-        new TextActuator().printBoard(board); //TextActuator as board debug print
-        System.out.println("It is " + currentState.getTurnColor() + "'s turn.");
+//        new TextActuator().printBoard(board); //TextActuator as board debug print
+//        System.out.println("It is " + currentState.getTurnColor() + "'s turn.");
 //        gamePanel.feedBackPanel.addlabel("It is " + currentState.getTurnColor() + "'s turn.");
 
         for (int i = 0; i < h; i++) {
@@ -59,7 +59,7 @@ public class BoardPanel extends JPanel {
                 int finalI = i;
                 int finalJ = j;
                 button.addActionListener(e -> {
-                    System.out.println("Clicked piece at " + button.getXPos() + " " + button.getYPos());
+//                    System.out.println("Clicked piece at " + button.getXPos() + " " + button.getYPos());
                     AudioManager.getInstance().playClick();
 
                     Position currentPosition = new Position(finalI, finalJ);
@@ -131,13 +131,13 @@ public class BoardPanel extends JPanel {
 
                                 if (isInCheck) {
                                     if (!hasAvailableMove) {
-                                        System.out.println("Checkmate; " + currentState.getTurnColor() + " loses.");
+//                                        System.out.println("Checkmate; " + currentState.getTurnColor() + " loses.");
 //                                        gamePanel.feedBackPanel.addlabel(currentState.getTurnColor() + " is in checkmate.");
                                         canPlay = false;
 
                                         gameOver(currentState.getTurnColor(), EndGameStates.CHECKMATE);
                                     } else {
-                                        System.out.println(currentState.getTurnColor() + " is in check.");
+//                                        System.out.println(currentState.getTurnColor() + " is in check.");
 //                                        gamePanel.feedBackPanel.addlabel(currentState.getTurnColor() + " is in check.");
                                     }
 
@@ -158,11 +158,7 @@ public class BoardPanel extends JPanel {
 //                                    gamePanel.feedBackPanel.addlabel("The game has ended in a draw.");
 
                                     gameOver(null, EndGameStates.FIFTY_MOVE_DRAW);
-                                } else {
-                                    System.out.println("It is " + currentState.getTurnColor() + "'s turn.");
-//                                    gamePanel.feedBackPanel.addlabel("It is " + currentState.getTurnColor() + "'s turn.");
                                 }
-
                             } else {
                                 unhighlightSpaces();
 
@@ -188,10 +184,6 @@ public class BoardPanel extends JPanel {
                         } else {
                             unhighlightSpaces();
                         }
-                    } else if (board.getSpace(currentPosition) == null) {
-                        System.out.println("That is not a usable space.");
-                    } else {
-                        System.out.println("Game over");
                     }
                 });
 
@@ -276,8 +268,8 @@ public class BoardPanel extends JPanel {
      */
     @SuppressWarnings("Duplicates")
     private boolean isThreeFoldDraw() {
-        System.out.println(currentState);
-        System.out.println(gameStates);
+//        System.out.println(currentState);
+//        System.out.println(gameStates);
 
         if (gameStates.size() > 8) {
 

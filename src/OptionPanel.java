@@ -17,7 +17,7 @@ public class OptionPanel extends JPanel {
 
 
     void addComponent(int yPos, JComponent jComponent){
-        System.out.println("yPos = " + yPos);
+//        System.out.println("yPos = " + yPos);
         c.gridy = yPos;
         add(jComponent, c);
     }

@@ -21,7 +21,7 @@ class ImageManager {
             }
         }
 
-        System.out.println(images);
+//        System.out.println(images);
     }
 
     private static final ImageManager imageManager = new ImageManager();

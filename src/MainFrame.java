@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.RoundRectangle2D;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -12,6 +11,8 @@ class MainFrame extends JFrame {
     private GameSettings gameSettings = GameSettings.getInstance();
     private Dimension dimension = new Dimension(1280, 800);
 
+    //TODO: add music
+    //TODO:
 
     MainFrame() {
         super("Random Chess");
@@ -25,7 +26,6 @@ class MainFrame extends JFrame {
         getContentPane().setBackground(Color.CYAN);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 
         setLayout(new GridBagLayout());
 
@@ -45,8 +45,6 @@ class MainFrame extends JFrame {
         c.weighty = 1;
         c.anchor = GridBagConstraints.CENTER;
         add(mainMenuPanel, c);
-
-
 
         ImageButton fullScreenButton = new FullScreenButton(e -> toggleFullScreen());
 
@@ -78,8 +76,6 @@ class MainFrame extends JFrame {
         add(infoButton, c);
 
 
-
-
         InfoPanel infoPanel = new InfoPanel("white");
         infoPanel.setVisible(false);
 
@@ -94,9 +90,7 @@ class MainFrame extends JFrame {
 
         GamePanel gamePanel = new GamePanel();
         gamePanel.setVisible(false);
-        gamePanel.addTurnChangeListener(e -> {
-            infoPanel.toggleColor();
-        });
+        gamePanel.addTurnChangeListener(e -> infoPanel.toggleColor());
         c.gridx = 1;
         c.gridy = 1;
         c.weightx = 1;
@@ -111,9 +105,14 @@ class MainFrame extends JFrame {
             pausePanel.setVisible(!pausePanel.isVisible());
         });
         pausePanel.getButton(1).addActionListener(e -> {
+            //TODO: update infoPanel
             gamePanel.newGame();
             gamePanel.setVisible(!gamePanel.isVisible());
             pausePanel.setVisible(!pausePanel.isVisible());
+        });
+        pausePanel.getButton(2).addActionListener(e -> {
+            dispose();
+            System.exit(0);
         });
 
         c.gridx = 1;
@@ -141,6 +140,7 @@ class MainFrame extends JFrame {
         add(pauseButton, c);
 
         mainMenuPanel.getButton(0).addActionListener(e -> CompletableFuture.runAsync(() -> {
+            //TODO: add resume/save functionality
             try {
                 Thread.sleep(115);
             } catch (InterruptedException e1) {
@@ -152,6 +152,19 @@ class MainFrame extends JFrame {
             gamePanel.setVisible(true);
             validate();
         }));
+        mainMenuPanel.getButton(1).addActionListener(e -> {
+            //TODO: update info panel here, too
+            gamePanel.newGame();
+            mainMenuPanel.setVisible(false);
+            pauseButton.setVisible(true);
+            infoPanel.setVisible(true);
+            gamePanel.setVisible(true);
+            validate();
+        });
+        mainMenuPanel.getButton(2).addActionListener(e -> {
+            dispose();
+            System.exit(0);
+        });
 
         setVisible(true);
     }

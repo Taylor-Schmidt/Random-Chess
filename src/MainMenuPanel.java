@@ -12,7 +12,8 @@ public class MainMenuPanel extends OptionPanel {
 
         addComponent(0, logo);
 
-        addButton(new MenuButton("play_game"));
-        addButton(new MenuButton("settings"));
+        addButton(new MenuButton("continue"));
+        addButton(new MenuButton("new_game"));
+        addButton(new MenuButton("quit"));
     }
 }
