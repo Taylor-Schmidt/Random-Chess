@@ -12,7 +12,7 @@ public class MainMenuPanel extends OptionPanel {
 
         addComponent(0, logo);
 
-        addButton(new MenuButton("play_game", "Start a standard game"));
-        addButton(new MenuButton("settings", "Settings"));
+        addButton(new MenuButton("play_game"));
+        addButton(new MenuButton("settings"));
     }
 }

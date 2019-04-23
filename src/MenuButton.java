@@ -2,10 +2,8 @@ import javax.swing.*;
 
 class MenuButton extends JButton {
 
-    MenuButton(String title, String description) {
+    MenuButton(String title) {
         super();
-
-        setToolTipText(description);
 
         ImageIcon icon = new ImageIcon("assets/" + title + "_button.png");
         setIcon(icon);

@@ -35,7 +35,7 @@ class MainFrame extends JFrame {
         ImageIcon icon = imageManager.getScaledImage("pawn_blue");
         setIconImage(icon.getImage());
 
-        OptionPanel options = new MainMenuPanel();
+        OptionPanel mainMenuPanel = new MainMenuPanel();
 
         GridBagConstraints c = new GridBagConstraints();
 //        new BorderLayout(); //Does nothing?
@@ -44,7 +44,7 @@ class MainFrame extends JFrame {
         c.weightx = 1;
         c.weighty = 1;
         c.anchor = GridBagConstraints.CENTER;
-        add(options, c);
+        add(mainMenuPanel, c);
 
 
 
@@ -78,19 +78,7 @@ class MainFrame extends JFrame {
         add(infoButton, c);
 
 
-        PauseButton pauseButton = new PauseButton();
-        pauseButton.addActionListener(e -> {
-        });
-        pauseButton.setVisible(false);
 
-        c.gridx = 2;
-        c.gridy = 1;
-        c.weightx = 0;
-        c.weighty = 0;
-        c.ipadx = 10;
-        c.ipady = 0;
-        c.anchor = GridBagConstraints.NORTHEAST;
-        add(pauseButton, c);
 
         InfoPanel infoPanel = new InfoPanel("white");
         infoPanel.setVisible(false);
@@ -105,32 +93,67 @@ class MainFrame extends JFrame {
         add(infoPanel, c);
 
         GamePanel gamePanel = new GamePanel();
+        gamePanel.setVisible(false);
         gamePanel.addTurnChangeListener(e -> {
             infoPanel.toggleColor();
         });
+        c.gridx = 1;
+        c.gridy = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.anchor = GridBagConstraints.CENTER;
+        add(gamePanel, c);
 
+        PausePanel pausePanel = new PausePanel();
+        pausePanel.setVisible(false);
+        pausePanel.getButton(0).addActionListener(e -> {
+            gamePanel.setVisible(!gamePanel.isVisible());
+            pausePanel.setVisible(!pausePanel.isVisible());
+        });
+        pausePanel.getButton(1).addActionListener(e -> {
+            gamePanel.newGame();
+            gamePanel.setVisible(!gamePanel.isVisible());
+            pausePanel.setVisible(!pausePanel.isVisible());
+        });
 
-        options.getButton(0).addActionListener(e -> CompletableFuture.runAsync(() -> {
+        c.gridx = 1;
+        c.gridy = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.anchor = GridBagConstraints.CENTER;
+        add(pausePanel, c);
+
+        PauseButton pauseButton = new PauseButton();
+        pauseButton.addActionListener(e -> {
+            gamePanel.setVisible(!gamePanel.isVisible());
+            pausePanel.setVisible(!pausePanel.isVisible());
+            pauseButton.toggle();
+        });
+        pauseButton.setVisible(false);
+
+        c.gridx = 2;
+        c.gridy = 1;
+        c.weightx = 0;
+        c.weighty = 0;
+        c.ipadx = 10;
+        c.ipady = 0;
+        c.anchor = GridBagConstraints.NORTHEAST;
+        add(pauseButton, c);
+
+        mainMenuPanel.getButton(0).addActionListener(e -> CompletableFuture.runAsync(() -> {
             try {
                 Thread.sleep(115);
             } catch (InterruptedException e1) {
                 e1.printStackTrace();
             }
-            options.setVisible(false);
+            mainMenuPanel.setVisible(false);
             pauseButton.setVisible(true);
             infoPanel.setVisible(true);
-
-            c.gridx = 1;
-            c.gridy = 1;
-            c.weightx = 1;
-            c.weighty = 1;
-            c.anchor = GridBagConstraints.CENTER;
-            add(gamePanel, c);
+            gamePanel.setVisible(true);
             validate();
         }));
 
         setVisible(true);
-
     }
 
     private void toggleFullScreen() {

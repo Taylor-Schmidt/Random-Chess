@@ -34,7 +34,7 @@ class GamePanel extends JPanel {
 
     }
 
-    private void newGame() {
+    void newGame() {
         //Creates BoardPanel
         board = new Board(true);
 
