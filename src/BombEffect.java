@@ -10,21 +10,21 @@ public class BombEffect extends Effect {
         }
         System.out.println("Landed on bomb");
 
-        if(b.getSpace(row+1, col)!=null && b.getSpace(row+1, col).getPiece()!=null)
+        if(b.getSpace(row+1, col)!=null && b.getSpace(row+1, col).getPiece()!=null && b.getSpace(row+1, col).getPiece().getType()!= Piece.ChessPieceType.KING)
             b.getSpace(row+1,col).setPiece(null);
-        if(b.getSpace(row, col+1)!=null && b.getSpace(row, col+1).getPiece()!=null)
+        if(b.getSpace(row, col+1)!=null && b.getSpace(row, col+1).getPiece()!=null && b.getSpace(row, col+1).getPiece().getType()!= Piece.ChessPieceType.KING)
             b.getSpace(row,col+1).setPiece(null);
-        if(b.getSpace(row+1, col+1)!=null && b.getSpace(row+1, col+1).getPiece()!=null)
+        if(b.getSpace(row+1, col+1)!=null && b.getSpace(row+1, col+1).getPiece()!=null && b.getSpace(row+1, col+1).getPiece().getType()!= Piece.ChessPieceType.KING)
             b.getSpace(row+1,col+1).setPiece(null);
-        if(b.getSpace(row+1, col-1)!=null && b.getSpace(row+1, col-1).getPiece()!=null)
+        if(b.getSpace(row+1, col-1)!=null && b.getSpace(row+1, col-1).getPiece()!=null && b.getSpace(row+1, col-1).getPiece().getType()!= Piece.ChessPieceType.KING)
             b.getSpace(row+1,col-1).setPiece(null);
-        if(b.getSpace(row-1, col)!=null && b.getSpace(row-1, col).getPiece()!=null)
+        if(b.getSpace(row-1, col)!=null && b.getSpace(row-1, col).getPiece()!=null && b.getSpace(row-1, col).getPiece().getType()!= Piece.ChessPieceType.KING)
             b.getSpace(row-1,col).setPiece(null);
-        if(b.getSpace(row, col-1)!=null && b.getSpace(row, col-1).getPiece()!=null)
+        if(b.getSpace(row, col-1)!=null && b.getSpace(row, col-1).getPiece()!=null && b.getSpace(row+1, col-1).getPiece().getType()!= Piece.ChessPieceType.KING)
             b.getSpace(row,col-1).setPiece(null);
-        if(b.getSpace(row-1, col-1)!=null && b.getSpace(row-1, col-1).getPiece()!=null)
+        if(b.getSpace(row-1, col-1)!=null && b.getSpace(row-1, col-1).getPiece()!=null && b.getSpace(row-1, col-1).getPiece().getType()!= Piece.ChessPieceType.KING)
             b.getSpace(row-1,col-1).setPiece(null);
-        if(b.getSpace(row-1, col+1)!=null && b.getSpace(row-1, col+1).getPiece()!=null)
+        if(b.getSpace(row-1, col+1)!=null && b.getSpace(row-1, col+1).getPiece()!=null && b.getSpace(row-1, col+1).getPiece().getType()!= Piece.ChessPieceType.KING)
             b.getSpace(row-1,col+1).setPiece(null);
 
         updateUI(buttons, b, row, col);
