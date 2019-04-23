@@ -4,6 +4,8 @@ import java.util.Random;
 public class ColorGenerator {
     private Color randomLightColor, randomDarkColor;
 
+    static Color backgroundColor = Color.CYAN;
+
     ColorGenerator() {
         Random rand = new Random();
 

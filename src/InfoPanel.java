@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class InfoPanel extends JPanel {
+class InfoPanel extends JPanel {
     private JLabel icon = new JLabel();
     private static ImageManager imageManager = ImageManager.getInstance();
     private static final ImageIcon black = imageManager.getScaledImage("pawn_blue", 50, 50, 0);
@@ -13,7 +13,7 @@ public class InfoPanel extends JPanel {
     InfoPanel(String color) {
         super();
 
-        setBackground(Color.CYAN);
+        setBackground(ColorGenerator.backgroundColor);
         setLayout(new GridBagLayout());
         GridBagConstraints gc = new GridBagConstraints();
 

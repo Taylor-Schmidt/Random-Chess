@@ -23,7 +23,7 @@ class GamePanel extends JPanel {
 
     GamePanel() {
         super();
-        setBackground(Color.CYAN);
+        setBackground(ColorGenerator.backgroundColor);
         setLayout(new GridBagLayout());
 
 

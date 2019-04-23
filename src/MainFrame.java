@@ -23,7 +23,7 @@ class MainFrame extends JFrame {
         setSize(dimension);
         setMinimumSize(new Dimension(1100, 800));
         setLocationRelativeTo(null); //Centers the window in the middle of the main screen
-        getContentPane().setBackground(Color.CYAN);
+        getContentPane().setBackground(ColorGenerator.backgroundColor);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -142,7 +142,7 @@ class MainFrame extends JFrame {
         mainMenuPanel.getButton(0).addActionListener(e -> CompletableFuture.runAsync(() -> {
             //TODO: add resume/save functionality
             try {
-                Thread.sleep(115);
+                Thread.sleep(80);
             } catch (InterruptedException e1) {
                 e1.printStackTrace();
             }

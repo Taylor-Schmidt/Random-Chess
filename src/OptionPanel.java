@@ -9,7 +9,7 @@ public class OptionPanel extends JPanel {
 
     public OptionPanel() {
         options = new ArrayList<>();
-        setBackground(Color.CYAN);
+        setBackground(ColorGenerator.backgroundColor);
 
         c = new GridBagConstraints();
         setLayout(new GridBagLayout());

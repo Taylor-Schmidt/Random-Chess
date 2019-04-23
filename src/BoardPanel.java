@@ -31,7 +31,7 @@ public class BoardPanel extends JPanel {
         //Represents the max number of rows.
         setPreferredSize(new Dimension(700, 700));
         setMinimumSize(new Dimension(650, 650));
-        setBackground(Color.CYAN);
+        setBackground(ColorGenerator.backgroundColor);
 
 
         boardButtons = new BoardButton[h][w];
@@ -39,10 +39,6 @@ public class BoardPanel extends JPanel {
 
         currentState = new GameState("white", board, null);
         gameStates.add(currentState);
-
-//        new TextActuator().printBoard(board); //TextActuator as board debug print
-//        System.out.println("It is " + currentState.getTurnColor() + "'s turn.");
-//        gamePanel.feedBackPanel.addlabel("It is " + currentState.getTurnColor() + "'s turn.");
 
         for (int i = 0; i < h; i++) {
             for (int j = 0; j < w; j++) {
@@ -54,7 +50,7 @@ public class BoardPanel extends JPanel {
                     piece = null;
                 }
 
-                BoardButton button = new BoardButton(this, i, j, color, s, piece);
+                BoardButton button = new BoardButton(i, j, color, s, piece);
 
                 int finalI = i;
                 int finalJ = j;

@@ -1,9 +1,5 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Random;
 
 /**
@@ -16,39 +12,44 @@ public class BoardButton extends JButton {
     private ImageIcon pieceIcon;
     private double paddingRatio;
 
-    private static BufferedImage[] lightGrassTiles;
-    private static BufferedImage[] darkGrassTiles;
-    private static BufferedImage[] lightDirtTiles;
-    private static BufferedImage[] darkDirtTiles;
-    private static BufferedImage bombSprite;
-    private static BufferedImage morphSprite;
+    private static ImageIcon[] lightGrassTiles;
+    private static ImageIcon[] darkGrassTiles;
+    private static ImageIcon[] lightDirtTiles;
+    private static ImageIcon[] darkDirtTiles;
+    private static ImageIcon bombSprite;
+    private static ImageIcon morphSprite;
 
     static {
-        try {
-            lightGrassTiles = new BufferedImage[]{
-                    ImageIO.read(new File("assets/board_tile_full.png")),
-                    ImageIO.read(new File("assets/board_tile_full3.png"))
-            };
-            darkGrassTiles = new BufferedImage[]{
-                    ImageIO.read(new File("assets/board_tile_full2.png")),
-                    ImageIO.read(new File("assets/board_tile_full4.png"))
-            };
-            lightDirtTiles = new BufferedImage[]{
-                    ImageIO.read(new File("assets/board_tile_empty_dirt1.png")),
-                    ImageIO.read(new File("assets/board_tile_empty_dirt3.png")),
-            };
-            darkDirtTiles = new BufferedImage[]{
-                    ImageIO.read(new File("assets/board_tile_empty_dirt2.png")),
-                    ImageIO.read(new File("assets/board_tile_empty_dirt4.png")),
-            };
-            bombSprite = ImageIO.read(new File("assets/board_tile_bomb.png"));
-            morphSprite = ImageIO.read(new File("assets/board_tile_morph.png"));
-        } catch (IOException ex) {
-            // handle exception...
-        }
+        ImageManager im = ImageManager.getInstance();
+
+        lightGrassTiles = new ImageIcon[]{
+                im.getImage("board_tile_full3"),
+                im.getImage("board_tile_full5"),
+                im.getImage("board_tile_full7"),
+                im.getImage("board_tile_full7"),
+                im.getImage("board_tile_full7"),
+                im.getImage("board_tile_full7")
+        };
+        darkGrassTiles = new ImageIcon[]{
+                im.getImage("board_tile_full4"),
+                im.getImage("board_tile_full6"),
+                im.getImage("board_tile_full8"),
+                im.getImage("board_tile_full8"),
+                im.getImage("board_tile_full8"),
+                im.getImage("board_tile_full8")
+        };
+        lightDirtTiles = new ImageIcon[]{
+                im.getImage("board_tile_empty_dirt1"),
+                im.getImage("board_tile_empty_dirt3")
+        };
+        darkDirtTiles = new ImageIcon[]{
+                im.getImage("board_tile_empty_dirt2"),
+                im.getImage("board_tile_empty_dirt4")
+        };
+        bombSprite = im.getImage("board_tile_bomb");
+        morphSprite = im.getImage("board_tile_morph");
     }
 
-    private BoardPanel parent;
     Space space;
     private final Color selectedColor = new Color(0, 255, 0);
     private Color backgroundColor;
@@ -62,13 +63,12 @@ public class BoardButton extends JButton {
 //        this(x, y, c, null, 0.1);
 //    }
 
-    public BoardButton(BoardPanel parent, int x, int y, ColorGenerator c, Space s, Piece p) {
-        this(parent, x, y, c, s, p, 0.1);
+    public BoardButton(int x, int y, ColorGenerator c, Space s, Piece p) {
+        this(x, y, c, s, p, 0.1);
     }
 
-    public BoardButton(BoardPanel parent, int x, int y, ColorGenerator c, Space space, Piece p, double paddingRatio) {
+    public BoardButton(int x, int y, ColorGenerator c, Space space, Piece p, double paddingRatio) {
         super();
-        this.parent = parent;
         xPos = x;
         yPos = y;
         this.paddingRatio = paddingRatio;
@@ -148,18 +148,18 @@ public class BoardButton extends JButton {
                 }
 
                 if (space.getEffect() != null) {
-                    BufferedImage effectIcon;
+                    ImageIcon effectIcon;
                     switch (space.getEffect().getType()) {
                         default:
                         case Bomb:
                             effectIcon = bombSprite;
                             break;
                         case SwitchPiece:
-                            effectIcon =  morphSprite;
+                            effectIcon = morphSprite;
                             break;
                     }
 
-                    double widthToHeightRatio = effectIcon.getWidth() / (effectIcon.getHeight() * 1.0); //float div with ints
+                    double widthToHeightRatio = effectIcon.getIconWidth() / (effectIcon.getIconHeight() * 1.0); //float div with ints
                     int width;
                     int height;
                     int x;
@@ -167,24 +167,7 @@ public class BoardButton extends JButton {
 
                     double effectPaddingRatio = 0.2;
 
-                    double internalSize = 1 - (2 * effectPaddingRatio);
-                    if (widthToHeightRatio > 1) {//width is bigger
-                        width = (int) (getWidth() * internalSize);
-                        height = (int) (width / widthToHeightRatio);
-                        x = (int) (getWidth() * effectPaddingRatio);
-                        y = (int) (getHeight() * effectPaddingRatio + (getHeight() * internalSize - height) / 2.0);
-                    } else if (widthToHeightRatio < 1) {
-                        height = (int) (getHeight() * internalSize);
-                        width = (int) (height * widthToHeightRatio);
-                        x = (int) (getWidth() * effectPaddingRatio + (getWidth() * internalSize - width) / 2.0);
-                        y = (int) (getHeight() * effectPaddingRatio);
-                    } else {
-                        width = (int) (getWidth() * internalSize);
-                        height = (int) (getHeight() * internalSize);
-                        x = (int) (getWidth() * effectPaddingRatio);
-                        y = (int) (getHeight() * effectPaddingRatio);
-                    }
-                    g.drawImage(effectIcon, x, y, width, height, this);
+                    drawScaledImageIcon(g, widthToHeightRatio, effectPaddingRatio, effectIcon);
                 }
             } else {
                 setBackground(selectedColor);
@@ -204,31 +187,39 @@ public class BoardButton extends JButton {
             int x;
             int y;
 
-            double internalSize = 1 - (2 * paddingRatio);
-            if (widthToHeightRatio > 1) {//width is bigger
-                width = (int) (getWidth() * internalSize);
-                height = (int) (width / widthToHeightRatio);
-                x = (int) (getWidth() * paddingRatio);
-                y = (int) (getHeight() * paddingRatio + (getHeight() * internalSize - height) / 2.0);
-            } else if (widthToHeightRatio < 1) {
-                height = (int) (getHeight() * internalSize);
-                width = (int) (height * widthToHeightRatio);
-                x = (int) (getWidth() * paddingRatio + (getWidth() * internalSize - width) / 2.0);
-                y = (int) (getHeight() * paddingRatio);
-            } else {
-                width = (int) (getWidth() * internalSize);
-                height = (int) (getHeight() * internalSize);
-                x = (int) (getWidth() * paddingRatio);
-                y = (int) (getHeight() * paddingRatio);
-            }
-            g.drawImage(pieceIcon.getImage(), x, y, width, height, this);
+            drawScaledImageIcon(g, widthToHeightRatio, paddingRatio, pieceIcon);
         }
 
 
     }
 
-    private void drawBackground(Graphics g, BufferedImage image) {
-        g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+    private void drawScaledImageIcon(Graphics g, double widthToHeightRatio, double paddingRatio, ImageIcon pieceIcon) {
+        int width;
+        int height;
+        int x;
+        int y;
+        double internalSize = 1 - (2 * paddingRatio);
+        if (widthToHeightRatio > 1) {//width is bigger
+            width = (int) (getWidth() * internalSize);
+            height = (int) (width / widthToHeightRatio);
+            x = (int) (getWidth() * paddingRatio);
+            y = (int) (getHeight() * paddingRatio + (getHeight() * internalSize - height) / 2.0);
+        } else if (widthToHeightRatio < 1) {
+            height = (int) (getHeight() * internalSize);
+            width = (int) (height * widthToHeightRatio);
+            x = (int) (getWidth() * paddingRatio + (getWidth() * internalSize - width) / 2.0);
+            y = (int) (getHeight() * paddingRatio);
+        } else {
+            width = (int) (getWidth() * internalSize);
+            height = (int) (getHeight() * internalSize);
+            x = (int) (getWidth() * paddingRatio);
+            y = (int) (getHeight() * paddingRatio);
+        }
+        g.drawImage(pieceIcon.getImage(), x, y, width, height, this);
+    }
+
+    private void drawBackground(Graphics g, ImageIcon image) {
+        g.drawImage(image.getImage(), 0, 0, getWidth(), getHeight(), this);
     }
 
 

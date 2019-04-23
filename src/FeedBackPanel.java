@@ -8,7 +8,7 @@ import java.awt.*;
            setPreferredSize(new Dimension(100, 700));
            setMinimumSize(new Dimension(250, 650));
            setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-           setBackground(Color.CYAN);
+           setBackground(ColorGenerator.backgroundColor);
 
         }
         public void addlabel(String feedback){
