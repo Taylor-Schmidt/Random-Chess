@@ -187,7 +187,6 @@ class GameManagerText {
                         //If a piece was captured, adds that piece to the list of captured pieces in the state.
                         Piece previousPiece = gameStates.get(gameStates.size() - 1).getBoard().getSpace(pAfter).getPiece();
 
-                        //TODO: en passante special case
                         if (previousPiece != null) {
                             currentState.addTakenPiece(previousPiece);
                             currentState.resetFiftyMoveDrawCounter();

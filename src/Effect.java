@@ -4,6 +4,6 @@ public abstract class Effect {
         Bomb, SwitchPiece
     }
 
-    public abstract void doEffect(Space s);
+    public abstract void doEffect(Space s, Board b, int row, int col, BoardButton[][] buttons);
     public abstract EffectType getType();
 }

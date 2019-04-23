@@ -93,7 +93,7 @@ public class Space {
         return Objects.hash(p);
     }
 
-    public void doEffect(Space s){
-        s.getEffect().doEffect(s);
+    public void doEffect(Space s, Board b, int row, int col, BoardButton[][] buttons){
+        s.getEffect().doEffect(s,b,row,col,buttons);
     }
 }

@@ -4,7 +4,7 @@ public class SwitchPieceEffect extends Effect {
 
     private EffectType effectType = EffectType.SwitchPiece;
 
-    public void doEffect(Space s){
+    public void doEffect(Space s, Board b, int row, int col, BoardButton[][] buttons){
         if(s.getPiece().getType()!=Piece.ChessPieceType.KING){
             AudioManager.getInstance().playTele();
             String color = s.getPiece().getColor();
