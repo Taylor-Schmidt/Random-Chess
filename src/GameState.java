@@ -174,15 +174,14 @@ public class GameState {
     HashSet<Position> availableMoves(Board board, Piece piece, Position position){
         HashSet<Position> availableMoves = new HashSet<>();
 
-        System.out.println("Piece = " + piece);
 
         if (piece != null) {
-            System.out.println("Piece.color = " + piece.getColor());
-            System.out.println("turnColor = " + turnColor);
+//            System.out.println("Piece.color = " + piece.getColor());
+//            System.out.println("turnColor = " + turnColor);
             if (piece.getColor().equals(turnColor)) {
                 HashSet<Position> moves = piece.getAvailableMoves(board, position);
 
-                System.out.println(moves);
+//                System.out.println(moves);
 
                 for (Position move : moves) {
                     if (piece.legalMove(board, move)) {
@@ -197,7 +196,7 @@ public class GameState {
             }
         }
 
-        System.out.println(availableMoves);
+//        System.out.println(availableMoves);
 
         return availableMoves;
     }

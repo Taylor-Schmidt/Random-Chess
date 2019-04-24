@@ -17,31 +17,28 @@ public class Space {
     public Space() {
 
         p = null;
-        effect=null;
+        effect = null;
     }
 
     public Space(boolean isRandom) {
 
         p = null;
-        if(isRandom){
+        if (isRandom) {
             Random randomNum = new Random();
             int randInt = randomNum.nextInt(20); //20 makes it so that each effect has a 5% chance of generating.
 
             //5% chance of generating a bomb space.
-            if(randInt==1){
+            if (randInt == 1) {
                 effect = new BombEffect();
                 //System.out.println("Created bomb tile.");
-            }
-            else if(randInt==2){
+            } else if (randInt == 2) {
                 effect = new SwitchPieceEffect();
                 //System.out.println("Created SwitchPiece tile.");
+            } else {
+                effect = null;
             }
-            else{
-                effect=null;
-            }
-        }
-        else{
-            effect=null;
+        } else {
+            effect = null;
         }
     }
 
@@ -52,7 +49,7 @@ public class Space {
      */
     public Space(Piece P) {
         p = P;
-        effect=null;
+        effect = null;
     }
 
     /**
@@ -73,10 +70,11 @@ public class Space {
         p = P;
     }
 
-    public Effect getEffect(){
+    public Effect getEffect() {
         return effect;
     }
-    public void setEffect(Effect e){
+
+    public void setEffect(Effect e) {
         effect = e;
     }
 
@@ -93,7 +91,7 @@ public class Space {
         return Objects.hash(p);
     }
 
-    public void doEffect(Space s, Board b, int row, int col, BoardButton[][] buttons){
-        s.getEffect().doEffect(s,b,row,col,buttons);
+    public void doEffect(Space s, Board b, Position p, BoardButton[][] buttons) {
+        s.getEffect().doEffect(s, b, p, buttons);
     }
 }

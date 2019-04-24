@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
 
+import static java.lang.Thread.sleep;
+
 /**
  * These are the buttons for the spaces on the board.
  */
@@ -128,10 +130,11 @@ public class BoardButton extends JButton {
 //            if (pieceIcon != null) {
 //                setIcon(getScaledIcon(icon));
 //            }
-            updateUI();
         } else {
             pieceIcon = null;
         }
+
+        updateUI();
     }
 /*
     private Icon getScaledIcon(ImageIcon icon) {
@@ -188,7 +191,11 @@ public class BoardButton extends JButton {
             drawScaledImageIcon(g, widthToHeightRatio, paddingRatio, pieceIcon);
         }
 
-
+        if (explosionIcon != null) {
+            System.out.println("drawing explosion");
+            double widthToHeightRatio = explosionIcon.getIconWidth() / (explosionIcon.getIconHeight() * 1.0); //float div with ints
+            drawScaledImageIcon(g, widthToHeightRatio, paddingRatio, explosionIcon);
+        }
     }
 
     private void drawScaledImageIcon(Graphics g, double widthToHeightRatio, double paddingRatio, ImageIcon pieceIcon) {
@@ -230,5 +237,20 @@ public class BoardButton extends JButton {
             setBackground(backgroundColor);
 
         }
+    }
+
+    private long durationOfAnimation = 1000L;
+
+    private ImageIcon explosionIcon;
+
+    void explode(){
+        System.out.println("Exploding" + xPos + ", " + yPos);
+        setNewIcon(null);
+//        new Thread(() -> {
+//            explosionIcon = new ImageIcon("assets/bomb_gif.gif");
+//
+//            updateUI();
+//        }).start();
+
     }
 }

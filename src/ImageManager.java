@@ -49,7 +49,7 @@ class ImageManager {
     }
 
     @SuppressWarnings("SameParameterValue")
-    private ImageIcon getScaledImage(ImageIcon imageIcon, int w, int h, double paddingRatio) {
+    ImageIcon getScaledImage(ImageIcon imageIcon, int w, int h, double paddingRatio) {
         Image fsImage = imageIcon.getImage();
 
         int width;
@@ -71,4 +71,6 @@ class ImageManager {
 
         return new ImageIcon(fsImage.getScaledInstance(width, height, 0));
     }
+
+
 }
