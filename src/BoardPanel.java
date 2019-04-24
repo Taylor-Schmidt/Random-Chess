@@ -50,7 +50,7 @@ public class BoardPanel extends JPanel {
                     piece = null;
                 }
 
-                BoardButton button = new BoardButton(i, j, color, s, piece);
+                BoardButton button = new BoardButton(i, j, s, piece);
 
                 int finalI = i;
                 int finalJ = j;

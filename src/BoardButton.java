@@ -40,11 +40,17 @@ public class BoardButton extends JButton {
         };
         lightDirtTiles = new ImageIcon[]{
                 im.getImage("board_tile_empty_dirt1"),
-                im.getImage("board_tile_empty_dirt3")
+                im.getImage("board_tile_empty_dirt3"),
+                im.getImage("board_tile_empty_dirt5"),
+                im.getImage("board_tile_empty_dirt5"),
+                im.getImage("board_tile_empty_dirt5")
         };
         darkDirtTiles = new ImageIcon[]{
                 im.getImage("board_tile_empty_dirt2"),
-                im.getImage("board_tile_empty_dirt4")
+                im.getImage("board_tile_empty_dirt4"),
+                im.getImage("board_tile_empty_dirt6"),
+                im.getImage("board_tile_empty_dirt6"),
+                im.getImage("board_tile_empty_dirt6")
         };
         bombSprite = im.getImage("board_tile_bomb");
         morphSprite = im.getImage("board_tile_morph");
@@ -63,11 +69,11 @@ public class BoardButton extends JButton {
 //        this(x, y, c, null, 0.1);
 //    }
 
-    public BoardButton(int x, int y, ColorGenerator c, Space s, Piece p) {
-        this(x, y, c, s, p, 0.1);
+    BoardButton(int x, int y, Space s, Piece p) {
+        this(x, y, s, p, 0.1);
     }
 
-    public BoardButton(int x, int y, ColorGenerator c, Space space, Piece p, double paddingRatio) {
+    private BoardButton(int x, int y, Space space, Piece p, double paddingRatio) {
         super();
         xPos = x;
         yPos = y;
@@ -94,7 +100,7 @@ public class BoardButton extends JButton {
         return yPos;
     }
 
-    public void setNewIcon(Piece p) {
+    void setNewIcon(Piece p) {
         if (p != null) {
             String color = p.getColor().equals("black") ? "blue" : "red";
 
@@ -160,10 +166,6 @@ public class BoardButton extends JButton {
                     }
 
                     double widthToHeightRatio = effectIcon.getIconWidth() / (effectIcon.getIconHeight() * 1.0); //float div with ints
-                    int width;
-                    int height;
-                    int x;
-                    int y;
 
                     double effectPaddingRatio = 0.2;
 
@@ -182,10 +184,6 @@ public class BoardButton extends JButton {
         if (pieceIcon != null) {
 //            System.out.println(getHeight() + "x" + getWidth());
             double widthToHeightRatio = pieceIcon.getIconWidth() / (pieceIcon.getIconHeight() * 1.0); //float div with ints
-            int width;
-            int height;
-            int x;
-            int y;
 
             drawScaledImageIcon(g, widthToHeightRatio, paddingRatio, pieceIcon);
         }
@@ -223,7 +221,7 @@ public class BoardButton extends JButton {
     }
 
 
-    public void setHighlight(boolean highLighted) {
+    void setHighlight(boolean highLighted) {
         this.highlighted = highLighted;
         if (highLighted) {
             setBackground(selectedColor);
