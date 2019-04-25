@@ -62,7 +62,10 @@ class MainFrame extends JFrame {
             ImageIcon logoIcon = ImageManager.getInstance().getScaledImage("pawn_blue", 35, 35, 0);
             JOptionPane.showMessageDialog(this, "Random Chess is made by:\nJack Xiao\nTaylor" +
                             " Schmidt\nBrandon Cecchini\nRyan Byrnes\nMackenzie Dahlem\nBenjamin Phillips" +
-                            "\nand \nChristopher DeLuca.", "About this game",
+                            "\nand \nChristopher DeLuca.\n\n" +
+                            "Audio Credits:\n" +
+                            "\"Explosion, 8-bit, 01.wav\" by InspectorJ (www.jshaw.co.uk) of Freesound.org\n" +
+                            "\"aiwha_explosion.wav\" by Aiwah of Freesound.org", "About this game",
                     JOptionPane.INFORMATION_MESSAGE, logoIcon);
         });
 
