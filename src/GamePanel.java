@@ -7,10 +7,9 @@ import java.util.ArrayList;
 /**
  * This is the panel that the game will take place on.
  */
-
+@SuppressWarnings("FieldCanBeLocal")
 class GamePanel extends JPanel {
     private BoardPanel boardPanel;
-    @SuppressWarnings("FieldCanBeLocal")
     private static String black = "black";
     private static String white = "white";
 
@@ -53,7 +52,6 @@ class GamePanel extends JPanel {
             System.out.println("Saving.");
             try {
                 ArrayList<GameState> gameStates = (ArrayList<GameState>) boardPanel.getClientProperty(BoardPanel.STATES);
-                System.out.println(gameStates);
                 ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
                 oos.writeObject(gameStates);
                 oos.flush();
@@ -73,7 +71,6 @@ class GamePanel extends JPanel {
     }
 
     private void newGame() {
-        System.out.println("Started a new game.");
         //Creates BoardPanel
         Board board = new Board(true);
 
@@ -88,6 +85,7 @@ class GamePanel extends JPanel {
     }
 
 
+    @SuppressWarnings("unchecked")
     private ArrayList<GameState> loadGame() {
         System.out.println("Loading.");
         try {
@@ -96,7 +94,6 @@ class GamePanel extends JPanel {
             ArrayList<GameState> states = (ArrayList<GameState>) ois.readObject();
             ois.close();
 
-            System.out.println(states);
             return states;
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
