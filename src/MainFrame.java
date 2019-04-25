@@ -169,6 +169,15 @@ class MainFrame extends JFrame {
             System.exit(0);
         });
 
+        //        dispose();
+        boolean isFullscreen = (boolean) gameSettings.get(GameSettings.FULLSCREEN);
+        System.out.println(isFullscreen);
+        if (isFullscreen) {
+            setExtendedState(JFrame.MAXIMIZED_BOTH);
+            setUndecorated(true);
+            fullScreenButton.toggle();
+        }
+
         setVisible(true);
     }
 
