@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.io.*;
 import java.util.ArrayList;
 
 /**
@@ -19,20 +20,38 @@ class GamePanel extends JPanel {
 
     private ArrayList<ActionListener> turnChangeListeners = new ArrayList<>();
 
-    GamePanel() {
-        super();
-        setBackground(ColorGenerator.backgroundColor);
-        setLayout(new GridBagLayout());
+    private static final String fileName = "save.dat";
 
-        newGame();
+
+
+    GamePanel() {
+        this(true);
     }
 
-    void newGame() {
-        //Creates BoardPanel
-        board = new Board(true);
+    GamePanel(boolean isNewGame) {
+        super();
 
-        //Sets pieces on board.
-        setPieces();
+        setBackground(ColorGenerator.backgroundColor);
+        setLayout(new GridBagLayout());
+        setUpBoard(isNewGame);
+    }
+
+    @SuppressWarnings("unchecked")
+    void setUpBoard(boolean isNewGame) {
+
+        if (isNewGame) {
+            //Creates BoardPanel
+            board = new Board(true);
+
+            //Sets pieces on board.
+            setPieces();
+        } else {
+//            board = loadGame();
+
+            board = new Board(true);
+            
+            setPieces();
+        }
 
         if (boardPanel != null) {
             remove(boardPanel);
@@ -40,10 +59,28 @@ class GamePanel extends JPanel {
 
         boardPanel = new BoardPanel(board.getRows(), board.getCols(), board);
         boardPanel.addNewGameListener(e -> newGame());
-
         boardPanel.addChangeTurnListener(e -> changeTurn());
+        boardPanel.addSaveListener(e -> {
+            try {
+                ArrayList<GameState> gameStates = (ArrayList<GameState>) boardPanel.getClientProperty(BoardPanel.STATES);
+                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
+                oos.writeObject(gameStates);
+                oos.flush();
+                oos.close();
+            } catch (ClassCastException| IOException exception) {
+                System.out.println("Could not save");
+            }
+        });
 
         add(boardPanel, gc);
+    }
+
+    void newGame() {
+        setUpBoard(true);
+    }
+
+    void loadGame() {
+
     }
 
     private void changeTurn() {

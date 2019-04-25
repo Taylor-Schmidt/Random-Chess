@@ -20,9 +20,11 @@ public class BoardPanel extends JPanel {
 
     private ArrayList<ActionListener> changeTurnListeners = new ArrayList<>();
     private ArrayList<ActionListener> newGameListeners = new ArrayList<>();
+    private ArrayList<ActionListener> saveListeners = new ArrayList<>();
 
     private enum EndGameStates {CHECKMATE, STALEMATE, THREEFOLD_REPETITION, FIFTY_MOVE_DRAW}
 
+    static String STATES = "this.game_states";
 
     @SuppressWarnings("Duplicates")
     BoardPanel(int w, int h, Board board) {
@@ -187,6 +189,8 @@ public class BoardPanel extends JPanel {
                 boardButtons[i][j] = button;
             }
         }
+
+        putClientProperty(STATES, gameStates);
     }
 
     private void highlightSpaces(HashSet<Position> spacesToHighlight) {
@@ -211,6 +215,14 @@ public class BoardPanel extends JPanel {
 
     void addChangeTurnListener(ActionListener e) {
         changeTurnListeners.add(e);
+    }
+
+    void addSaveListener(ActionListener e) {
+        saveListeners.add(e);
+    }
+
+    void save() {
+        callListeners(saveListeners);
     }
 
     private void gameOver(String winnerColor, EndGameStates state) {
