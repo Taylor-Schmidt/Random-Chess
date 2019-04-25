@@ -22,55 +22,43 @@ class GamePanel extends JPanel {
 
 
     GamePanel() {
-        this(true);
-    }
-
-    GamePanel(boolean isNewGame) {
-        super();
-
         setBackground(ColorGenerator.backgroundColor);
         setLayout(new GridBagLayout());
-        setUpBoard(isNewGame);
     }
 
     @SuppressWarnings("unchecked")
-    private void setUpBoard(boolean isNewGame) {
+    void setUpBoard(boolean isNewGame) {
 
         if (boardPanel != null) {
             remove(boardPanel);
         }
 
         if (isNewGame) {
-            //Creates BoardPanel
-            Board board = new Board(true);
-
-            //Sets pieces on board.
-            setPieces(board);
-
-            ArrayList<GameState> gameStates = new ArrayList<>();
-
-            gameStates.add(new GameState("white", board, null));
-
-            boardPanel = new BoardPanel(gameStates);
+            newGame();
         } else {
 
             ArrayList<GameState> gameStates = loadGame();
 
-            boardPanel = new BoardPanel(gameStates);
+            if (gameStates == null) {
+                newGame();
+            } else {
+                boardPanel = new BoardPanel(gameStates);
+            }
         }
 
 
-
-        boardPanel.addNewGameListener(e -> newGame());
+        boardPanel.addNewGameListener(e -> setUpBoard(true));
         boardPanel.addChangeTurnListener(e -> changeTurn());
         boardPanel.addSaveListener(e -> {
+            System.out.println("Saving.");
             try {
                 ArrayList<GameState> gameStates = (ArrayList<GameState>) boardPanel.getClientProperty(BoardPanel.STATES);
+                System.out.println(gameStates);
                 ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
                 oos.writeObject(gameStates);
                 oos.flush();
                 oos.close();
-            } catch (ClassCastException| IOException exception) {
+            } catch (ClassCastException | IOException exception) {
                 System.out.println("Could not save");
             }
         });
@@ -78,16 +66,35 @@ class GamePanel extends JPanel {
         add(boardPanel, gc);
     }
 
-    void newGame() {
-        setUpBoard(true);
+    void save(){
+        boardPanel.save();
     }
 
+    private void newGame() {
+        System.out.println("Started a new game.");
+        //Creates BoardPanel
+        Board board = new Board(true);
+
+        //Sets pieces on board.
+        setPieces(board);
+
+        ArrayList<GameState> gameStates = new ArrayList<>();
+
+        gameStates.add(new GameState("white", board, null));
+
+        boardPanel = new BoardPanel(gameStates);
+    }
+
+
     private ArrayList<GameState> loadGame() {
+        System.out.println("Loading.");
         try {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName));
             // Check it's an ArrayList
             ArrayList<GameState> states = (ArrayList<GameState>) ois.readObject();
             ois.close();
+
+            System.out.println(states);
             return states;
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

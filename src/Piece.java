@@ -1,10 +1,11 @@
+import java.io.Serializable;
 import java.util.HashSet;
 
 /**
  * All chess pieces implement this interface.
  * Provides methods to make their usage more consistent across the board.
  */
-public abstract class Piece {
+public abstract class Piece implements Serializable {
 
     /**
      * Used to identify what kind of piece it is (for displaying the piece, for example)

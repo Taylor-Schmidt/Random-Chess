@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -13,7 +14,7 @@ import java.util.Random;
  * If piece is null- no piece on the space
  * If piece has(name of pieces)- that piece is on the space
  */
-public class Board {
+public class Board implements Serializable {
 
     private Space[][] b;// 2D array that represents board.
     private int rows;
@@ -89,7 +90,7 @@ public class Board {
         }
     }
 
-    public Board(boolean isRandom){
+    public Board(boolean isRandom) {
         this(16, isRandom);
     }
 
@@ -301,25 +302,24 @@ public class Board {
         return result;
     }
 
-    public void pawnToQueen(String color, int row, int col){
+    public void pawnToQueen(String color, int row, int col) {
         Position position;
         boolean topOrBottom = true;
-        for(int i = 1; i<getRows(); i++){
-            if(color.equals("white")){
-                position = new Position(row-i,col);
-                if(positionIsWithinBounds(position) && getSpace(position)!=null) {
+        for (int i = 1; i < getRows(); i++) {
+            if (color.equals("white")) {
+                position = new Position(row - i, col);
+                if (positionIsWithinBounds(position) && getSpace(position) != null) {
                     topOrBottom = false;
                 }
-            }
-            else{
-                position = new Position(row+i,col);
-                if(positionIsWithinBounds(position) && getSpace(position)!=null) {
+            } else {
+                position = new Position(row + i, col);
+                if (positionIsWithinBounds(position) && getSpace(position) != null) {
                     topOrBottom = false;
                 }
             }
 
         }
-        if(topOrBottom){
+        if (topOrBottom) {
             setSpace(new Space(new Queen(color)), row, col);
         }
     }

@@ -15,7 +15,7 @@ public class BoardPanel extends JPanel {
     private Position selectedPosition; //Piece that corresponds to the highlighted spaces
     private HashSet<Position> highlightedSpaces = new HashSet<>();
     private GameState currentState;
-    private ArrayList<GameState> gameStates = new ArrayList<>();
+    private ArrayList<GameState> gameStates;
     private boolean canPlay = true;
 
     private ArrayList<ActionListener> changeTurnListeners = new ArrayList<>();
@@ -235,6 +235,7 @@ public class BoardPanel extends JPanel {
     }
 
     void save() {
+        gameStates.add(new GameState(currentState));
         callListeners(saveListeners);
     }
 

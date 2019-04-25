@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -9,7 +10,7 @@ import java.util.*;
  * information regarding the current or previous "states" of the game. This makes it very easy to create things such as
  * an "undo" function.
  */
-public class GameState {
+public class GameState implements Serializable {
     private String turnColor; //Color of the current player's turn at the time of creation of this state.
     private Board board; //
     private Position lastMove;
@@ -68,8 +69,9 @@ public class GameState {
     public Board getBoard() {
         return board;
     }
-    public void setBoard(Board b){
-        board=b;
+
+    public void setBoard(Board b) {
+        board = b;
     }
 
     public HashMap<String, ArrayList<Piece>> getTakenPieces() {
@@ -171,7 +173,7 @@ public class GameState {
         return hasAvailableMove;
     }
 
-    HashSet<Position> availableMoves(Board board, Piece piece, Position position){
+    HashSet<Position> availableMoves(Board board, Piece piece, Position position) {
         HashSet<Position> availableMoves = new HashSet<>();
 
 
@@ -188,7 +190,7 @@ public class GameState {
                         Board tempBoard = new Board(board);
                         Status status = tempBoard.getSpace(position).getPiece().move(tempBoard, position, move);
 
-                        if (!status.status.equals(Status.STATUS_BAD) && !tempBoard.kingInCheck(turnColor)){
+                        if (!status.status.equals(Status.STATUS_BAD) && !tempBoard.kingInCheck(turnColor)) {
                             availableMoves.add(move);
                         }
                     }

@@ -1,11 +1,11 @@
-import java.awt.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Stores the value for a row and col.
  * Primarily used to get both values from a method, since Java can return only one object;
  */
-public class Position {
+public class Position implements Serializable {
     public int row, col;
 
 

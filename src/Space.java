@@ -1,10 +1,11 @@
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.Random;
 
 /**
  * Represents on tile on a Board instance.
  */
-public class Space {
+public class Space implements Serializable {
 
     private Piece p; //Piece that is on this Space. If it is empty, then there is no piece on this Space.
     private Effect effect; //Effect on the space.

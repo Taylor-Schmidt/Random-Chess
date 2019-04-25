@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -12,6 +11,7 @@ class MainFrame extends JFrame {
     private Dimension dimension = new Dimension(1280, 800);
 
     //TODO: add music
+    //TODO: add mute button
 
     MainFrame() {
         super("Random Chess");
@@ -24,7 +24,7 @@ class MainFrame extends JFrame {
         setLocationRelativeTo(null); //Centers the window in the middle of the main screen
         getContentPane().setBackground(ColorGenerator.backgroundColor);
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         setLayout(new GridBagLayout());
 
@@ -37,7 +37,6 @@ class MainFrame extends JFrame {
         OptionPanel mainMenuPanel = new MainMenuPanel();
 
         GridBagConstraints c = new GridBagConstraints();
-//        new BorderLayout(); //Does nothing?
         c.gridx = 1;
         c.gridy = 1;
         c.weightx = 1;
@@ -137,7 +136,7 @@ class MainFrame extends JFrame {
             if (infoPanel.getColor().equals(InfoPanel.BLACK)) {
                 infoPanel.toggleColor();
             }
-            gamePanel.newGame();
+            gamePanel.setUpBoard(true);
             gamePanel.setVisible(!gamePanel.isVisible());
             pausePanel.setVisible(!pausePanel.isVisible());
             infoPanel.setVisible(!infoPanel.isVisible());
@@ -146,6 +145,7 @@ class MainFrame extends JFrame {
         //Quit button
         pausePanel.getButton(2).addActionListener(e -> {
             dispose();
+            gamePanel.save();
             System.exit(0);
         });
 
@@ -157,6 +157,7 @@ class MainFrame extends JFrame {
             } catch (InterruptedException e1) {
                 e1.printStackTrace();
             }
+            gamePanel.setUpBoard(false);
             mainMenuPanel.setVisible(false);
             pauseButton.setVisible(true);
             infoPanel.setVisible(true);
@@ -165,7 +166,7 @@ class MainFrame extends JFrame {
         }));
         //New game button
         mainMenuPanel.getButton(1).addActionListener(e -> {
-            gamePanel.newGame();
+            gamePanel.setUpBoard(true);
             mainMenuPanel.setVisible(false);
             pauseButton.setVisible(true);
             infoPanel.setVisible(true);
@@ -185,6 +186,23 @@ class MainFrame extends JFrame {
             setUndecorated(true);
             fullScreenButton.toggle();
         }
+
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        WindowListener exitListener = new WindowAdapter() {
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                int confirm = JOptionPane.showOptionDialog(
+                        null, "Are you sure you want to quit?",
+                        "Quit", JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE, null, null, null);
+                if (confirm == 0) {
+                    gamePanel.save();
+                    System.exit(0);
+                }
+            }
+        };
+        addWindowListener(exitListener);
 
         setVisible(true);
     }
