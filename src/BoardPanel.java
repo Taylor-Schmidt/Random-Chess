@@ -35,7 +35,6 @@ public class BoardPanel extends JPanel {
 
 
         boardButtons = new BoardButton[h][w];
-        ColorGenerator color = new ColorGenerator();
 
         currentState = new GameState("white", board, null);
         gameStates.add(currentState);
@@ -133,6 +132,7 @@ public class BoardPanel extends JPanel {
 
                                         gameOver(currentState.getTurnColor(), EndGameStates.CHECKMATE);
                                     } else {
+                                        //TODO: Add animation to indicate the piece is in check
 //                                        System.out.println(currentState.getTurnColor() + " is in check.");
 //                                        gamePanel.feedBackPanel.addlabel(currentState.getTurnColor() + " is in check.");
                                     }
