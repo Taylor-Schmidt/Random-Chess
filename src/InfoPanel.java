@@ -8,6 +8,10 @@ class InfoPanel extends JPanel {
     private static final ImageIcon white = imageManager.getScaledImage("pawn_red", 50, 50, 0);
     private static final ImageIcon turnIcon = imageManager.getImage("turn_word");
 
+    static final String BLACK = "black";
+    @SuppressWarnings("WeakerAccess")
+    static final String WHITE = "white";
+
     private String color;
 
     InfoPanel(String color) {
@@ -28,8 +32,6 @@ class InfoPanel extends JPanel {
 
         setColor(color);
         add(icon, gc);
-
-
     }
 
     void setColor(String color){
@@ -41,11 +43,15 @@ class InfoPanel extends JPanel {
         icon.updateUI();
     }
 
+    String getColor(){
+        return color;
+    }
+
     void toggleColor(){
-        if (color.equals("black")) {
-            color = "white";
+        if (color.equals(BLACK)) {
+            color = WHITE;
         } else {
-            color = "black";
+            color = BLACK;
         }
 
         setColor(color);

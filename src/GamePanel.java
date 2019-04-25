@@ -38,8 +38,6 @@ class GamePanel extends JPanel {
         //Creates BoardPanel
         board = new Board(true);
 
-//        setPiecesTest();
-
         //Sets pieces on board.
         setPieces();
 
@@ -54,6 +52,7 @@ class GamePanel extends JPanel {
         boardPanel.addNewGameListener(e -> newGame());
 
         boardPanel.addChangeTurnListener(e -> changeTurn());
+
         add(boardPanel, gc);
     }
 
@@ -73,7 +72,6 @@ class GamePanel extends JPanel {
 
     @SuppressWarnings({"ConstantConditions", "unused"})
     private void setPiecesTest() {
-
         board.getSpace(new Position(Position.parsePosition("H8"))).setPiece(new King(black));
         board.getSpace(new Position(Position.parsePosition("F7"))).setPiece(new King(white));
         board.getSpace(new Position(Position.parsePosition("f6"))).setPiece(new Queen(white));

@@ -103,20 +103,7 @@ class MainFrame extends JFrame {
 
         PausePanel pausePanel = new PausePanel();
         pausePanel.setVisible(false);
-        pausePanel.getButton(0).addActionListener(e -> {
-            gamePanel.setVisible(!gamePanel.isVisible());
-            pausePanel.setVisible(!pausePanel.isVisible());
-        });
-        pausePanel.getButton(1).addActionListener(e -> {
-            //TODO: update infoPanel
-            gamePanel.newGame();
-            gamePanel.setVisible(!gamePanel.isVisible());
-            pausePanel.setVisible(!pausePanel.isVisible());
-        });
-        pausePanel.getButton(2).addActionListener(e -> {
-            dispose();
-            System.exit(0);
-        });
+
 
         c.gridx = 1;
         c.gridy = 1;
@@ -141,6 +128,25 @@ class MainFrame extends JFrame {
         c.ipady = 0;
         c.anchor = GridBagConstraints.NORTHEAST;
         add(pauseButton, c);
+
+        pausePanel.getButton(0).addActionListener(e -> {
+            gamePanel.setVisible(!gamePanel.isVisible());
+            pausePanel.setVisible(!pausePanel.isVisible());
+            pauseButton.toggle();
+        });
+        pausePanel.getButton(1).addActionListener(e -> {
+            if (infoPanel.getColor().equals(InfoPanel.BLACK)) {
+                infoPanel.toggleColor();
+            }
+            gamePanel.newGame();
+            gamePanel.setVisible(!gamePanel.isVisible());
+            pausePanel.setVisible(!pausePanel.isVisible());
+            pauseButton.toggle();
+        });
+        pausePanel.getButton(2).addActionListener(e -> {
+            dispose();
+            System.exit(0);
+        });
 
         mainMenuPanel.getButton(0).addActionListener(e -> CompletableFuture.runAsync(() -> {
             //TODO: add resume/save functionality
@@ -171,7 +177,6 @@ class MainFrame extends JFrame {
 
         //        dispose();
         boolean isFullscreen = (boolean) gameSettings.get(GameSettings.FULLSCREEN);
-        System.out.println(isFullscreen);
         if (isFullscreen) {
             setExtendedState(JFrame.MAXIMIZED_BOTH);
             setUndecorated(true);
