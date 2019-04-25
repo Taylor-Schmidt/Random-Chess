@@ -13,6 +13,7 @@ class MainFrame extends JFrame {
     //TODO: add music
     //TODO: add mute button
 
+    @SuppressWarnings("SpellCheckingInspection")
     MainFrame() {
         super("Random Chess");
 
@@ -151,7 +152,6 @@ class MainFrame extends JFrame {
 
         //Continue button
         mainMenuPanel.getButton(0).addActionListener(e -> CompletableFuture.runAsync(() -> {
-            //TODO: add resume/save functionality
             try {
                 Thread.sleep(80);
             } catch (InterruptedException e1) {
@@ -179,6 +179,10 @@ class MainFrame extends JFrame {
             System.exit(0);
         });
 
+        if (gamePanel.loadGame() == null) {
+            mainMenuPanel.getButton(0).setVisible(false);
+        }
+
         //Enter fullscreen if the game was closed in fullscreen.
         boolean isFullscreen = (boolean) gameSettings.get(GameSettings.FULLSCREEN);
         if (isFullscreen) {
@@ -192,14 +196,16 @@ class MainFrame extends JFrame {
 
             @Override
             public void windowClosing(WindowEvent e) {
-                int confirm = JOptionPane.showOptionDialog(
-                        null, "Are you sure you want to quit?",
-                        "Quit", JOptionPane.YES_NO_OPTION,
-                        JOptionPane.QUESTION_MESSAGE, null, null, null);
-                if (confirm == 0) {
-                    gamePanel.save();
-                    System.exit(0);
-                }
+//                int confirm = JOptionPane.showOptionDialog(
+//                        null, "Are you sure you want to quit?",
+//                        "Quit", JOptionPane.YES_NO_OPTION,
+//                        JOptionPane.QUESTION_MESSAGE, null, null, null);
+//                if (confirm == 0) {
+//                    gamePanel.save();
+//                    System.exit(0);
+//                }
+                gamePanel.save();
+                System.exit(0);
             }
         };
         addWindowListener(exitListener);

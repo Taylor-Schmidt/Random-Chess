@@ -49,7 +49,6 @@ class GamePanel extends JPanel {
         boardPanel.addNewGameListener(e -> setUpBoard(true));
         boardPanel.addChangeTurnListener(e -> changeTurn());
         boardPanel.addSaveListener(e -> {
-            System.out.println("Saving.");
             try {
                 ArrayList<GameState> gameStates = (ArrayList<GameState>) boardPanel.getClientProperty(BoardPanel.STATES);
                 ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
@@ -86,20 +85,16 @@ class GamePanel extends JPanel {
 
 
     @SuppressWarnings("unchecked")
-    private ArrayList<GameState> loadGame() {
-        System.out.println("Loading.");
+    ArrayList<GameState> loadGame() {
         try {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName));
-            // Check it's an ArrayList
             ArrayList<GameState> states = (ArrayList<GameState>) ois.readObject();
             ois.close();
 
             return states;
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            return null;
         }
-
-        return null;
     }
 
     private void changeTurn() {
