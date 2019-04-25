@@ -8,16 +8,14 @@ public class ImageButton extends JButton {
     ImageIcon altIcon;
     ImageIcon altIconPush;
     private boolean isToggled = false;
-    String toolTipText;
-    String altToolTipText;
 
     ImageButton(){}
 
-    ImageButton(String iconAddr, String iconPushAddr, String toolTipText) {
-        this(iconAddr, iconPushAddr, toolTipText, null, null, null, false);
+    ImageButton(String iconAddr, String iconPushAddr) {
+        this(iconAddr, iconPushAddr, null, null, false);
     }
 
-    ImageButton(String iconAddr, String iconPushAddr, String toolTipText, String altIconAddr, String altIconPushAddr, String altToolTipText, boolean hasAlt) {
+    ImageButton(String iconAddr, String iconPushAddr, String altIconAddr, String altIconPushAddr, boolean hasAlt) {
         this.hasAlt = hasAlt;
 
         ImageManager imageManager = ImageManager.getInstance();
@@ -33,7 +31,6 @@ public class ImageButton extends JButton {
     void updateIcon(){
         setIcon(icon);
         setPressedIcon(iconPush);
-        setToolTipText(toolTipText);
         setBorderPainted(false);
         setFocusPainted(false);
         setContentAreaFilled(false);
@@ -45,11 +42,9 @@ public class ImageButton extends JButton {
             if (isToggled) {
                 setIcon(icon);
                 setPressedIcon(iconPush);
-                setToolTipText(toolTipText);
             } else {
                 setIcon(altIcon);
                 setPressedIcon(altIconPush);
-                setToolTipText(altToolTipText);
             }
 
             isToggled = !isToggled;

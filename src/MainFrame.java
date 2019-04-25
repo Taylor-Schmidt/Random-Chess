@@ -128,11 +128,13 @@ class MainFrame extends JFrame {
         c.anchor = GridBagConstraints.NORTHEAST;
         add(pauseButton, c);
 
+        //Continue button
         pausePanel.getButton(0).addActionListener(e -> {
             gamePanel.setVisible(!gamePanel.isVisible());
             pausePanel.setVisible(!pausePanel.isVisible());
             pauseButton.toggle();
         });
+        //New game button
         pausePanel.getButton(1).addActionListener(e -> {
             if (infoPanel.getColor().equals(InfoPanel.BLACK)) {
                 infoPanel.toggleColor();
@@ -142,11 +144,13 @@ class MainFrame extends JFrame {
             pausePanel.setVisible(!pausePanel.isVisible());
             pauseButton.toggle();
         });
+        //Quit button
         pausePanel.getButton(2).addActionListener(e -> {
             dispose();
             System.exit(0);
         });
 
+        //Continue button
         mainMenuPanel.getButton(0).addActionListener(e -> CompletableFuture.runAsync(() -> {
             //TODO: add resume/save functionality
             try {
@@ -160,6 +164,7 @@ class MainFrame extends JFrame {
             gamePanel.setVisible(true);
             validate();
         }));
+        //New game button
         mainMenuPanel.getButton(1).addActionListener(e -> {
             gamePanel.newGame();
             mainMenuPanel.setVisible(false);
@@ -168,12 +173,13 @@ class MainFrame extends JFrame {
             gamePanel.setVisible(true);
             validate();
         });
+        //Quit button
         mainMenuPanel.getButton(2).addActionListener(e -> {
             dispose();
             System.exit(0);
         });
 
-        //        dispose();
+        //Enter fullscreen if the game was closed in fullscreen.
         boolean isFullscreen = (boolean) gameSettings.get(GameSettings.FULLSCREEN);
         if (isFullscreen) {
             setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -210,8 +216,6 @@ class MainFrame extends JFrame {
             iconPush = m.getScaledImage("full_screen_icon_push");
             altIcon = m.getScaledImage("exit_full_screen_icon");
             altIconPush = m.getScaledImage("exit_full_screen_icon_push");
-            toolTipText = "Full screen";
-            altToolTipText = "Exit full screen";
             hasAlt = true;
 
             updateIcon();
@@ -237,7 +241,6 @@ class MainFrame extends JFrame {
             ImageManager m = ImageManager.getInstance();
             icon = m.getScaledImage("question_mark_icon");
             iconPush = m.getScaledImage("question_mark_icon_push");
-            toolTipText = "Info";
 
             updateIcon();
 
@@ -251,10 +254,8 @@ class MainFrame extends JFrame {
             ImageManager m = ImageManager.getInstance();
             icon = m.getScaledImage("pause_button");
             iconPush = m.getScaledImage("pause_button_push");
-            toolTipText = "Pause";
             altIcon = m.getScaledImage("play_button");
             altIconPush = m.getScaledImage("play_button_push");
-            altToolTipText = "Resume";
             hasAlt = true;
 
             updateIcon();
