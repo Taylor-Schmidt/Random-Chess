@@ -9,9 +9,7 @@ import java.util.ArrayList;
 
 class GamePanel extends JPanel {
     private BoardPanel boardPanel;
-    FeedBackPanel feedBackPanel;
     private Board board;
-    private ArrayList<GameState> gameStates = new ArrayList<>();
 
     @SuppressWarnings("FieldCanBeLocal")
     private static String black = "black";
@@ -26,12 +24,7 @@ class GamePanel extends JPanel {
         setBackground(ColorGenerator.backgroundColor);
         setLayout(new GridBagLayout());
 
-
-//        feedBackPanel = new FeedBackPanel();
-//        add(feedBackPanel, gc);
-
         newGame();
-
     }
 
     void newGame() {
@@ -40,9 +33,6 @@ class GamePanel extends JPanel {
 
         //Sets pieces on board.
         setPieces();
-
-        GameState currentState = new GameState(white, board, null);
-        gameStates.add(new GameState(currentState));
 
         if (boardPanel != null) {
             remove(boardPanel);
@@ -77,58 +67,23 @@ class GamePanel extends JPanel {
         board.getSpace(new Position(Position.parsePosition("f6"))).setPiece(new Queen(white));
     }
 
+    //Specifically made for a 16x16 board.
     private void setPieces() {
-        //Specifically made for a 16x16 board.
-        Space space;
-        space = new Space(new Rook("black"));
-        board.setSpace(space, 4, 4);
-        space = new Space(new Knight("black"));
-        board.setSpace(space, 4, 5);
-        space = new Space(new Bishop("black"));
-        board.setSpace(space, 4, 6);
-        space = new Space(new Queen("black"));
-        board.setSpace(space, 4, 7);
-        space = new Space(new King("black"));
-        board.setSpace(space, 4, 8);
-        space = new Space(new Bishop("black"));
-        board.setSpace(space, 4, 9);
-        space = new Space(new Knight("black"));
-        board.setSpace(space, 4, 10);
-        space = new Space(new Rook("black"));
-        board.setSpace(space, 4, 11);
-        for (int i = 4; i < 12; i++) {
-            space = new Space(new Pawn("black"));
-            board.setSpace(space, 5, i);
-        }
+        initPiecesForColor(white, 11, 10);
+        initPiecesForColor(black, 4, 5);
+    }
 
-        space = new Space(new Rook("white"));
-        board.setSpace(space, 11, 4);
-        space = new Space(new Knight("white"));
-        board.setSpace(space, 11, 5);
-        space = new Space(new Bishop("white"));
-        board.setSpace(space, 11, 6);
-        space = new Space(new Queen("white"));
-        board.setSpace(space, 11, 7);
-        space = new Space(new King("white"));
-        board.setSpace(space, 11, 8);
-        space = new Space(new Bishop("white"));
-        board.setSpace(space, 11, 9);
-        space = new Space(new Knight("white"));
-        board.setSpace(space, 11, 10);
-        space = new Space(new Rook("white"));
-        board.setSpace(space, 11, 11);
+    private void initPiecesForColor(String color, int royalRow, int pawnRow) {
+        board.setSpace(new Space(new Rook(color)), royalRow, 4);
+        board.setSpace(new Space(new Knight(color)), royalRow, 5);
+        board.setSpace(new Space(new Bishop(color)), royalRow, 6);
+        board.setSpace(new Space(new Queen(color)), royalRow, 7);
+        board.setSpace(new Space(new King(color)), royalRow, 8);
+        board.setSpace(new Space(new Bishop(color)), royalRow, 9);
+        board.setSpace(new Space(new Knight(color)), royalRow, 10);
+        board.setSpace(new Space(new Rook(color)), royalRow, 11);
         for (int i = 4; i < 12; i++) {
-            space = new Space(new Pawn("white"));
-            board.setSpace(space, 10, i);
+            board.setSpace(new Space(new Pawn(color)), pawnRow, i);
         }
     }
-
-    private GameState getCurrentState() {
-        return gameStates.get(gameStates.size() - 1);
-    }
-
-    Board getBoard() {
-        return getCurrentState().getBoard();
-    }
-
 }
