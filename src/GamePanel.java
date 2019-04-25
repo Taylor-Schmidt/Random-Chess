@@ -66,8 +66,10 @@ class GamePanel extends JPanel {
         add(boardPanel, gc);
     }
 
-    void save(){
-        boardPanel.save();
+    void save() {
+        if (boardPanel != null) {
+            boardPanel.save();
+        }
     }
 
     private void newGame() {
