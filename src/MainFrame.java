@@ -112,11 +112,13 @@ class MainFrame extends JFrame {
         add(pausePanel, c);
 
         PauseButton pauseButton = new PauseButton();
-        pauseButton.addActionListener(e -> {
+        ActionListener pauseListener = e -> {
             gamePanel.setVisible(!gamePanel.isVisible());
             pausePanel.setVisible(!pausePanel.isVisible());
+            infoPanel.setVisible(!infoPanel.isVisible());
             pauseButton.toggle();
-        });
+        };
+        pauseButton.addActionListener(pauseListener);
         pauseButton.setVisible(false);
 
         c.gridx = 2;
@@ -129,11 +131,7 @@ class MainFrame extends JFrame {
         add(pauseButton, c);
 
         //Continue button
-        pausePanel.getButton(0).addActionListener(e -> {
-            gamePanel.setVisible(!gamePanel.isVisible());
-            pausePanel.setVisible(!pausePanel.isVisible());
-            pauseButton.toggle();
-        });
+        pausePanel.getButton(0).addActionListener(pauseListener);
         //New game button
         pausePanel.getButton(1).addActionListener(e -> {
             if (infoPanel.getColor().equals(InfoPanel.BLACK)) {
@@ -142,6 +140,7 @@ class MainFrame extends JFrame {
             gamePanel.newGame();
             gamePanel.setVisible(!gamePanel.isVisible());
             pausePanel.setVisible(!pausePanel.isVisible());
+            infoPanel.setVisible(!infoPanel.isVisible());
             pauseButton.toggle();
         });
         //Quit button
