@@ -10,18 +10,15 @@ import java.util.ArrayList;
 
 class GamePanel extends JPanel {
     private BoardPanel boardPanel;
-    private Board board;
-
     @SuppressWarnings("FieldCanBeLocal")
     private static String black = "black";
     private static String white = "white";
 
+    private static final String fileName = "save.dat";
+
     private GridBagConstraints gc = new GridBagConstraints();
 
     private ArrayList<ActionListener> turnChangeListeners = new ArrayList<>();
-
-    private static final String fileName = "save.dat";
-
 
 
     GamePanel() {
@@ -37,27 +34,33 @@ class GamePanel extends JPanel {
     }
 
     @SuppressWarnings("unchecked")
-    void setUpBoard(boolean isNewGame) {
-
-        if (isNewGame) {
-            //Creates BoardPanel
-            board = new Board(true);
-
-            //Sets pieces on board.
-            setPieces();
-        } else {
-//            board = loadGame();
-
-            board = new Board(true);
-            
-            setPieces();
-        }
+    private void setUpBoard(boolean isNewGame) {
 
         if (boardPanel != null) {
             remove(boardPanel);
         }
 
-        boardPanel = new BoardPanel(board.getRows(), board.getCols(), board);
+        if (isNewGame) {
+            //Creates BoardPanel
+            Board board = new Board(true);
+
+            //Sets pieces on board.
+            setPieces(board);
+
+            ArrayList<GameState> gameStates = new ArrayList<>();
+
+            gameStates.add(new GameState("white", board, null));
+
+            boardPanel = new BoardPanel(gameStates);
+        } else {
+
+            ArrayList<GameState> gameStates = loadGame();
+
+            boardPanel = new BoardPanel(gameStates);
+        }
+
+
+
         boardPanel.addNewGameListener(e -> newGame());
         boardPanel.addChangeTurnListener(e -> changeTurn());
         boardPanel.addSaveListener(e -> {
@@ -79,8 +82,18 @@ class GamePanel extends JPanel {
         setUpBoard(true);
     }
 
-    void loadGame() {
+    private ArrayList<GameState> loadGame() {
+        try {
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName));
+            // Check it's an ArrayList
+            ArrayList<GameState> states = (ArrayList<GameState>) ois.readObject();
+            ois.close();
+            return states;
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
+        return null;
     }
 
     private void changeTurn() {
@@ -97,20 +110,13 @@ class GamePanel extends JPanel {
         turnChangeListeners.add(e);
     }
 
-    @SuppressWarnings({"ConstantConditions", "unused"})
-    private void setPiecesTest() {
-        board.getSpace(new Position(Position.parsePosition("H8"))).setPiece(new King(black));
-        board.getSpace(new Position(Position.parsePosition("F7"))).setPiece(new King(white));
-        board.getSpace(new Position(Position.parsePosition("f6"))).setPiece(new Queen(white));
-    }
-
     //Specifically made for a 16x16 board.
-    private void setPieces() {
-        initPiecesForColor(white, 11, 10);
-        initPiecesForColor(black, 4, 5);
+    private void setPieces(Board board) {
+        initPiecesForColor(board, white, 11, 10);
+        initPiecesForColor(board, black, 4, 5);
     }
 
-    private void initPiecesForColor(String color, int royalRow, int pawnRow) {
+    private void initPiecesForColor(Board board, String color, int royalRow, int pawnRow) {
         board.setSpace(new Space(new Rook(color)), royalRow, 4);
         board.setSpace(new Space(new Knight(color)), royalRow, 5);
         board.setSpace(new Space(new Bishop(color)), royalRow, 6);

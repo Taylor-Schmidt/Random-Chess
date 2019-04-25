@@ -27,19 +27,32 @@ public class BoardPanel extends JPanel {
     static String STATES = "this.game_states";
 
     @SuppressWarnings("Duplicates")
-    BoardPanel(int w, int h, Board board) {
-        super(new GridLayout(w, h));
+    BoardPanel(ArrayList<GameState> mGameStates) {
+        super();
+
+        gameStates = mGameStates;
+
+        if (!gameStates.isEmpty()) {
+            currentState = gameStates.get(gameStates.size() - 1);
+        } else {
+            gameStates = new ArrayList<>();
+            currentState = new GameState("white", new Board(true), null);
+            gameStates.add(currentState);
+        }
+
+        Board board = currentState.getBoard();
+
+        int w = board.getRows();
+        int h = board.getCols();
+
+        setLayout(new GridLayout(h, w));
         //Represents the max number of columns.
         //Represents the max number of rows.
         setPreferredSize(new Dimension(700, 700));
         setMinimumSize(new Dimension(650, 650));
         setBackground(ColorGenerator.backgroundColor);
 
-
         boardButtons = new BoardButton[h][w];
-
-        currentState = new GameState("white", board, null);
-        gameStates.add(currentState);
 
         for (int i = 0; i < h; i++) {
             for (int j = 0; j < w; j++) {
