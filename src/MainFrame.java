@@ -12,7 +12,6 @@ class MainFrame extends JFrame {
     private Dimension dimension = new Dimension(1280, 800);
 
     //TODO: add music
-    //TODO:
 
     MainFrame() {
         super("Random Chess");
@@ -162,7 +161,6 @@ class MainFrame extends JFrame {
             validate();
         }));
         mainMenuPanel.getButton(1).addActionListener(e -> {
-            //TODO: update info panel here, too
             gamePanel.newGame();
             mainMenuPanel.setVisible(false);
             pauseButton.setVisible(true);
