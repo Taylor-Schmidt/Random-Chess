@@ -191,8 +191,8 @@ public class Board implements Serializable {
                 createTile(6, 3, 4, 1);
             }
             if (0 == randomNum.nextInt(2)) {
-                createTile(4, 3, 7, 1);
-                createTile(4, 12, 7, 1);
+                createTile(5, 3, 6, 1);
+                createTile(5, 12, 6, 1);
             }
         }
     }
