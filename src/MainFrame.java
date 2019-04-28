@@ -11,9 +11,6 @@ class MainFrame extends JFrame {
     private AudioManager audioManager = AudioManager.getInstance();
     private Dimension dimension = new Dimension(1280, 800);
 
-    //TODO: add music
-    //TODO: add mute button
-
     @SuppressWarnings("SpellCheckingInspection")
     MainFrame() {
         super("Random Chess");
