@@ -3,9 +3,10 @@ import java.io.File;
 
 class AudioManager {
     private static File clickFile = new File("assets/219069__annabloom__click1.wav");
-    private static File Boom = new File("assets/250712__aiwha__explosion.wav");
-    private static File Teleport = new File("assets/448226__inspectorj__explosion-8-bit-01.wav");
-    private static File Music = new File("assets/bensound-ukulele.wav");
+    private static File boom = new File("assets/250712__aiwha__explosion.wav");
+    private static File teleport = new File("assets/448226__inspectorj__explosion-8-bit-01.wav");
+    private static File uke_song = new File("assets/bensound-ukulele.wav");
+
     private static final AudioManager audioManager = new AudioManager();
 
     private AudioManager() {
@@ -33,10 +34,16 @@ class AudioManager {
     void playMusic() {
         if (musicStream == null) {
             try {
-                musicStream = AudioSystem.getAudioInputStream(Music);
+                musicStream = AudioSystem.getAudioInputStream(uke_song);
                 Clip clip = AudioSystem.getClip();
                 clip.open(musicStream);
                 clip.start();
+                clip.addLineListener(e -> {
+                    if (e.getType() == LineEvent.Type.STOP) {
+                        musicStream = null;
+                        playMusic();
+                    }
+                });
             } catch (Exception ex) {
                 System.out.println("Error with playing sound.");
                 ex.printStackTrace();
@@ -53,12 +60,13 @@ class AudioManager {
                 e.printStackTrace();
             }
             clip.stop();
+            musicStream = null;
         }
     }
 
     void playBoom() {
         try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(Boom);
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(boom);
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             clip.start();
@@ -70,7 +78,7 @@ class AudioManager {
 
     void playTele() {
         try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(Teleport);
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(teleport);
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             clip.start();
@@ -81,7 +89,7 @@ class AudioManager {
     }
 
     //Makes sure audio streams are open
-    void playTestSound(){
+    void playTestSound() {
         File file = new File("assets/silence.wav");
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
