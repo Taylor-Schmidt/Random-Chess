@@ -1,4 +1,7 @@
-import javax.sound.sampled.*;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import java.io.File;
 
 class AudioManager {
@@ -28,31 +31,17 @@ class AudioManager {
         }
     }
 
-    static AudioInputStream musicStream;
-
     void playMusic() {
-        if (musicStream == null) {
-            try {
-                musicStream = AudioSystem.getAudioInputStream(Music);
-                Clip clip = AudioSystem.getClip();
-                clip.open(musicStream);
-                clip.start();
-            } catch (Exception ex) {
-                System.out.println("Error with playing sound.");
-                ex.printStackTrace();
-            }
-        }
-    }
-
-    void stopMusic() {
-        if (musicStream != null) {
-            Clip clip = null;
-            try {
-                clip = AudioSystem.getClip();
-            } catch (LineUnavailableException e) {
-                e.printStackTrace();
-            }
-            clip.stop();
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(Music);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(-15.0f);
+            clip.start();
+        } catch (Exception ex) {
+            System.out.println("Error with playing sound.");
+            ex.printStackTrace();
         }
     }
 
@@ -73,6 +62,8 @@ class AudioManager {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(Teleport);
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
+            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(-15.0f);
             clip.start();
         } catch (Exception ex) {
             System.out.println("Error with playing sound.");
