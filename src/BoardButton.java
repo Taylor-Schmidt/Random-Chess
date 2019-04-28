@@ -243,6 +243,7 @@ public class BoardButton extends JButton {
 
     private ImageIcon explosionIcon;
 
+    //TODO: add explosion effect
     void explode(){
         System.out.println("Exploding" + xPos + ", " + yPos);
         setNewIcon(null);
