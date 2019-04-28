@@ -37,6 +37,8 @@ class AudioManager {
                 musicStream = AudioSystem.getAudioInputStream(uke_song);
                 Clip clip = AudioSystem.getClip();
                 clip.open(musicStream);
+                FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                gainControl.setValue(-15.0f);
                 clip.start();
                 clip.addLineListener(e -> {
                     if (e.getType() == LineEvent.Type.STOP) {
@@ -81,6 +83,8 @@ class AudioManager {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(teleport);
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
+            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(-15.0f);
             clip.start();
         } catch (Exception ex) {
             System.out.println("Error with playing sound.");
