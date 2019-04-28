@@ -84,7 +84,7 @@ class AudioManager {
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(-15.0f);
+            gainControl.setValue(-25.0f);
             clip.start();
         } catch (Exception ex) {
             System.out.println("Error with playing sound.");
