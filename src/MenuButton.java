@@ -15,6 +15,6 @@ class MenuButton extends JButton {
         setPressedIcon(pressedIcon);
 
         addActionListener(e -> AudioManager.getInstance().playClick());
-        addActionListener(e -> AudioManager.getInstance().playMusic());
+//        addActionListener(e -> AudioManager.getInstance().playMusic());
     }
 }

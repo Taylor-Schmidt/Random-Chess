@@ -184,6 +184,8 @@ class MainFrame extends JFrame {
             mainMenuPanel.getButton(0).setVisible(false);
         }
 
+        AudioManager.getInstance().playMusic();
+
         //Enter fullscreen if the game was closed in fullscreen.
         boolean isFullscreen = (boolean) gameSettings.get(GameSettings.FULLSCREEN);
         if (isFullscreen) {
@@ -205,6 +207,7 @@ class MainFrame extends JFrame {
 //                    gamePanel.save();
 //                    System.exit(0);
 //                }
+                AudioManager.getInstance().stopMusic();
                 gamePanel.save();
                 System.exit(0);
             }
