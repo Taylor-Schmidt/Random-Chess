@@ -2,12 +2,16 @@ import javax.sound.sampled.*;
 import java.io.File;
 
 class AudioManager {
-    private static File clickFile = new File("assets/219069__annabloom__click1.wav");
-    private static File boom = new File("assets/250712__aiwha__explosion.wav");
-    private static File teleport = new File("assets/448226__inspectorj__explosion-8-bit-01.wav");
-    private static File uke_song = new File("assets/bensound-ukulele.wav");
+    private File clickFile = new File("assets/219069__annabloom__click1.wav");
+    private File boom = new File("assets/250712__aiwha__explosion.wav");
+    private File teleport = new File("assets/448226__inspectorj__explosion-8-bit-01.wav");
+    private File uke_song = new File("assets/bensound-ukulele.wav");
 
     private static final AudioManager audioManager = new AudioManager();
+
+    static AudioInputStream musicStream;
+
+    private GameSettings gameSettings = GameSettings.getInstance();
 
     private AudioManager() {
     }
@@ -16,12 +20,21 @@ class AudioManager {
         return audioManager;
     }
 
-
     void playClick() {
+        playSound(clickFile);
+    }
+
+    private void playSound(File file) {
+        playSound(file, 0);
+    }
+
+    private void playSound(File file, float gain) {
         try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(clickFile);
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
+            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(gain);
             clip.start();
         } catch (Exception ex) {
             System.out.println("Error with playing sound.");
@@ -29,7 +42,6 @@ class AudioManager {
         }
     }
 
-    static AudioInputStream musicStream;
 
     void playMusic() {
         if (musicStream == null) {
@@ -61,35 +73,19 @@ class AudioManager {
             } catch (LineUnavailableException e) {
                 e.printStackTrace();
             }
-            clip.stop();
+            if (clip != null) {
+                clip.stop();
+            }
             musicStream = null;
         }
     }
 
     void playBoom() {
-        try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(boom);
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            clip.start();
-        } catch (Exception ex) {
-            System.out.println("Error with playing sound.");
-            ex.printStackTrace();
-        }
+        playSound(boom);
     }
 
     void playTele() {
-        try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(teleport);
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(-25.0f);
-            clip.start();
-        } catch (Exception ex) {
-            System.out.println("Error with playing sound.");
-            ex.printStackTrace();
-        }
+        playSound(teleport, -25);
     }
 
     //Makes sure audio streams are open
@@ -108,7 +104,4 @@ class AudioManager {
             ex.printStackTrace();
         }
     }
-
-    //public static
-
 }
