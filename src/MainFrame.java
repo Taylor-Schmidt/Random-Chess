@@ -64,7 +64,8 @@ class MainFrame extends JFrame {
                             "\nand \nChristopher DeLuca.\n\n" +
                             "Audio Credits:\n" +
                             "\"Explosion, 8-bit, 01.wav\" by InspectorJ (www.jshaw.co.uk) of Freesound.org\n" +
-                            "\"aiwha_explosion.wav\" by Aiwah of Freesound.org ", "About this game",
+                            "\"aiwha_explosion.wav\" by Aiwah of Freesound.org\n" +
+                            "Royalty Free Music from Bensound", "About this game",
                     JOptionPane.INFORMATION_MESSAGE, logoIcon);
         });
 

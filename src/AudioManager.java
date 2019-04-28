@@ -8,6 +8,7 @@ class AudioManager {
     private static File clickFile = new File("assets/219069__annabloom__click1.wav");
     private static File Boom = new File("assets/250712__aiwha__explosion.wav");
     private static File Teleport = new File("assets/448226__inspectorj__explosion-8-bit-01.wav");
+    private static File Music = new File("assets/bensound-ukulele.wav");
     private static final AudioManager audioManager = new AudioManager();
 
     private AudioManager() {
@@ -17,9 +18,22 @@ class AudioManager {
         return audioManager;
     }
 
+
     void playClick() {
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(clickFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (Exception ex) {
+            System.out.println("Error with playing sound.");
+            ex.printStackTrace();
+        }
+    }
+
+    void playMusic() {
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(Music);
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             clip.start();
@@ -69,4 +83,7 @@ class AudioManager {
             ex.printStackTrace();
         }
     }
+
+    //public static
+
 }
