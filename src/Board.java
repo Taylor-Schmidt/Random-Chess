@@ -67,10 +67,11 @@ public class Board implements Serializable {
                 Space oldSpace = other.getBoard()[i][j];
                 Space newSpace = null;
                 if (oldSpace != null) {
-                    newSpace = new Space(true);
+                    newSpace = new Space();
 
                     Piece oldPiece = oldSpace.getPiece();
                     Piece newPiece = null;
+                    Effect oldEffect = oldSpace.getEffect();
 
                     if (oldPiece != null) {
                         try {
@@ -81,6 +82,9 @@ public class Board implements Serializable {
                         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                             e.printStackTrace();
                         }
+                    }
+                    if (oldEffect!=null){
+                        newSpace.setEffect(oldEffect);
                     }
 
                     newSpace.setPiece(newPiece);
