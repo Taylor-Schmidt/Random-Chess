@@ -9,8 +9,6 @@ class AudioManager {
 
     private static final AudioManager audioManager = new AudioManager();
 
-    static AudioInputStream musicStream;
-
     private GameSettings gameSettings = GameSettings.getInstance();
 
     private AudioManager() {
@@ -49,15 +47,12 @@ class AudioManager {
     private boolean continuingMusic;
 
     void playMusic() {
-        System.out.println(gameSettings);
-        System.out.println(gameSettings.get(GameSettings.MUTED));
         boolean muted = (boolean) gameSettings.get(GameSettings.MUTED);
-        if (musicStream == null && !muted) {
+        if (!muted) {
             continuingMusic = true;
             try {
-                musicStream = AudioSystem.getAudioInputStream(uke_song);
+                AudioInputStream musicStream = AudioSystem.getAudioInputStream(uke_song);
                 clip = AudioSystem.getClip();
-                System.out.println(clip);
                 clip.open(musicStream);
                 FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
                 gainControl.setValue(-15.0f);
@@ -65,7 +60,6 @@ class AudioManager {
                 clip.addLineListener(e -> {
                     if (e.getType() == LineEvent.Type.STOP) {
                         if (continuingMusic) {
-                            musicStream = null;
                             playMusic();
                         }
                     }
@@ -78,16 +72,10 @@ class AudioManager {
     }
 
     void stopMusic() {
-        System.out.println("stop music");
         continuingMusic = false;
-        if (musicStream != null) {
-            System.out.println("music Stream != null");
 
-            System.out.println(clip);
-            if (clip != null) {
-                clip.stop();
-            }
-            musicStream = null;
+        if (clip != null) {
+            clip.stop();
         }
     }
 

@@ -8,6 +8,7 @@ import java.util.concurrent.CompletableFuture;
  */
 class MainFrame extends JFrame {
     private GameSettings gameSettings = GameSettings.getInstance();
+    private AudioManager audioManager = AudioManager.getInstance();
     private Dimension dimension = new Dimension(1280, 800);
 
     //TODO: add music
@@ -132,6 +133,30 @@ class MainFrame extends JFrame {
         c.anchor = GridBagConstraints.NORTHEAST;
         add(pauseButton, c);
 
+        MuteButton muteButton = new MuteButton();
+        if ((boolean) gameSettings.get(GameSettings.MUTED)) {
+            muteButton.toggle();
+        }
+        muteButton.addActionListener(e -> {
+            boolean isMuted = (boolean) gameSettings.get(GameSettings.MUTED);
+            gameSettings.put(GameSettings.MUTED, !isMuted);
+            muteButton.toggle();
+            if (isMuted) {
+                audioManager.playMusic();
+            } else {
+                audioManager.stopMusic();
+            }
+        });
+
+        c.gridx = 1;
+        c.gridy = 0;
+        c.weightx = 0;
+        c.weighty = 0;
+        c.ipadx = 0;
+        c.ipady = 10;
+        c.anchor = GridBagConstraints.NORTHEAST;
+        add(muteButton, c);
+
         //Continue button
         pausePanel.getButton(0).addActionListener(pauseListener);
         //New game button
@@ -185,7 +210,7 @@ class MainFrame extends JFrame {
             mainMenuPanel.getButton(0).setVisible(false);
         }
 
-        AudioManager.getInstance().playMusic();
+        audioManager.playMusic();
 
         //Enter fullscreen if the game was closed in fullscreen.
         boolean isFullscreen = (boolean) gameSettings.get(GameSettings.FULLSCREEN);
@@ -208,7 +233,7 @@ class MainFrame extends JFrame {
 //                    gamePanel.save();
 //                    System.exit(0);
 //                }
-                AudioManager.getInstance().stopMusic();
+                audioManager.stopMusic();
                 gamePanel.save();
                 System.exit(0);
             }
@@ -251,7 +276,7 @@ class MainFrame extends JFrame {
             GameSettings gameSettings = GameSettings.getInstance();
 
             addActionListener(e -> {
-                AudioManager.getInstance().playClick();
+                audioManager.playClick();
                 if (gameSettings.get(GameSettings.FULLSCREEN) != null) {
                     actionListener.actionPerformed(new ActionEvent(this, 1,
                             Boolean.toString((boolean) gameSettings.get(GameSettings.FULLSCREEN))));
@@ -272,7 +297,7 @@ class MainFrame extends JFrame {
 
             updateIcon();
 
-            addActionListener(e -> AudioManager.getInstance().playClick());
+            addActionListener(e -> audioManager.playClick());
         }
     }
 
@@ -288,7 +313,7 @@ class MainFrame extends JFrame {
 
             updateIcon();
 
-            addActionListener(e -> AudioManager.getInstance().playClick());
+            addActionListener(e -> audioManager.playClick());
         }
     }
 
@@ -304,7 +329,7 @@ class MainFrame extends JFrame {
 
             updateIcon();
 
-            addActionListener(e -> AudioManager.getInstance().playClick());
+            addActionListener(e -> audioManager.playClick());
         }
     }
 }
