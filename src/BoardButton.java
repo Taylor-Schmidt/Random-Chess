@@ -220,6 +220,12 @@ public class BoardButton extends JButton {
             x = (int) (getWidth() * paddingRatio);
             y = (int) (getHeight() * paddingRatio);
         }
+        if (g instanceof Graphics2D) {
+            Graphics2D graphics2D = (Graphics2D) g;
+            graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            graphics2D.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+            graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        }
         g.drawImage(pieceIcon.getImage(), x, y, width, height, this);
     }
 
