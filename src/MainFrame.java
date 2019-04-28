@@ -161,7 +161,10 @@ class MainFrame extends JFrame {
             if (infoPanel.getColor().equals(InfoPanel.BLACK)) {
                 infoPanel.toggleColor();
             }
-            gamePanel.setUpBoard(true);
+            String color = gamePanel.setUpBoard(true);
+            if (!infoPanel.getColor().equals(color)){
+                infoPanel.toggleColor();
+            }
             gamePanel.setVisible(!gamePanel.isVisible());
             pausePanel.setVisible(!pausePanel.isVisible());
             infoPanel.setVisible(!infoPanel.isVisible());
@@ -181,7 +184,10 @@ class MainFrame extends JFrame {
             } catch (InterruptedException e1) {
                 e1.printStackTrace();
             }
-            gamePanel.setUpBoard(false);
+            String color = gamePanel.setUpBoard(false);
+            if (!infoPanel.getColor().equals(color)){
+                infoPanel.toggleColor();
+            }
             mainMenuPanel.setVisible(false);
             pauseButton.setVisible(true);
             infoPanel.setVisible(true);
@@ -190,7 +196,10 @@ class MainFrame extends JFrame {
         }));
         //New game button
         mainMenuPanel.getButton(1).addActionListener(e -> {
-            gamePanel.setUpBoard(true);
+            String color = gamePanel.setUpBoard(true);
+            if (!infoPanel.getColor().equals(color)){
+                infoPanel.toggleColor();
+            }
             mainMenuPanel.setVisible(false);
             pauseButton.setVisible(true);
             infoPanel.setVisible(true);

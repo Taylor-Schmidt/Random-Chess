@@ -26,7 +26,9 @@ class GamePanel extends JPanel {
     }
 
     @SuppressWarnings("unchecked")
-    void setUpBoard(boolean isNewGame) {
+    String setUpBoard(boolean isNewGame) {
+
+        String color = "white";
 
         if (boardPanel != null) {
             remove(boardPanel);
@@ -42,6 +44,10 @@ class GamePanel extends JPanel {
                 newGame();
             } else {
                 boardPanel = new BoardPanel(gameStates);
+                if (!gameStates.isEmpty()) {
+                    GameState currentState = gameStates.get(gameStates.size() - 1);
+                    color = currentState.getTurnColor();
+                }
             }
         }
 
@@ -61,6 +67,8 @@ class GamePanel extends JPanel {
         });
 
         add(boardPanel, gc);
+
+        return color;
     }
 
     void save() {
