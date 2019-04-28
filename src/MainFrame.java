@@ -291,4 +291,20 @@ class MainFrame extends JFrame {
             addActionListener(e -> AudioManager.getInstance().playClick());
         }
     }
+
+    private class MuteButton extends ImageButton {
+        MuteButton() {
+            super();
+            ImageManager m = ImageManager.getInstance();
+            icon = m.getScaledImage("volume_mute_button");
+            iconPush = m.getScaledImage("volume_mute_button_push");
+            altIcon = m.getScaledImage("volume_on_button");
+            altIconPush = m.getScaledImage("volume_on_button_push");
+            hasAlt = true;
+
+            updateIcon();
+
+            addActionListener(e -> AudioManager.getInstance().playClick());
+        }
+    }
 }

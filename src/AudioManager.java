@@ -29,33 +29,45 @@ class AudioManager {
     }
 
     private void playSound(File file, float gain) {
-        try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(gain);
-            clip.start();
-        } catch (Exception ex) {
-            System.out.println("Error with playing sound.");
-            ex.printStackTrace();
+        if (!(boolean) gameSettings.get(GameSettings.MUTED)) {
+            try {
+                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
+                Clip clip = AudioSystem.getClip();
+                clip.open(audioInputStream);
+                FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                gainControl.setValue(gain);
+                clip.start();
+            } catch (Exception ex) {
+                System.out.println("Error with playing sound.");
+                ex.printStackTrace();
+            }
         }
     }
 
+    private Clip clip;
+
+    private boolean continuingMusic;
 
     void playMusic() {
-        if (musicStream == null) {
+        System.out.println(gameSettings);
+        System.out.println(gameSettings.get(GameSettings.MUTED));
+        boolean muted = (boolean) gameSettings.get(GameSettings.MUTED);
+        if (musicStream == null && !muted) {
+            continuingMusic = true;
             try {
                 musicStream = AudioSystem.getAudioInputStream(uke_song);
-                Clip clip = AudioSystem.getClip();
+                clip = AudioSystem.getClip();
+                System.out.println(clip);
                 clip.open(musicStream);
                 FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
                 gainControl.setValue(-15.0f);
                 clip.start();
                 clip.addLineListener(e -> {
                     if (e.getType() == LineEvent.Type.STOP) {
-                        musicStream = null;
-                        playMusic();
+                        if (continuingMusic) {
+                            musicStream = null;
+                            playMusic();
+                        }
                     }
                 });
             } catch (Exception ex) {
@@ -66,13 +78,12 @@ class AudioManager {
     }
 
     void stopMusic() {
+        System.out.println("stop music");
+        continuingMusic = false;
         if (musicStream != null) {
-            Clip clip = null;
-            try {
-                clip = AudioSystem.getClip();
-            } catch (LineUnavailableException e) {
-                e.printStackTrace();
-            }
+            System.out.println("music Stream != null");
+
+            System.out.println(clip);
             if (clip != null) {
                 clip.stop();
             }

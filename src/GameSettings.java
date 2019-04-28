@@ -8,6 +8,7 @@ class GameSettings {
     private final File file = new File("settings.dat");
 
     static final String FULLSCREEN = "full_screen";
+    static final String MUTED = "muted";
 
     private GameSettings() {
         try {
@@ -29,6 +30,9 @@ class GameSettings {
     void initDefaults() {
         if (!settings.containsKey(FULLSCREEN)) {
             settings.put(FULLSCREEN, false);
+        }
+        if (!settings.containsKey(MUTED)) {
+            settings.put(MUTED, false);
         }
     }
 
