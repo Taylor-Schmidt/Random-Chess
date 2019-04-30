@@ -21,6 +21,12 @@ public class BoardButton extends JButton {
     private static ImageIcon bombSprite;
     private static ImageIcon morphSprite;
 
+    private static ImageIcon explosionIcon;
+
+    private static long durationOfAnimation = 800L;
+
+
+
     static {
         ImageManager im = ImageManager.getInstance();
 
@@ -56,20 +62,17 @@ public class BoardButton extends JButton {
         };
         bombSprite = im.getImage("board_tile_bomb");
         morphSprite = im.getImage("board_tile_morph");
+
+        explosionIcon = new ImageIcon("assets/bomb_gif.gif");
     }
 
     Space space;
     private final Color selectedColor = new Color(0, 255, 0);
-    private Color backgroundColor;
     private Random rand = new Random();
     private int random = rand.nextInt(Integer.MAX_VALUE);
 
 
     private boolean highlighted = false;
-
-//    public BoardButton(int x, int y, RandomColorTile c) {
-//        this(x, y, c, null, 0.1);
-//    }
 
     BoardButton(int x, int y, Space s, Piece p) {
         this(x, y, s, p, 0.1);
@@ -81,25 +84,15 @@ public class BoardButton extends JButton {
         yPos = y;
         this.paddingRatio = paddingRatio;
 
-        //Creates checkered effect
-
-        if (space == null) {
-            backgroundColor = Color.decode("#78d5e1");
-        }
         this.space = space;
 
+        //Sets background as translucent (all drawing occur under the background & icon
+        Color backgroundColor = new Color(1f, 0f, 0f, 0f);
         setBackground(backgroundColor);
+
         setNewIcon(p);
         setOpaque(true);
         setBorderPainted(false);
-    }
-
-    public int getXPos() {
-        return xPos;
-    }
-
-    public int getYPos() {
-        return yPos;
     }
 
     void setNewIcon(Piece p) {
@@ -126,27 +119,15 @@ public class BoardButton extends JButton {
                     pieceIcon = new ImageIcon("assets/knight_" + color + ".png");
                     break;
             }
-//
-//            if (pieceIcon != null) {
-//                setIcon(getScaledIcon(icon));
-//            }
         } else {
             pieceIcon = null;
         }
 
         updateUI();
     }
-/*
-    private Icon getScaledIcon(ImageIcon icon) {
-        Image image = icon.getImage();
-        Image newImage = null;
-        newImage = image.getScaledInstance((int) (tileHeight * .8), (int) (tileHeight * .8), Image.SCALE_SMOOTH);
-        return new ImageIcon(newImage);
-    }*/
 
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
         if (space != null) {
             if (!highlighted) {
 
@@ -175,7 +156,8 @@ public class BoardButton extends JButton {
                     drawScaledImageIcon(g, widthToHeightRatio, effectPaddingRatio, effectIcon);
                 }
             } else {
-                setBackground(selectedColor);
+                g.setColor(selectedColor);
+                g.fillRect(0, 0, getWidth(), getHeight());
             }
         } else {
             if (((xPos + yPos) % 2) == 0) {
@@ -185,17 +167,11 @@ public class BoardButton extends JButton {
             }
         }
         if (pieceIcon != null) {
-//            System.out.println(getHeight() + "x" + getWidth());
             double widthToHeightRatio = pieceIcon.getIconWidth() / (pieceIcon.getIconHeight() * 1.0); //float div with ints
 
             drawScaledImageIcon(g, widthToHeightRatio, paddingRatio, pieceIcon);
         }
-
-        if (explosionIcon != null) {
-            System.out.println("drawing explosion");
-            double widthToHeightRatio = explosionIcon.getIconWidth() / (explosionIcon.getIconHeight() * 1.0); //float div with ints
-            drawScaledImageIcon(g, widthToHeightRatio, paddingRatio, explosionIcon);
-        }
+        super.paintComponent(g);
     }
 
     private void drawScaledImageIcon(Graphics g, double widthToHeightRatio, double paddingRatio, ImageIcon pieceIcon) {
@@ -236,28 +212,23 @@ public class BoardButton extends JButton {
 
     void setHighlight(boolean highLighted) {
         this.highlighted = highLighted;
-        if (highLighted) {
-            setBackground(selectedColor);
-
-        } else {
-            setBackground(backgroundColor);
-
-        }
+        updateUI();
     }
 
-    private long durationOfAnimation = 1000L;
-
-    private ImageIcon explosionIcon;
-
-    //TODO: add explosion effect
-    void explode(){
-        System.out.println("Exploding" + xPos + ", " + yPos);
+    void explode() {
+        explosionIcon.setImage(explosionIcon.getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_DEFAULT));
+        setIcon(explosionIcon);
         setNewIcon(null);
-//        new Thread(() -> {
-//            explosionIcon = new ImageIcon("assets/bomb_gif.gif");
-//
-//            updateUI();
-//        }).start();
+        updateUI();
+        new Thread(() -> {
+            try {
+                sleep(durationOfAnimation);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            setIcon(null);
+            updateUI();
+        }).start();
 
     }
 }
